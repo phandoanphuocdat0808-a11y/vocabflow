@@ -1394,7 +1394,8 @@
                 <li><b>Cách 1 (Nhanh):</b> Nhấn vào biểu tượng <b>"aA"</b> hoặc <b>ổ khóa 🔒</b> ở góc trái thanh địa
                   chỉ Safari -> chọn <b>Cài đặt trang web (Website Settings)</b> -> <b>Micro: Cho phép (Allow)</b>.</li>
                 <li><b>Cách 2 (Cài đặt máy):</b> Mở <b>Cài đặt (Settings) trên iPhone</b> -> kéo xuống chọn
-                  <b>Safari</b> -> chọn <b>Microphone</b> -> chuyển sang <b>Cho phép (Allow)</b>.</li>
+                  <b>Safari</b> -> chọn <b>Microphone</b> -> chuyển sang <b>Cho phép (Allow)</b>.
+                </li>
                 <li>Sau đó quay lại trang web và nhấn vào nút Micro để đọc!</li>
               </ol>
             </div>
@@ -1561,7 +1562,7 @@
      * =========================================================================================
      */
     function isApiConfigured() {
-      return API_URL && API_URL.trim() !== '' && !API_URL.includes('https://script.google.com/macros/s/AKfycbziaFkd1a7zrg4BflT5yKiWT2KSZXlwza4i35Ked08s1eRH8dqWjA_QHezG-pP6wdHs4Q/exec');
+      return API_URL && API_URL.trim() !== '' && API_URL.startsWith('http') && !API_URL.includes('DÁN_LINK_DEPLOY');
     }
 
     async function apiCall(action, payload = {}, method = 'POST') {
