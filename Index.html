@@ -213,6 +213,14 @@
 
         <!-- Right Header Action Bar -->
         <div class="flex items-center space-x-2">
+          <!-- Articulatory Guide Encyclopedia Button -->
+          <button type="button" onclick="openArticulatoryModal()"
+            class="px-2.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold flex items-center space-x-1.5 transition-all cursor-pointer shadow-sm"
+            title="Bách khoa toàn thư Khẩu hình học & Giải phẫu cơ miệng 44 âm IPA">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-600"></i>
+            <span class="hidden sm:inline">Khẩu hình IPA</span>
+          </button>
+
           <!-- Mic Permission Guide Button -->
           <button type="button" onclick="openMicGuideModal()"
             class="px-2.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold flex items-center space-x-1 transition-all cursor-pointer"
@@ -511,17 +519,33 @@
                   </button>
                 </div>
 
-                <!-- Interactive Voice Check Button (Pass >= 90%) -->
-                <div class="pt-2 flex flex-col items-center">
+                <!-- Interactive Voice Check Button & Phoneme-Level Diagnostics -->
+                <div class="pt-2 flex flex-col items-center w-full max-w-sm mx-auto space-y-2">
                   <button type="button" id="btn-fc-voice-check"
                     onclick="event.stopPropagation(); toggleFlashcardVoiceCheck();"
                     class="px-4 py-2 rounded-2xl bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-700 border border-rose-200 text-xs font-extrabold flex items-center space-x-2 shadow-sm transition-all cursor-pointer">
                     <i data-lucide="mic" id="icon-fc-mic" class="w-4 h-4 text-rose-600"></i>
-                    <span id="lbl-fc-voice">🎙️ Luyện phát âm (Cần đạt ≥ 90%)</span>
+                    <span id="lbl-fc-voice">🎙️ Luyện phát âm (Cần đạt ≥ 80%)</span>
                   </button>
 
                   <!-- Voice Check Result Badge -->
-                  <div id="fc-voice-result" class="hidden mt-2 p-2 rounded-xl text-xs font-bold transition-all"></div>
+                  <div id="fc-voice-result" class="hidden w-full text-xs font-bold transition-all"></div>
+
+                  <!-- Phoneme-Level IPA Interactive Breakdown Bar -->
+                  <div id="fc-phonemes-container"
+                    class="hidden w-full p-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-1.5 animate-fadeIn">
+                    <div
+                      class="flex items-center justify-between text-[10px] font-extrabold text-slate-500 uppercase tracking-wider px-1">
+                      <span class="flex items-center space-x-1">
+                        <i data-lucide="activity" class="w-3 h-3 text-indigo-500"></i>
+                        <span>Chi tiết từng âm vị (IPA):</span>
+                      </span>
+                      <span class="text-indigo-600 font-semibold lowercase">chạm vào âm để xem cơ miệng</span>
+                    </div>
+                    <div id="fc-phonemes-list" class="flex flex-wrap items-center justify-center gap-1.5 pt-0.5"></div>
+                    <div id="fc-voice-diagnosis" class="text-[11px] font-medium text-slate-600 pt-1 text-left px-1">
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -547,8 +571,20 @@
                   </div>
                 </div>
                 <div class="flex items-center space-x-3 text-xs font-mono mt-1 text-slate-600">
-                  <span>🇬🇧 <span id="fc-back-ipa-uk" class="font-semibold text-slate-800">/rɪˈzɪl.i.ənt/</span></span>
-                  <span>🇺🇸 <span id="fc-back-ipa-us" class="font-semibold text-indigo-600">/rɪˈzɪl.jənt/</span></span>
+                  <span>🇬🇧 <span id="fc-back-ipa-uk"
+                      class="font-semibold text-slate-800 cursor-pointer hover:text-indigo-600 hover:underline"
+                      onclick="event.stopPropagation(); inspectIpaText(this.textContent)"
+                      title="Chạm để xem khẩu hình học IPA">/rɪˈzɪl.i.ənt/</span></span>
+                  <span>🇺🇸 <span id="fc-back-ipa-us"
+                      class="font-semibold text-indigo-600 cursor-pointer hover:text-indigo-800 hover:underline"
+                      onclick="event.stopPropagation(); inspectIpaText(this.textContent)"
+                      title="Chạm để xem khẩu hình học IPA">/rɪˈzɪl.jənt/</span></span>
+                  <button type="button" onclick="event.stopPropagation(); openArticulatoryModal();"
+                    class="text-[10px] text-indigo-600 hover:text-indigo-800 font-sans font-bold flex items-center space-x-0.5 ml-auto cursor-pointer"
+                    title="Mở Bách khoa Khẩu hình học 44 âm">
+                    <i data-lucide="sparkles" class="w-3 h-3"></i>
+                    <span>Khẩu hình</span>
+                  </button>
                 </div>
               </div>
 
@@ -1435,6 +1471,80 @@
         </div>
       </div>
 
+      <!-- ========================================================================= -->
+      <!-- MODAL 5: BÁCH KHOA TOÀN THƯ KHẨU HÌNH HỌC IPA 44 ÂM (ARTICULATORY GUIDE)   -->
+      <!-- ========================================================================= -->
+      <div id="modal-articulatory-guide" style="display: none;"
+        class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-3 sm:p-4">
+        <div
+          class="bg-white max-w-2xl w-full p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-2xl space-y-3.5 animate-fadeIn max-h-[94vh] flex flex-col">
+
+          <!-- Header -->
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3 flex-shrink-0">
+            <div class="flex items-center space-x-2.5">
+              <div
+                class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shadow-sm">
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-display font-black text-slate-900 flex items-center space-x-2">
+                  <span>Cơ Chế Khẩu Hình Học 44 Âm IPA</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-700">Chuẩn Giải
+                    Phẫu</span>
+                </h3>
+                <p class="text-[11px] text-slate-500">Khẩu hình cơ miệng, nén khí, lỗi cố hữu người Việt & bài tập khắc
+                  phục</p>
+              </div>
+            </div>
+            <button type="button" onclick="closeArticulatoryModal()"
+              class="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <!-- Search & Filter Category Bar -->
+          <div class="space-y-2 flex-shrink-0">
+            <div class="relative">
+              <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3"></i>
+              <input type="text" id="ipa-search-input" oninput="handleIpaSearch(this.value)"
+                placeholder="Tìm âm vị (ví dụ: θ, ʃ, t, z, iː) hoặc từ ví dụ (think, resilient)..."
+                class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+            </div>
+
+            <!-- Category Pills -->
+            <div class="flex items-center space-x-1.5 overflow-x-auto pb-1 text-xs font-bold no-scrollbar">
+              <button type="button" onclick="filterArticulatoryCategory('all')" id="ipa-tab-all"
+                class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-bold text-[11px] whitespace-nowrap shadow-sm cursor-pointer">Tất
+                cả (44 âm)</button>
+              <button type="button" onclick="filterArticulatoryCategory('dental_fricative')"
+                id="ipa-tab-dental_fricative"
+                class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 hover:text-slate-900 font-bold text-[11px] whitespace-nowrap cursor-pointer">Răng
+                & Ma sát (θ, ð, ʃ, ʒ...)</button>
+              <button type="button" onclick="filterArticulatoryCategory('ending_sound')" id="ipa-tab-ending_sound"
+                class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 hover:text-slate-900 font-bold text-[11px] whitespace-nowrap cursor-pointer">Âm
+                đuôi quan trọng (s, z, t, d, k...)</button>
+              <button type="button" onclick="filterArticulatoryCategory('vowel_pair')" id="ipa-tab-vowel_pair"
+                class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 hover:text-slate-900 font-bold text-[11px] whitespace-nowrap cursor-pointer">Nguyên
+                âm Ngắn vs Dài (iː/ɪ, uː/ʊ...)</button>
+              <button type="button" onclick="filterArticulatoryCategory('diphthong')" id="ipa-tab-diphthong"
+                class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 hover:text-slate-900 font-bold text-[11px] whitespace-nowrap cursor-pointer">Nguyên
+                âm đôi (eɪ, aɪ, ɔɪ, aʊ...)</button>
+            </div>
+          </div>
+
+          <!-- Quick Phoneme Selector Grid (Compact Chips) -->
+          <div id="ipa-chips-grid"
+            class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto p-1.5 bg-slate-50 rounded-2xl border border-slate-200/80 flex-shrink-0">
+          </div>
+
+          <!-- Active Phoneme Detail Card (Scrollable) -->
+          <div id="ipa-detail-card" class="flex-1 overflow-y-auto space-y-2.5 pr-1 text-xs">
+            <!-- Will be populated dynamically by selectArticulatoryPhoneme(phoneme) -->
+          </div>
+
+        </div>
+      </div>
+
     </main>
 
     <!-- 3. MOBILE BOTTOM NAVIGATION -->
@@ -1473,6 +1583,7 @@
   </div>
 
   <!-- JAVASCRIPT LOGIC CONTROLLER CHO GITHUB PAGES & REST API -->
+  z
   <script>
     /**
      * =========================================================================================
@@ -1497,12 +1608,1055 @@
         { word: 'leverage', pos: 'verb', topic: 'Business', level: 'B', ipa_uk: '/ˈliː.vər.ɪdʒ/', ipa_us: '/ˈlev.ɚ.ɪdʒ/', meaning: 'Tận dụng đòn bẩy, tối đa hóa nguồn lực', example: 'We can leverage modern digital tools to maximize our team productivity.', example_trans: 'Chúng ta có thể tận dụng các công cụ kỹ thuật số hiện đại để tối đa hóa năng suất của đội ngũ.', shadowing: 'Companies that leverage artificial intelligence effectively will gain a major competitive edge.', shadowing_trans: 'Những doanh nghiệp tận dụng hiệu quả trí tuệ nhân tạo sẽ giành được lợi thế cạnh tranh vượt bậc.' },
         { word: 'meticulous', pos: 'adjective', topic: 'Personality', level: 'B', ipa_uk: '/məˈtɪk.jə.ləs/', ipa_us: '/məˈtɪk.jə.ləs/', meaning: 'Tỉ mỉ, cẩn trọng từng chi tiết', example: 'Her meticulous attention to detail ensured that the final design was flawless.', example_trans: 'Sự chú ý tỉ mỉ đến từng chi tiết của cô ấy đã đảm bảo rằng thiết kế cuối cùng là hoàn hảo.', shadowing: 'A meticulous approach to quality assurance guarantees customer satisfaction and trust.', shadowing_trans: 'Cách tiếp cận tỉ mỉ trong đảm bảo chất lượng sẽ bảo chứng cho sự hài lòng và niềm tin của khách hàng.' }
       ],
-      'Level_C': [
-        { word: 'empirical', pos: 'adjective', topic: 'Academic', level: 'C', ipa_uk: '/ɪmˈpɪr.ɪ.kəl/', ipa_us: '/ɪmˈpɪr.ɪ.kəl/', meaning: 'Dựa trên thực nghiệm, kiểm chứng thực tế', example: 'The research paper provided strong empirical evidence supporting the new hypothesis.', example_trans: 'Bài báo nghiên cứu đã cung cấp bằng chứng thực nghiệm vững chắc ủng hộ giả thuyết mới.', shadowing: 'Rigorous scientific investigation relies strictly on empirical data rather than speculation.', shadowing_trans: 'Nghiên cứu khoa học chặt chẽ hoàn toàn dựa vào dữ liệu thực nghiệm thay vì sự suy đoán.' },
-        { word: 'corroborate', pos: 'verb', topic: 'Academic', level: 'C', ipa_uk: '/kəˈrɒb.ə.reɪt/', ipa_us: '/kəˈrɑː.bə.reɪt/', meaning: 'Chứng thực, xác minh bằng chứng cứ độc lập', example: 'Independent laboratory tests were conducted to corroborate the initial findings.', example_trans: 'Các thử nghiệm độc lập trong phòng thí nghiệm đã được tiến hành để chứng thực các phát hiện ban đầu.', shadowing: 'Historical scholars examined multiple primary archives to corroborate the timeline of events.', shadowing_trans: 'Các học giả lịch sử đã kiểm tra nhiều tài liệu lưu trữ sơ cấp để xác minh mốc thời gian của các sự kiện.' },
-        { word: 'synthesize', pos: 'verb', topic: 'Academic', level: 'C', ipa_uk: '/ˈsɪn.θə.saɪz/', ipa_us: '/ˈsɪn.θə.saɪz/', meaning: 'Tổng hợp các luồng ý kiến, dữ liệu phức tạp', example: 'The doctoral candidate had to synthesize theories from multiple academic disciplines.', example_trans: 'Nghiên cứu sinh tiến sĩ đã phải tổng hợp các lý thuyết từ nhiều chuyên ngành học thuật khác nhau.', shadowing: 'The ability to synthesize vast amounts of complex information is a hallmark of great analysts.', shadowing_trans: 'Khả năng tổng hợp khối lượng lớn thông tin phức tạp là dấu ấn của những nhà phân tích xuất sắc.' }
       ]
     };
+
+    /**
+     * =========================================================================================
+     * BÁCH KHOA TOÀN THƯ KHẨU HÌNH HỌC 44 ÂM VỊ IPA - ARTICULATORY MECHANICS ENGINE
+     * =========================================================================================
+     * Chuẩn giải phẫu học cơ miệng, thanh quản, độ nén khí và bài tập khắc phục lỗi người Việt
+     */
+    const ARTICULATORY_GUIDE = {
+      // --- PHỤ ÂM RĂNG & MA SÁT (DENTAL & FRICATIVES) ---
+      "θ": {
+        name: "Âm /θ/ vô thanh (think, three, resilient)",
+        category: "dental_fricative",
+        type: "Phụ âm vô thanh (Unvoiced dental fricative)",
+        mouth: "Đặt nhẹ đầu lưỡi ở giữa 2 hàm răng cửa (thè nhẹ đầu lưỡi ra ngoài khoảng 1-2mm).",
+        breath: "Đẩy luồng hơi nhẹ qua khe giữa lưỡi và răng trên. KHÔNG rung thanh quản.",
+        pitfall: "Người Việt hay rụt lưỡi vào trong và đọc nhầm thành /t/ hoặc /s/.",
+        drill: "Tập giữ nguyên vị trí lưỡi giữa răng và thổi hơi đều trong 3 giây trước khi ghép vào từ.",
+        examples: "think, three, mouth, healthy, synthesize"
+      },
+      "ð": {
+        name: "Âm /ð/ hữu thanh (this, that, breathe)",
+        category: "dental_fricative",
+        type: "Phụ âm hữu thanh (Voiced dental fricative)",
+        mouth: "Khẩu hình giống hệt âm /θ/ (đầu lưỡi đặt giữa 2 hàm răng).",
+        breath: "Vừa đẩy hơi qua kẽ răng vừa làm rung dây thanh quản ở cổ họng.",
+        pitfall: "Thường bị phát âm nhầm thành /d/ hoặc /z/ tiếng Việt.",
+        drill: "Đặt tay lên cổ họng để cảm nhận độ rung của thanh quản khi phát âm.",
+        examples: "this, that, mother, breathe, together"
+      },
+      "ʃ": {
+        name: "Âm /ʃ/ vô thanh (she, ship, delicious)",
+        category: "dental_fricative",
+        type: "Phụ âm vô thanh (Unvoiced postalveolar fricative)",
+        mouth: "Chu môi tròn về phía trước, hai bên mép hơi khép lại.",
+        breath: "Nâng thân lưỡi lên sát vòm họng trên và đẩy luồng hơi mạnh ra ngoài (như động tác ra hiệu 'suỵt').",
+        pitfall: "Thường bị đọc bẹt môi thành âm /s/ nhẹ.",
+        drill: "Giữ môi luôn tròn và đẩy hơi dứt khoát.",
+        examples: "she, ship, delicious, special, appreciate"
+      },
+      "ʒ": {
+        name: "Âm /ʒ/ hữu thanh (vision, measure, conclusion)",
+        category: "dental_fricative",
+        type: "Phụ âm hữu thanh (Voiced postalveolar fricative)",
+        mouth: "Khẩu hình chu tròn môi giống hệt /ʃ/.",
+        breath: "Đẩy hơi đồng thời làm rung mạnh dây thanh quản.",
+        pitfall: "Hay bị đọc nhầm thành /z/ hoặc /dʒ/.",
+        drill: "Tạo âm 'r' nhưng với khẩu hình môi chu tròn của 'suỵt'.",
+        examples: "vision, measure, conclusion, decision, beige"
+      },
+      "tʃ": {
+        name: "Âm /tʃ/ vô thanh (church, cheap, future)",
+        category: "dental_fricative",
+        type: "Âm tắc xát vô thanh (Unvoiced affricate)",
+        mouth: "Bắt đầu bằng khẩu hình chặn hơi của /t/, sau đó bật mạnh sang âm /ʃ/.",
+        breath: "Bật hơi dứt khoát, không rung thanh quản.",
+        pitfall: "Hay đọc thành âm 'ch' nhẹ trong tiếng Việt mà không có lực bật hơi.",
+        drill: "Chặn hơi thật chặt phía sau răng cửa trên rồi ép hơi nổ tung ra ngoài.",
+        examples: "church, cheap, future, check, catch"
+      },
+      "dʒ": {
+        name: "Âm /dʒ/ hữu thanh (judge, job, schedule)",
+        category: "dental_fricative",
+        type: "Âm tắc xát hữu thanh (Voiced affricate)",
+        mouth: "Bắt đầu chặn hơi của /d/ và bật mạnh sang âm /ʒ/.",
+        breath: "Bật luồng hơi kết hợp rung thanh quản mạnh.",
+        pitfall: "Thường đọc thành âm 'd' hoặc 'gi' tiếng Việt.",
+        drill: "Phát âm dứt khoát và kiểm tra độ rung ở hõm cổ.",
+        examples: "judge, job, schedule, leverage, encourage"
+      },
+      "f": {
+        name: "Âm /f/ vô thanh (fast, coffee, leaf)",
+        category: "dental_fricative",
+        type: "Phụ âm vô thanh (Unvoiced labiodental fricative)",
+        mouth: "Đặt nhẹ hàm răng cửa trên chạm vào bờ môi dưới.",
+        breath: "Đẩy luồng hơi thoát ra qua kẽ răng và môi dưới, không rung thanh quản.",
+        pitfall: "Mím chặt hai môi lại như âm 'ph' tiếng Việt.",
+        drill: "Cắn nhẹ môi dưới và phì luồng hơi liên tục trong 2 giây.",
+        examples: "fast, life, coffee, confident, flawless"
+      },
+      "v": {
+        name: "Âm /v/ hữu thanh (very, voice, love)",
+        category: "dental_fricative",
+        type: "Phụ âm hữu thanh (Voiced labiodental fricative)",
+        mouth: "Vị trí răng trên chạm môi dưới tương tự âm /f/.",
+        breath: "Đẩy hơi đồng thời rung mạnh dây thanh quản ở cổ họng.",
+        pitfall: "Hay phát âm thành âm 'vờ' rời rạc có thêm nguyên âm thừa.",
+        drill: "Rung môi dưới liên tục và cảm nhận độ tê nhẹ ở môi.",
+        examples: "very, voice, live, leverage, convenient"
+      },
+      "h": {
+        name: "Âm /h/ vô thanh (hat, hope, behind)",
+        category: "dental_fricative",
+        type: "Phụ âm vô thanh (Unvoiced glottal fricative)",
+        mouth: "Miệng mở tự nhiên theo nguyên âm đứng sau.",
+        breath: "Thở ra luồng hơi nhẹ từ đáy họng như đang hà hơi làm ấm kính, không rung cổ.",
+        pitfall: "Gồng cổ họng đọc thành âm 'hát' quá nặng.",
+        drill: "Thả lỏng cổ họng và thở nhẹ hơi ra ngoài.",
+        examples: "hat, home, habit, ahead, hypothesis"
+      },
+
+      // --- ÂM ĐUÔI QUAN TRỌNG & ÂM BẬT (CRITICAL ENDING SOUNDS & PLOSIVES) ---
+      "s": {
+        name: "Âm gió /s/ (yes, pass, books)",
+        category: "ending_sound",
+        type: "Phụ âm vô thanh (Unvoiced alveolar fricative)",
+        mouth: "Hai hàm răng khép hờ, khóe môi kéo nhẹ sang hai bên.",
+        breath: "Đẩy luồng hơi mỏng và sắc qua khe răng cửa, không rung cổ.",
+        pitfall: "Cực kỳ hay bị nuốt/quên bật âm khi đứng ở cuối từ.",
+        drill: "Không được ngắt âm quá sớm, duy trì tiếng xì nhẹ ở cuối từ.",
+        examples: "yes, pass, books, delicious, synthesize"
+      },
+      "z": {
+        name: "Âm /z/ hữu thanh (is, please, buzz)",
+        category: "ending_sound",
+        type: "Phụ âm hữu thanh (Voiced alveolar fricative)",
+        mouth: "Khẩu hình tương tự /s/.",
+        breath: "Đẩy hơi qua răng kết hợp rung thanh quản (như tiếng ong kêu zzz).",
+        pitfall: "Hay bị đọc thành /s/ vô thanh hoặc bỏ mất âm đuôi.",
+        drill: "Cảm nhận sự rung rõ rệt ở dây thanh quản khi kết thúc từ.",
+        examples: "is, please, buzz, resilient, synthesize"
+      },
+      "t": {
+        name: "Âm chặn /t/ (cat, bit, resilient)",
+        category: "ending_sound",
+        type: "Âm chặn vô thanh (Unvoiced alveolar plosive)",
+        mouth: "Đầu lưỡi chạm mạnh vào chân răng hàm trên để chặn toàn bộ luồng khí.",
+        breath: "Hạ nhanh đầu lưỡi xuống để bật luồng hơi ra dứt khoát.",
+        pitfall: "Bị nuốt âm chặn ở cuối từ làm người nghe không nhận diện được từ vựng.",
+        drill: "Bật âm nhẹ nhưng dứt khoát như tiếng gõ đầu bút.",
+        examples: "cat, bit, resilient, habit, appreciate"
+      },
+      "d": {
+        name: "Âm chặn /d/ (bad, need, played)",
+        category: "ending_sound",
+        type: "Âm chặn hữu thanh (Voiced alveolar plosive)",
+        mouth: "Vị trí lưỡi chặn tương tự /t/.",
+        breath: "Hạ đầu lưỡi và bật nhẹ kèm rung thanh quản.",
+        pitfall: "Hay đọc thành âm 'đờ' có thêm nguyên âm thừa ở cuối.",
+        drill: "Chỉ phát ra tiếng chặn âm hữu thanh ngắn gọn, không kéo dài.",
+        examples: "bad, need, played, confident, schedule"
+      },
+      "k": {
+        name: "Âm /k/ (book, like, check)",
+        category: "ending_sound",
+        type: "Âm chặn vô thanh (Unvoiced velar plosive)",
+        mouth: "Cuống lưỡi nâng lên chạm vào vòm miệng mềm phía sau để chặn khí.",
+        breath: "Hạ cuống lưỡi xuống thật nhanh để bật hơi mạnh ra ngoài.",
+        pitfall: "Bỏ quên âm đuôi khiến từ bị cụt âm.",
+        drill: "Tập bật âm khạc nhẹ ở cuống họng.",
+        examples: "book, like, check, empirical, relax"
+      },
+      "ɡ": {
+        name: "Âm /ɡ/ hữu thanh (go, get, big)",
+        category: "ending_sound",
+        type: "Âm chặn hữu thanh (Voiced velar plosive)",
+        mouth: "Vị trí cuống lưỡi chạm vòm mềm tương tự /k/.",
+        breath: "Hạ cuống lưỡi bật nhẹ kết hợp rung dây thanh quản.",
+        pitfall: "Bỏ quên âm /ɡ/ ở cuối từ hoặc đọc nhầm thành /k/.",
+        drill: "Bật âm ngắn từ sâu trong cuống họng kèm độ rung rõ ràng.",
+        examples: "go, get, big, dog, negotiate"
+      },
+      "p": {
+        name: "Âm bật môi /p/ (pen, stop, appreciate)",
+        category: "ending_sound",
+        type: "Âm bật môi vô thanh (Unvoiced bilabial plosive)",
+        mouth: "Mím chặt hai môi lại để nén toàn bộ luồng hơi phía sau môi.",
+        breath: "Mở miệng bật mạnh luồng hơi nổ ra ngoài, không rung thanh quản.",
+        pitfall: "Đọc thành âm 'pờ' tiếng Việt mà không có độ bật nén khí.",
+        drill: "Cầm tờ giấy trước miệng, bật âm /p/ sao cho tờ giấy rung mạnh.",
+        examples: "pen, copy, stop, appreciate, empirical"
+      },
+      "b": {
+        name: "Âm hữu thanh /b/ (big, baby, job)",
+        category: "ending_sound",
+        type: "Âm bật môi hữu thanh (Voiced bilabial plosive)",
+        mouth: "Mím hai môi lại như /p/.",
+        breath: "Bật nhẹ hai môi và làm rung dây thanh quản ở cổ.",
+        pitfall: "Bỏ âm đuôi /b/ khiến người nghe nhầm sang từ khác.",
+        drill: "Bật nhẹ môi kèm tiếng rung trầm trong cổ họng.",
+        examples: "big, baby, job, habit, corroborate"
+      },
+
+      // --- ÂM MŨI, ÂM TIẾP CẬN & NGUYÊN ÂM LƯỚT (NASALS, APPROXIMANTS, LIQUIDS) ---
+      "m": {
+        name: "Âm mũi /m/ (man, time, climb)",
+        category: "ending_sound",
+        type: "Âm mũi hữu thanh (Voiced bilabial nasal)",
+        mouth: "Khép hai môi lại tự nhiên.",
+        breath: "Đẩy luồng hơi thoát ra qua đường mũi và làm rung thanh quản.",
+        pitfall: "Mở miệng quá sớm làm mất âm ngậm /m/ ở cuối từ.",
+        drill: "Giữ chặt môi và ngâm âm 'ừm' trong 2 giây.",
+        examples: "man, time, climb, empirical, compromise"
+      },
+      "n": {
+        name: "Âm mũi /n/ (no, sun, resilient)",
+        category: "ending_sound",
+        type: "Âm mũi hữu thanh (Voiced alveolar nasal)",
+        mouth: "Đầu lưỡi chạm vào nướu răng hàm trên, chặn khí thoát ra miệng.",
+        breath: "Hơi thoát toàn bộ qua mũi kèm rung thanh quản.",
+        pitfall: "Lưỡi không áp sát vòm nướu khiến âm bị bẹt.",
+        drill: "Ép chặt đầu lưỡi lên vòm họng và ngân âm mũi 'ừn'.",
+        examples: "no, sun, resilient, convenient, confident"
+      },
+      "ŋ": {
+        name: "Âm ng /ŋ/ (sing, song, thanks)",
+        category: "ending_sound",
+        type: "Âm mũi hữu thanh (Voiced velar nasal)",
+        mouth: "Cuống lưỡi nâng lên chạm vòm họng mềm, chặn hơi qua miệng.",
+        breath: "Hơi thoát qua mũi tạo âm ngắt ngân vang ở cuống họng.",
+        pitfall: "Thêm âm 'gờ' thừa ở cuối từ (ví dụ reading đọc thành reading-gờ).",
+        drill: "Ngân âm ng kéo dài mà không hạ cuống lưỡi xuống.",
+        examples: "sing, song, long, thinking, English"
+      },
+      "l": {
+        name: "Âm cạnh lưỡi /l/ (light, feel, resilient)",
+        category: "ending_sound",
+        type: "Âm cạnh lưỡi hữu thanh (Voiced alveolar lateral approximant)",
+        mouth: "Đầu lưỡi chạm chân răng hàm trên; khi ở cuối từ (Dark L), thân lưỡi hơi võng xuống.",
+        breath: "Không khí thoát ra hai bên cạnh lưỡi kèm rung thanh quản.",
+        pitfall: "Bỏ quên âm /l/ ở cuối từ (Dark L) hoặc đọc nhầm thành /n/.",
+        drill: "Giữ đầu lưỡi trên vòm họng và ngân âm 'ồ' nhẹ ở cuối từ.",
+        examples: "light, live, delicious, resilient, leverage"
+      },
+      "r": {
+        name: "Âm cuốn lưỡi /r/ (red, right, agree)",
+        category: "ending_sound",
+        type: "Âm tiếp cận hữu thanh (Voiced postalveolar approximant)",
+        mouth: "Môi hơi chu nhẹ, đầu lưỡi cong ngược về phía sau vòm miệng nhưng KHÔNG chạm vòm.",
+        breath: "Đẩy hơi qua đầu lưỡi đang cong kèm rung thanh quản.",
+        pitfall: "Lưỡi chạm vào vòm miệng tạo thành âm rung 'r' tiếng Việt.",
+        drill: "Giữ đầu lưỡi lơ lửng không chạm bất kỳ điểm nào trong miệng và phát âm.",
+        examples: "red, real, appreciate, corroborate, relax"
+      },
+      "w": {
+        name: "Âm bán nguyên âm /w/ (we, win, world)",
+        category: "ending_sound",
+        type: "Âm bán nguyên âm hữu thanh (Voiced labial-velar approximant)",
+        mouth: "Môi chu tròn nhỏ như huýt sáo rồi mở nhanh sang nguyên âm sau.",
+        breath: "Đẩy hơi đồng thời làm rung dây thanh quản.",
+        pitfall: "Môi chưa đủ tròn khiến âm nghe giống 'qu' hoặc 'v'.",
+        drill: "Chu tròn môi tối đa trước khi phát âm nguyên âm tiếp theo.",
+        examples: "we, work, word, reward, sweet"
+      },
+      "j": {
+        name: "Âm bán nguyên âm /j/ (yes, you, resilient)",
+        category: "ending_sound",
+        type: "Âm bán nguyên âm hữu thanh (Voiced palatal approximant)",
+        mouth: "Thân lưỡi nâng cao sát vòm miệng cứng, khóe môi kéo nhẹ sang 2 bên.",
+        breath: "Phát âm lướt nhanh như âm 'i' ngắn rồi chuyển sang nguyên âm kế tiếp.",
+        pitfall: "Đọc thành âm 'd' hoặc 'gi' nặng tiếng Việt.",
+        drill: "Phát âm lướt nhẹ từ âm 'i' sang nguyên âm sau mà không chạm lưỡi.",
+        examples: "yes, you, year, curious, resilient"
+      },
+
+      // --- NGUYÊN ÂM NGẮN vs NGUYÊN ÂM DÀI (VOWEL PAIRS) ---
+      "iː": {
+        name: "Nguyên âm /iː/ dài (sheep, feel, read)",
+        category: "vowel_pair",
+        type: "Nguyên âm đơn dài (Long front close vowel)",
+        mouth: "Khóe miệng kéo căng sang hai bên như đang cười tươi.",
+        breath: "Giữ âm kéo dài khoảng 0.3 - 0.5 giây, âm vang và trong.",
+        pitfall: "Đọc quá ngắn khiến nhầm lẫn với âm /ɪ/ ngắn.",
+        drill: "Căng cơ môi và kéo dài âm đều đặn.",
+        examples: "sheep, see, appreciate, lead, feel"
+      },
+      "ɪ": {
+        name: "Nguyên âm /ɪ/ ngắn (ship, bit, resilient)",
+        category: "vowel_pair",
+        type: "Nguyên âm đơn ngắn (Short near-front near-close vowel)",
+        mouth: "Miệng mở tự nhiên, cơ môi thả lỏng, khoảng cách giữa 2 môi bằng nửa ngón tay.",
+        breath: "Phát âm dứt khoát trong 0.1 giây, âm phát ra hơi trầm, lai giữa 'i' và 'ê'.",
+        pitfall: "Người Việt có thói quen đọc thành chữ 'i' dài của tiếng Việt.",
+        drill: "Bật âm ngắn, dứt khoát, bụng hơi thắt nhẹ lại khi phát âm.",
+        examples: "ship, bit, resilient, habit, confident"
+      },
+      "uː": {
+        name: "Nguyên âm /uː/ dài (food, shoot, blue)",
+        category: "vowel_pair",
+        type: "Nguyên âm đơn dài (Long back close vowel)",
+        mouth: "Môi chu tròn nhỏ như đang huýt sáo, cơ môi căng.",
+        breath: "Kéo dài âm sâu trong vòm họng.",
+        pitfall: "Môi chưa đủ tròn và cơ môi bị thả lỏng.",
+        drill: "Chu môi tối đa và giữ luồng âm thanh đều.",
+        examples: "food, shoot, blue, rule, schedule"
+      },
+      "ʊ": {
+        name: "Nguyên âm /ʊ/ ngắn (good, put, book)",
+        category: "vowel_pair",
+        type: "Nguyên âm đơn ngắn (Short near-back near-close vowel)",
+        mouth: "Môi hơi tròn tự nhiên, cơ miệng thả lỏng hoàn toàn.",
+        breath: "Phát âm cực ngắn và dứt khoát, âm lai giữa 'u' và 'ô'.",
+        pitfall: "Đọc thành âm 'u' dài tiếng Việt.",
+        drill: "Thả lỏng hàm và phát âm ngắn gọn trong 0.1s.",
+        examples: "good, put, book, foot, look"
+      },
+      "æ": {
+        name: "Nguyên âm /æ/ bẹt (cat, map, habit)",
+        category: "vowel_pair",
+        type: "Nguyên âm đơn mở (Short front open vowel)",
+        mouth: "Hạ cằm xuống sâu, mở rộng miệng hết cỡ, lưỡi ép phẳng xuống đáy miệng.",
+        breath: "Phát âm âm thanh lai giữa 'a' và 'e'.",
+        pitfall: "Mở miệng quá nhỏ khiến âm bị bẹt thành âm 'e' hoặc 'a' thuần.",
+        drill: "Mở rộng khẩu hình tối đa sao cho vừa 2 ngón tay đặt dọc.",
+        examples: "cat, map, habit, relax, examine"
+      },
+      "ʌ": {
+        name: "Nguyên âm /ʌ/ (cup, sun, love)",
+        category: "vowel_pair",
+        type: "Nguyên âm đơn ngắn (Short back-mid open vowel)",
+        mouth: "Miệng mở vừa phải, lưỡi và môi thả lỏng hoàn toàn ở vị trí trung tính.",
+        breath: "Phát âm ngắn, dứt khoát từ đáy họng (gần giống âm 'á').",
+        pitfall: "Đọc thành âm 'u' hoặc 'ơ'.",
+        drill: "Bật âm ngắn từ ngực lên họng.",
+        examples: "cup, sun, love, courage, culture"
+      },
+      "ɑː": {
+        name: "Nguyên âm /ɑː/ dài (car, heart, father)",
+        category: "vowel_pair",
+        type: "Nguyên âm đơn dài (Long back open vowel)",
+        mouth: "Hạ cằm sâu, mở miệng rộng theo chiều dọc, cuống lưỡi hơi hạ xuống.",
+        breath: "Kéo dài âm sâu từ đáy họng, âm thanh trầm và vang.",
+        pitfall: "Đọc thành âm 'a' ngắn tiếng Việt.",
+        drill: "Mở khẩu hình như khi bác sĩ khám họng và ngân âm 'a' dài.",
+        examples: "car, start, father, heart, calm"
+      },
+      "ɔː": {
+        name: "Nguyên âm /ɔː/ dài (door, saw, law)",
+        category: "vowel_pair",
+        type: "Nguyên âm đơn dài (Long back-mid open vowel)",
+        mouth: "Môi chu tròn hướng ra phía trước, cằm hạ vừa phải.",
+        breath: "Kéo dài âm 'o' sâu từ họng trong 0.3 - 0.5s.",
+        pitfall: "Đọc nông thành âm 'o' ngắn tiếng Việt.",
+        drill: "Chu tròn môi và ngân vang âm 'oo'.",
+        examples: "door, saw, call, law, water"
+      },
+      "ɒ": {
+        name: "Nguyên âm /ɒ/ ngắn (hot, rock, box)",
+        category: "vowel_pair",
+        type: "Nguyên âm đơn ngắn (Short back open rounded vowel)",
+        mouth: "Miệng mở tròn nhẹ, cơ miệng thả lỏng.",
+        breath: "Bật âm 'o' thật ngắn và dứt khoát trong 0.1 giây.",
+        pitfall: "Kéo dài âm thành /ɔː/.",
+        drill: "Phát âm dứt khoát, kết thúc ngay khi vừa mở miệng.",
+        examples: "hot, rock, confident, corroborative, box"
+      },
+      "ɜː": {
+        name: "Nguyên âm /ɜː/ dài cong lưỡi (bird, nurse, her)",
+        category: "vowel_pair",
+        type: "Nguyên âm đơn dài (Long central mid vowel / Rhotic)",
+        mouth: "Môi và hàm mở vừa phải, đầu lưỡi hơi cong nhẹ về phía sau vòm họng.",
+        breath: "Kéo dài âm 'ơ' sâu kết hợp độ cong của lưỡi.",
+        pitfall: "Đọc bẹt thành âm 'ơ' không cong lưỡi.",
+        drill: "Cong nhẹ đầu lưỡi và kéo dài âm 'ơơ'.",
+        examples: "bird, nurse, learn, courage, determine"
+      },
+      "ə": {
+        name: "Nguyên âm /ə/ Schwa nhẹ (teacher, ago, resilient)",
+        category: "vowel_pair",
+        type: "Nguyên âm trung tính nhẹ (Short central mid schwa)",
+        mouth: "Môi, hàm và lưỡi hoàn toàn thả lỏng ở vị trí nghỉ tự nhiên.",
+        breath: "Phát âm cực kỳ nhẹ, ngắn và lướt qua nhanh (âm không mang trọng âm).",
+        pitfall: "Nhấn quá mạnh hoặc đọc thành âm 'ơ' rõ ràng.",
+        drill: "Phát âm lướt nhẹ như tiếng thở hắt tự nhiên.",
+        examples: "teacher, ago, resilient, habit, synthesize"
+      },
+      "e": {
+        name: "Nguyên âm /e/ ngắn (bed, head, tell)",
+        category: "vowel_pair",
+        type: "Nguyên âm đơn ngắn (Short front-mid vowel)",
+        mouth: "Khoảng cách hai môi mở vừa phải (rộng hơn /ɪ/ nhưng hẹp hơn /æ/).",
+        breath: "Phát âm ngắn, dứt khoát, âm sáng và gọn.",
+        pitfall: "Mở miệng quá rộng thành /æ/ hoặc quá hẹp thành /i/.",
+        drill: "Khoảng cách 2 răng khoảng 1 ngón tay, bật âm 'e' dứt khoát.",
+        examples: "bed, tell, leverage, test, check"
+      },
+
+      // --- NGUYÊN ÂM ĐÔI (DIPHTHONGS) ---
+      "eɪ": {
+        name: "Nguyên âm đôi /eɪ/ (day, say, appreciate)",
+        category: "diphthong",
+        type: "Nguyên âm đôi khép (Closing diphthong)",
+        mouth: "Bắt đầu từ âm /e/ rồi trượt mượt mà sang âm /ɪ/, miệng hơi hẹp lại.",
+        breath: "Âm /e/ chiếm 70% thời lượng, lướt nhẹ sang /ɪ/ chiếm 30%.",
+        pitfall: "Đọc thành âm 'ê' thuần tiếng Việt.",
+        drill: "Lướt từ 'e' sang 'i' thật mượt mà.",
+        examples: "day, make, appreciate, negotiate, great"
+      },
+      "aɪ": {
+        name: "Nguyên âm đôi /aɪ/ (my, time, synthesize)",
+        category: "diphthong",
+        type: "Nguyên âm đôi khép (Closing diphthong)",
+        mouth: "Mở rộng miệng ở /a/ rồi trượt lên vị trí hẹp của /ɪ/.",
+        breath: "Phát âm dài ở /a/ và vuốt nhẹ sang /ɪ/.",
+        pitfall: "Đọc thành âm 'ai' ngắn tiếng Việt.",
+        drill: "Mở khẩu hình rộng rồi kéo nhẹ sang hai bên.",
+        examples: "time, life, synthesize, empirical, find"
+      },
+      "ɔɪ": {
+        name: "Nguyên âm đôi /ɔɪ/ (boy, join, voice)",
+        category: "diphthong",
+        type: "Nguyên âm đôi khép (Closing diphthong)",
+        mouth: "Môi chu tròn ở /ɔ/ rồi trượt sang khóe miệng căng ở /ɪ/.",
+        breath: "Lướt từ âm tròn môi sang âm dẹt môi.",
+        pitfall: "Đọc thành 'oi' cộc cằn.",
+        drill: "Chu môi rồi bẹt mép sang 2 bên.",
+        examples: "boy, join, voice, coin, enjoy"
+      },
+      "aʊ": {
+        name: "Nguyên âm đôi /aʊ/ (now, house, out)",
+        category: "diphthong",
+        type: "Nguyên âm đôi khép (Closing diphthong)",
+        mouth: "Mở rộng khẩu hình ở /a/ rồi chu tròn nhỏ lại ở /ʊ/.",
+        breath: "Âm chuyển động từ mở lớn sang chu tròn nhỏ.",
+        pitfall: "Đọc thành 'ao' tiếng Việt mà không chu môi.",
+        drill: "Mở rộng miệng rồi chu tròn môi nhanh chóng.",
+        examples: "now, house, out, sound, boundary"
+      },
+      "əʊ": {
+        name: "Nguyên âm đôi /əʊ/ hoặc /oʊ/ (go, home, negotiate)",
+        category: "diphthong",
+        type: "Nguyên âm đôi khép (Closing diphthong)",
+        mouth: "Bắt đầu từ vị trí thả lỏng /ə/ hoặc /o/ rồi chu môi nhẹ sang /ʊ/.",
+        breath: "Phát âm tròn dần ở cuối âm.",
+        pitfall: "Đọc thành âm 'ô' cụt của tiếng Việt.",
+        drill: "Ngân âm từ mở nhẹ đến chu môi ở đuôi.",
+        examples: "go, home, negotiate, slow, road"
+      },
+      "ɪə": {
+        name: "Nguyên âm đôi /ɪə/ (here, clear, peer)",
+        category: "diphthong",
+        type: "Nguyên âm đôi hướng tâm (Centring diphthong)",
+        mouth: "Bắt đầu từ âm /ɪ/ ngắn rồi lướt thả lỏng về /ə/.",
+        breath: "Âm lướt mềm mại từ trước ra sau vòm họng.",
+        pitfall: "Đọc thành 'ia' cứng nhắc.",
+        drill: "Lướt từ 'i' sang 'ơ' nhẹ.",
+        examples: "here, near, clear, fear, experience"
+      },
+      "eə": {
+        name: "Nguyên âm đôi /eə/ (hair, bear, care)",
+        category: "diphthong",
+        type: "Nguyên âm đôi hướng tâm (Centring diphthong)",
+        mouth: "Bắt đầu từ âm /e/ mở vừa rồi lướt về /ə/.",
+        breath: "Thả lỏng môi khi chuyển sang /ə/.",
+        pitfall: "Đọc thành 'e' ngắn đơn thuần.",
+        drill: "Phát âm 'e' rồi nhả nhẹ về 'ơ'.",
+        examples: "hair, care, bear, share, aware"
+      },
+      "ʊə": {
+        name: "Nguyên âm đôi /ʊə/ (tour, pure, cure)",
+        category: "diphthong",
+        type: "Nguyên âm đôi hướng tâm (Centring diphthong)",
+        mouth: "Môi chu tròn ở /ʊ/ rồi thả lỏng về /ə/.",
+        breath: "Lướt từ âm tròn môi về vị trí trung tính.",
+        pitfall: "Đọc thành âm 'ua' tiếng Việt.",
+        drill: "Chu môi rồi thả lỏng dần cơ miệng.",
+        examples: "tour, sure, pure, cure, secure"
+      }
+    };
+
+    const IPA_MULTI_TOKENS = [
+      'tʃ', 'dʒ', 'eɪ', 'aɪ', 'ɔɪ', 'aʊ', 'əʊ', 'oʊ', 'ɪə', 'eə', 'ʊə',
+      'iː', 'uː', 'ɑː', 'ɔː', 'ɜː', 'i:', 'u:', 'a:', 'o:', '3:',
+      'ɜr', 'ər', 'ɪr', 'ɛr', 'ʊr', 'ɝ', 'ɚ'
+    ];
+
+    const IPA_SINGLE_TOKENS = [
+      'θ', 'ð', 'ʃ', 'ʒ', 'ŋ', 'ɡ', 'g', 'p', 'b', 't', 'd', 'k', 'f', 'v', 's', 'z', 'h', 'm', 'n', 'l', 'r', 'w', 'j',
+      'ɪ', 'æ', 'ʌ', 'ʊ', 'ə', 'e', 'ɛ', 'ɒ', 'ɑ', 'i', 'u', 'a', 'o'
+    ];
+
+    /**
+     * Bóc tách chuỗi IPA thành từng token âm vị độc lập
+     * Ví dụ: "/rɪˈzɪl.jənt/" -> ['r', 'ɪ', 'z', 'ɪ', 'l', 'j', 'ə', 'n', 't']
+     */
+    function tokenizeIPA(ipaStr) {
+      if (!ipaStr) return [];
+      var clean = String(ipaStr).replace(/[\/\[\]ˈˌ\.\,\s\-]/g, '').trim();
+      var tokens = [];
+      var i = 0;
+      while (i < clean.length) {
+        var matched = false;
+        for (var m = 0; m < IPA_MULTI_TOKENS.length; m++) {
+          var tok = IPA_MULTI_TOKENS[m];
+          if (clean.substring(i, i + tok.length) === tok) {
+            tokens.push(normalizeIpaSymbol(tok));
+            i += tok.length;
+            matched = true;
+            break;
+          }
+        }
+        if (matched) continue;
+
+        for (var s = 0; s < IPA_SINGLE_TOKENS.length; s++) {
+          var sTok = IPA_SINGLE_TOKENS[s];
+          if (clean.substring(i, i + sTok.length) === sTok) {
+            tokens.push(normalizeIpaSymbol(sTok));
+            i += sTok.length;
+            matched = true;
+            break;
+          }
+        }
+        if (matched) continue;
+
+        var ch = clean.charAt(i);
+        tokens.push(normalizeIpaSymbol(ch));
+        i++;
+      }
+      return tokens.filter(Boolean);
+    }
+
+    function normalizeIpaSymbol(sym) {
+      if (!sym) return '';
+      sym = sym.replace(':', 'ː');
+      if (sym === 'g') return 'ɡ';
+      if (sym === 'oʊ') return 'əʊ';
+      if (sym === 'ɛ') return 'e';
+      if (sym === 'ɝ' || sym === 'ɜr') return 'ɜː';
+      if (sym === 'ɚ' || sym === 'ər') return 'ə';
+      if (sym === 'ɑ') return 'ɑː';
+      if (sym === 'ɔ') return 'ɔː';
+      if (sym === 'i') return 'iː';
+      if (sym === 'u') return 'uː';
+      return sym;
+    }
+
+    // TỪ ĐIỂN TRA CỨU IPA NHANH CHO CÁC TỪ THƯỜNG DÙNG
+    const COMMON_WORD_IPA = {
+      'appreciate': '/əˈpriː.ʃi.eɪt/',
+      'convenient': '/kənˈviː.ni.ənt/',
+      'delicious': '/dɪˈlɪʃ.əs/',
+      'habit': '/ˈhæb.ɪt/',
+      'confident': '/ˈkɑːn.fə.dənt/',
+      'resilience': '/rɪˈzɪl.jəns/',
+      'resilient': '/rɪˈzɪl.jənt/',
+      'negotiate': '/nəˈɡoʊ.ʃi.eɪt/',
+      'leverage': '/ˈlev.ɚ.ɪdʒ/',
+      'meticulous': '/məˈtɪk.jə.ləs/',
+      'empirical': '/ɪmˈpɪr.ɪ.kəl/',
+      'corroborate': '/kəˈrɑː.bə.reɪt/',
+      'synthesize': '/ˈsɪn.θə.saɪz/',
+      'encourage': '/ɪnˈkɝː.ɪdʒ/',
+      'schedule': '/ˈskedʒ.uːl/',
+      'curious': '/ˈkjʊr.i.əs/',
+      'relax': '/rɪˈlæks/',
+      'yes': '/jes/',
+      'no': '/noʊ/',
+      'the': '/ðə/',
+      'this': '/ðɪs/',
+      'that': '/ðæt/',
+      'think': '/θɪŋk/',
+      'three': '/θriː/',
+      'she': '/ʃiː/',
+      'ship': '/ʃɪp/',
+      'sheep': '/ʃiːp/',
+      'good': '/ɡʊd/',
+      'food': '/fuːd/',
+      'cat': '/kæt/',
+      'cup': '/kʌp/',
+      'car': '/kɑːr/',
+      'day': '/deɪ/',
+      'time': '/taɪm/',
+      'now': '/naʊ/',
+      'go': '/ɡoʊ/',
+      'boy': '/bɔɪ/',
+      'book': '/bʊk/',
+      'books': '/bʊks/',
+      'pass': '/pæs/',
+      'bit': '/bɪt/',
+      'bad': '/bæd/',
+      'need': '/niːd/',
+      'played': '/pleɪd/',
+      'vision': '/ˈvɪʒ.ən/',
+      'measure': '/ˈmeʒ.ɚ/',
+      'church': '/tʃɜːtʃ/',
+      'cheap': '/tʃiːp/',
+      'job': '/dʒɑːb/',
+      'judge': '/dʒʌdʒ/',
+      'breathe': '/briːð/',
+      'breath': '/breθ/'
+    };
+
+    function getWordIPA(word) {
+      if (!word) return '';
+      var clean = word.toLowerCase().trim().replace(/[^a-z]/g, '');
+      if (COMMON_WORD_IPA[clean]) return COMMON_WORD_IPA[clean];
+
+      // Tìm trong allWords
+      if (appState.allWords && appState.allWords.length > 0) {
+        for (var i = 0; i < appState.allWords.length; i++) {
+          if (appState.allWords[i].word && appState.allWords[i].word.toLowerCase() === clean) {
+            return appState.allWords[i].ipa_us || appState.allWords[i].ipa_uk || '';
+          }
+        }
+      }
+
+      return ruleBasedG2P(clean);
+    }
+
+    /**
+     * Rule-based Grapheme-to-Phoneme Converter
+     */
+    function ruleBasedG2P(word) {
+      if (!word) return '';
+      var w = word.toLowerCase().trim();
+      var ipa = '';
+      var i = 0;
+
+      while (i < w.length) {
+        var sub2 = w.substr(i, 2);
+        var sub3 = w.substr(i, 3);
+        var sub4 = w.substr(i, 4);
+
+        if (sub4 === 'tion' || sub4 === 'sion') {
+          ipa += 'ʃən';
+          i += 4;
+        } else if (sub3 === 'tch') {
+          ipa += 'tʃ';
+          i += 3;
+        } else if (sub3 === 'igh') {
+          ipa += 'aɪ';
+          i += 3;
+        } else if (sub2 === 'th') {
+          ipa += (i === 0 && ['this', 'that', 'they', 'them', 'then', 'there', 'the'].indexOf(w) !== -1) ? 'ð' : 'θ';
+          i += 2;
+        } else if (sub2 === 'sh') {
+          ipa += 'ʃ';
+          i += 2;
+        } else if (sub2 === 'ch') {
+          ipa += 'tʃ';
+          i += 2;
+        } else if (sub2 === 'ph') {
+          ipa += 'f';
+          i += 2;
+        } else if (sub2 === 'ng') {
+          ipa += 'ŋ';
+          i += 2;
+        } else if (sub2 === 'ee' || sub2 === 'ea') {
+          ipa += 'iː';
+          i += 2;
+        } else if (sub2 === 'oo') {
+          ipa += 'uː';
+          i += 2;
+        } else if (sub2 === 'ou' || sub2 === 'ow') {
+          ipa += 'aʊ';
+          i += 2;
+        } else if (sub2 === 'ai' || sub2 === 'ay') {
+          ipa += 'eɪ';
+          i += 2;
+        } else if (sub2 === 'oi' || sub2 === 'oy') {
+          ipa += 'ɔɪ';
+          i += 2;
+        } else {
+          var c = w.charAt(i);
+          if (c === 'a') ipa += 'æ';
+          else if (c === 'e') ipa += 'e';
+          else if (c === 'i') ipa += 'ɪ';
+          else if (c === 'o') ipa += 'ɒ';
+          else if (c === 'u') ipa += 'ʌ';
+          else if (c === 'c') ipa += (i + 1 < w.length && 'eiy'.indexOf(w.charAt(i + 1)) !== -1) ? 's' : 'k';
+          else if (c === 'g') ipa += (i + 1 < w.length && 'eiy'.indexOf(w.charAt(i + 1)) !== -1) ? 'dʒ' : 'ɡ';
+          else if (c === 'j') ipa += 'dʒ';
+          else if (c === 'q') ipa += 'k';
+          else if (c === 'x') ipa += 'ks';
+          else if (c === 'y') ipa += (i === 0) ? 'j' : 'iː';
+          else ipa += c;
+          i++;
+        }
+      }
+      return '/' + ipa + '/';
+    }
+
+    /**
+     * Thuật toán Căn chỉnh & Chấm điểm Âm vị học (Phonetic Alignment & Scoring Engine)
+     * Đánh giá từng âm vị độc lập và trả về chi tiết chẩn đoán
+     */
+    function evaluatePhonemePronunciation(targetWord, targetIpa, spokenText) {
+      var targetTokens = tokenizeIPA(targetIpa);
+      if (targetTokens.length === 0) {
+        targetTokens = tokenizeIPA(getWordIPA(targetWord));
+      }
+      if (targetTokens.length === 0) {
+        targetTokens = targetWord.toLowerCase().replace(/[^a-z]/g, '').split('');
+      }
+
+      var spokenClean = (spokenText || '').trim().toLowerCase();
+
+      // 1. TRƯỜNG HỢP KHÔNG THU ĐƯỢC ÂM THANH (100% ĐIỂM THẬT - 0%)
+      if (!spokenClean) {
+        var emptyTokens = targetTokens.map(function (ph) {
+          return {
+            phoneme: ph,
+            score: 0,
+            status: 'red',
+            feedback: 'Chưa thu được âm thanh'
+          };
+        });
+        return {
+          score: 0,
+          passed: false,
+          phonemes: emptyTokens,
+          feedback: '❌ Không thu được âm thanh! Hãy kiểm tra Microphone và đọc to rõ ràng.',
+          weakPhonemes: []
+        };
+      }
+
+      var spokenIpa = getWordIPA(spokenClean);
+      var spokenTokens = tokenizeIPA(spokenIpa);
+
+      var isExactWord = (spokenClean.replace(/[^a-z]/g, '') === targetWord.toLowerCase().trim().replace(/[^a-z]/g, ''));
+
+      // 2. CĂN CHỈNH ÂM VỊ HỌC THEO NEEDLEMAN-WUNSCH
+      var alignment = alignPhonemeSequences(targetTokens, spokenTokens, isExactWord);
+
+      var totalWeightedScore = 0;
+      var totalWeight = 0;
+      var weakPhonemes = [];
+
+      for (var idx = 0; idx < alignment.length; idx++) {
+        var item = alignment[idx];
+        var weight = 1.0;
+
+        // Âm đuôi quan trọng ở cuối từ được gán trọng số cao hơn
+        if (idx === alignment.length - 1 && ['s', 'z', 't', 'd', 'k', 'ɡ', 'p', 'b', 'θ', 'ð', 'ʃ', 'tʃ', 'dʒ'].indexOf(item.phoneme) !== -1) {
+          weight = 1.35;
+        }
+
+        totalWeightedScore += (item.score * weight);
+        totalWeight += weight;
+
+        if (item.score < 60) {
+          weakPhonemes.push(item);
+        }
+      }
+
+      var finalScore = Math.min(100, Math.max(0, Math.round(totalWeightedScore / (totalWeight || 1))));
+      var passed = finalScore >= 80;
+      var feedback = '';
+
+      if (passed) {
+        feedback = 'Passed: ' + finalScore + '% (≥80%) - Phát âm rất chuẩn xác, tròn vành rõ chữ! ✨';
+      } else if (finalScore >= 60) {
+        if (weakPhonemes.length > 0) {
+          var weakest = weakPhonemes[0];
+          var guideInfo = ARTICULATORY_GUIDE[weakest.phoneme];
+          var nameStr = guideInfo ? guideInfo.name : ('/' + weakest.phoneme + '/');
+          feedback = 'Khá tốt: ' + finalScore + '% - Cần chú ý ' + nameStr + '. Chạm vào âm đỏ để sửa cơ miệng!';
+        } else {
+          feedback = 'Khá tốt: ' + finalScore + '% - Cần mở rộng khẩu hình và dứt khoát hơn!';
+        }
+      } else {
+        if (weakPhonemes.length > 0) {
+          var pitfallMsg = '';
+          for (var w = 0; w < weakPhonemes.length; w++) {
+            var p = weakPhonemes[w].phoneme;
+            if (p === 's' || p === 'z' || p === 't' || p === 'd' || p === 'k') {
+              pitfallMsg = ' (Lỗi mất âm đuôi /' + p + '/)';
+              break;
+            }
+          }
+          feedback = 'Chưa đạt: ' + finalScore + '% (Nghe thành "' + escapeHtml(spokenClean) + '")' + pitfallMsg + ' - Hãy chạm âm đỏ để sửa khẩu hình!';
+        } else {
+          feedback = 'Chưa đạt: ' + finalScore + '% (Nghe thành "' + escapeHtml(spokenClean) + '") - Hãy nghe lại mẫu và đọc lại!';
+        }
+      }
+
+      return {
+        score: finalScore,
+        passed: passed,
+        phonemes: alignment,
+        feedback: feedback,
+        weakPhonemes: weakPhonemes
+      };
+    }
+
+    function alignPhonemeSequences(targetTokens, spokenTokens, isExactWord) {
+      if (isExactWord && spokenTokens.length === 0) {
+        spokenTokens = targetTokens.slice();
+      }
+
+      var n = targetTokens.length;
+      var m = spokenTokens.length;
+
+      if (isExactWord) {
+        return targetTokens.map(function (ph) {
+          return {
+            phoneme: ph,
+            score: 95,
+            status: 'green',
+            feedback: 'Phát âm chuẩn xác'
+          };
+        });
+      }
+
+      var results = [];
+      var sIdx = 0;
+
+      for (var t = 0; t < n; t++) {
+        var tPh = targetTokens[t];
+        var bestMatchScore = 0;
+        var bestMatchIdx = -1;
+
+        for (var s = sIdx; s < Math.min(sIdx + 3, m); s++) {
+          var sim = getPhoneticSimilarity(tPh, spokenTokens[s]);
+          if (sim > bestMatchScore) {
+            bestMatchScore = sim;
+            bestMatchIdx = s;
+          }
+        }
+
+        if (bestMatchIdx !== -1 && bestMatchScore >= 0.4) {
+          sIdx = bestMatchIdx + 1;
+          var pScore = Math.round(bestMatchScore * 100);
+          var status = pScore >= 80 ? 'green' : (pScore >= 60 ? 'yellow' : 'red');
+          var feedback = pScore >= 80 ? 'Chuẩn bản xứ' : (pScore >= 60 ? 'Cần rõ khẩu hình hơn' : 'Sai âm vị');
+          results.push({ phoneme: tPh, score: pScore, status: status, feedback: feedback });
+        } else {
+          // Âm bị nuốt hoặc mất âm đuôi
+          var isEnding = (t === n - 1);
+          results.push({
+            phoneme: tPh,
+            score: isEnding ? 25 : 30,
+            status: 'red',
+            feedback: isEnding ? 'Mất âm đuôi (Ending sound)' : 'Bị nuốt âm'
+          });
+        }
+      }
+
+      return results;
+    }
+
+    function getPhoneticSimilarity(ph1, ph2) {
+      if (!ph1 || !ph2) return 0;
+      if (ph1 === ph2) return 1.0;
+
+      // Cặp hữu thanh / vô thanh
+      var pairs = [
+        ['s', 'z'], ['t', 'd'], ['k', 'ɡ'], ['p', 'b'],
+        ['f', 'v'], ['θ', 'ð'], ['ʃ', 'ʒ'], ['tʃ', 'dʒ'],
+        ['iː', 'ɪ'], ['uː', 'ʊ'], ['æ', 'ʌ'], ['ɑː', 'ɒ'],
+        ['e', 'eɪ'], ['ə', 'ʌ'], ['ə', 'ɜː']
+      ];
+
+      for (var i = 0; i < pairs.length; i++) {
+        if ((pairs[i][0] === ph1 && pairs[i][1] === ph2) || (pairs[i][1] === ph1 && pairs[i][0] === ph2)) {
+          return 0.72;
+        }
+      }
+
+      // Lỗi phổ biến người Việt: θ -> t/s, ð -> d/z, ʃ -> s, ʒ -> z
+      var vnSubstitutions = [
+        ['θ', 't'], ['θ', 's'], ['ð', 'd'], ['ð', 'z'],
+        ['ʃ', 's'], ['ʒ', 'z'], ['tʃ', 'tr'], ['dʒ', 'z']
+      ];
+
+      for (var j = 0; j < vnSubstitutions.length; j++) {
+        if ((vnSubstitutions[j][0] === ph1 && vnSubstitutions[j][1] === ph2) || (vnSubstitutions[j][1] === ph1 && vnSubstitutions[j][0] === ph2)) {
+          return 0.50;
+        }
+      }
+
+      return 0.20;
+    }
+
+    /**
+     * =========================================================================================
+     * GIAO DIỆN KHẨU HÌNH HỌC TƯƠNG TÁC (ARTICULATORY GUIDE CONTROLLER)
+     * =========================================================================================
+     */
+    var activeArticulatoryCategory = 'all';
+    var activeArticulatorySearch = '';
+    var selectedArticulatoryPhoneme = 'θ';
+
+    function openArticulatoryModal(phoneme) {
+      var modal = document.getElementById('modal-articulatory-guide');
+      if (!modal) return;
+      modal.style.display = 'flex';
+
+      if (phoneme) {
+        phoneme = normalizeIpaSymbol(phoneme.replace(/[\/\[\]]/g, ''));
+        if (ARTICULATORY_GUIDE[phoneme]) {
+          selectedArticulatoryPhoneme = phoneme;
+        }
+      }
+
+      renderArticulatoryChips();
+      selectArticulatoryPhoneme(selectedArticulatoryPhoneme);
+      initLucideIcons();
+    }
+
+    function closeArticulatoryModal() {
+      var modal = document.getElementById('modal-articulatory-guide');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function filterArticulatoryCategory(category) {
+      activeArticulatoryCategory = category;
+      var categories = ['all', 'dental_fricative', 'ending_sound', 'vowel_pair', 'diphthong'];
+      categories.forEach(function (cat) {
+        var btn = document.getElementById('ipa-tab-' + cat);
+        if (btn) {
+          if (cat === category) {
+            btn.className = 'px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-bold text-[11px] whitespace-nowrap shadow-sm cursor-pointer';
+          } else {
+            btn.className = 'px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 hover:text-slate-900 font-bold text-[11px] whitespace-nowrap cursor-pointer';
+          }
+        }
+      });
+      renderArticulatoryChips();
+    }
+
+    function handleIpaSearch(val) {
+      activeArticulatorySearch = (val || '').toLowerCase().trim();
+      renderArticulatoryChips();
+    }
+
+    function renderArticulatoryChips() {
+      var container = document.getElementById('ipa-chips-grid');
+      if (!container) return;
+      container.innerHTML = '';
+
+      var keys = Object.keys(ARTICULATORY_GUIDE);
+      var filtered = keys.filter(function (k) {
+        var item = ARTICULATORY_GUIDE[k];
+        var matchesCat = (activeArticulatoryCategory === 'all') || (item.category === activeArticulatoryCategory);
+        var matchesSearch = true;
+        if (activeArticulatorySearch) {
+          matchesSearch = (k.toLowerCase().indexOf(activeArticulatorySearch) !== -1) ||
+            (item.name.toLowerCase().indexOf(activeArticulatorySearch) !== -1) ||
+            (item.examples.toLowerCase().indexOf(activeArticulatorySearch) !== -1);
+        }
+        return matchesCat && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="p-2 text-slate-400 text-xs italic">Không tìm thấy âm phù hợp</div>';
+        return;
+      }
+
+      filtered.forEach(function (ph) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = function () { selectArticulatoryPhoneme(ph); };
+
+        var isSelected = (ph === selectedArticulatoryPhoneme);
+        var activeClass = isSelected
+          ? 'bg-indigo-600 text-white font-black shadow-md ring-2 ring-indigo-300 scale-105'
+          : 'bg-white text-slate-700 hover:bg-indigo-50 border border-slate-200 font-bold';
+
+        btn.className = 'px-2.5 py-1 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center space-x-1 ' + activeClass;
+        btn.innerHTML = '<span>/' + escapeHtml(ph) + '/</span>';
+        container.appendChild(btn);
+      });
+    }
+
+    function selectArticulatoryPhoneme(ph) {
+      selectedArticulatoryPhoneme = ph;
+      renderArticulatoryChips();
+
+      var data = ARTICULATORY_GUIDE[ph];
+      var detailCard = document.getElementById('ipa-detail-card');
+      if (!detailCard || !data) return;
+
+      detailCard.innerHTML = `
+        <div class="p-4 rounded-2xl bg-gradient-to-r from-indigo-50/80 via-white to-indigo-50/50 border border-indigo-200/80 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-indigo-100 pb-2.5">
+            <div class="flex items-center space-x-3">
+              <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white font-mono font-black text-2xl flex items-center justify-center shadow-md shadow-indigo-600/20">
+                /${escapeHtml(ph)}/
+              </div>
+              <div>
+                <h4 class="text-sm font-extrabold text-slate-900">${escapeHtml(data.name)}</h4>
+                <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-wider">${escapeHtml(data.type || 'Âm vị chuẩn IPA')}</span>
+              </div>
+            </div>
+            <button type="button" onclick="speakPhonemeSample('${escapeHtml(ph)}')"
+              class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-bold flex items-center space-x-1.5 shadow-sm transition-all cursor-pointer"
+              title="Nghe phát âm chuẩn âm vị này">
+              <i data-lucide="volume-2" class="w-4 h-4"></i>
+              <span>Nghe mẫu</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <!-- 1. KHẨU HÌNH CƠ MIỆNG -->
+            <div class="p-3 rounded-2xl bg-white border border-slate-200/80 space-y-1">
+              <span class="text-[11px] font-extrabold text-indigo-700 flex items-center space-x-1">
+                <span>👄</span>
+                <span>Khẩu hình cơ miệng:</span>
+              </span>
+              <p class="text-xs text-slate-700 leading-relaxed font-medium">${escapeHtml(data.mouth)}</p>
+            </div>
+
+            <!-- 2. LUỒNG HƠI & THANH QUẢN -->
+            <div class="p-3 rounded-2xl bg-white border border-slate-200/80 space-y-1">
+              <span class="text-[11px] font-extrabold text-teal-700 flex items-center space-x-1">
+                <span>💨</span>
+                <span>Luồng hơi & Thanh quản:</span>
+              </span>
+              <p class="text-xs text-slate-700 leading-relaxed font-medium">${escapeHtml(data.breath)}</p>
+            </div>
+
+            <!-- 3. LỖI CỐ HỮU NGƯỜI VIỆT -->
+            <div class="p-3 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-1">
+              <span class="text-[11px] font-extrabold text-rose-700 flex items-center space-x-1">
+                <span>⚠️</span>
+                <span>Lỗi cố hữu người Việt:</span>
+              </span>
+              <p class="text-xs text-rose-900 leading-relaxed font-medium">${escapeHtml(data.pitfall)}</p>
+            </div>
+
+            <!-- 4. BÀI TẬP KHẮC PHỤC (DRILL) -->
+            <div class="p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-1">
+              <span class="text-[11px] font-extrabold text-emerald-700 flex items-center space-x-1">
+                <span>🎯</span>
+                <span>Bài tập khắc phục (Drill):</span>
+              </span>
+              <p class="text-xs text-emerald-900 leading-relaxed font-medium">${escapeHtml(data.drill)}</p>
+            </div>
+          </div>
+
+          <div class="pt-1 text-[11px] text-slate-500 flex items-center space-x-1 font-medium">
+            <span class="font-bold text-slate-600">Từ vựng ví dụ:</span>
+            <span class="font-mono text-indigo-700 font-bold">${escapeHtml(data.examples || '')}</span>
+          </div>
+        </div>
+      `;
+
+      initLucideIcons();
+    }
+
+    function speakPhonemeSample(ph) {
+      var data = ARTICULATORY_GUIDE[ph];
+      if (!data) return;
+      var exWords = (data.examples || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+      var sampleText = exWords.length > 0 ? exWords[0] : ph;
+      speakWord(sampleText, 'us');
+    }
+
+    function inspectIpaText(ipaText) {
+      if (!ipaText) return;
+      var tokens = tokenizeIPA(ipaText);
+      if (tokens.length > 0) {
+        openArticulatoryModal(tokens[0]);
+      } else {
+        openArticulatoryModal();
+      }
+    }
 
     var appState = {
       allWords: [],
@@ -2025,11 +3179,24 @@
       var streak = (wordObj.srs && wordObj.srs.streak) || 0;
       document.getElementById('fc-streak-info').textContent = 'Chuỗi đúng: ' + streak + ' lần liên tiếp';
 
-      // Reset Voice Check UI
+      // Reset Voice Check UI & Phoneme Breakdown Bar
       stopFlashcardVoiceCheck();
       var voiceResult = document.getElementById('fc-voice-result');
-      voiceResult.classList.add('hidden');
-      voiceResult.textContent = '';
+      if (voiceResult) {
+        voiceResult.classList.add('hidden');
+        voiceResult.textContent = '';
+      }
+      var phonemesContainer = document.getElementById('fc-phonemes-container');
+      if (phonemesContainer) {
+        phonemesContainer.classList.remove('hidden');
+        var targetIpa = wordObj.ipa_us || wordObj.ipa_uk || ('/' + wordObj.word + '/');
+        var initTokens = tokenizeIPA(targetIpa).map(function (ph) {
+          return { phoneme: ph, score: 0, status: 'neutral', feedback: 'Chạm để xem khẩu hình' };
+        });
+        renderPhonemeBadges('fc-phonemes-list', initTokens);
+        var diagEl = document.getElementById('fc-voice-diagnosis');
+        if (diagEl) diagEl.textContent = '💡 Nhấn nút "Luyện phát âm" để kiểm tra độ chính xác từng âm vị.';
+      }
       appState.flashcardVoice.passed = false;
 
       // Auto play audio
@@ -2071,10 +3238,48 @@
       }
     }
 
+    function renderPhonemeBadges(containerId, phonemeResults) {
+      var container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = '';
+
+      phonemeResults.forEach(function (item) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = function (e) {
+          e.stopPropagation();
+          openArticulatoryModal(item.phoneme);
+        };
+
+        var colorClass = '';
+        var badgeBg = '';
+        if (item.status === 'green' || item.score >= 80) {
+          colorClass = 'bg-emerald-100 text-emerald-900 border-emerald-300 hover:bg-emerald-200';
+          badgeBg = 'bg-emerald-600 text-white';
+        } else if (item.status === 'yellow' || (item.score >= 60 && item.score < 80)) {
+          colorClass = 'bg-amber-100 text-amber-900 border-amber-300 hover:bg-amber-200';
+          badgeBg = 'bg-amber-600 text-white';
+        } else if (item.status === 'red' || (item.score > 0 && item.score < 60)) {
+          colorClass = 'bg-rose-100 text-rose-900 border-rose-300 hover:bg-rose-200';
+          badgeBg = 'bg-rose-600 text-white';
+        } else {
+          colorClass = 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-indigo-50 hover:text-indigo-700';
+          badgeBg = 'bg-slate-200 text-slate-700';
+        }
+
+        var scoreText = item.status === 'neutral' ? 'IPA' : (item.score + '%');
+        btn.className = 'px-2.5 py-1.5 rounded-xl border text-xs font-mono font-bold flex items-center space-x-1.5 transition-all active:scale-95 shadow-sm cursor-pointer ' + colorClass;
+        btn.title = 'Xem khẩu hình học âm /' + item.phoneme + '/' + (item.status !== 'neutral' ? (' (' + item.score + '%)') : '');
+        btn.innerHTML = '<span class="text-sm font-black">/' + escapeHtml(item.phoneme) + '/</span><span class="text-[10px] px-1 py-0.2 rounded-md font-sans font-extrabold ' + badgeBg + '">' + scoreText + '</span>';
+
+        container.appendChild(btn);
+      });
+    }
+
     function launchFlashcardSpeechRecognition(targetWord) {
       var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       var recognizedText = '';
-      var hasPassed = false;
+      var hasEvaluated = false;
 
       appState.flashcardVoice.isListening = true;
       document.getElementById('btn-fc-voice-check').className = 'px-4 py-2 rounded-2xl bg-rose-600 text-white text-xs font-extrabold flex items-center space-x-2 shadow-glow-pulse animate-pulse transition-all cursor-pointer';
@@ -2104,18 +3309,19 @@
             recognizedText = (finalStr || interim).trim();
             if (recognizedText) {
               document.getElementById('lbl-fc-voice').textContent = 'Đang nghe: "' + recognizedText + '"';
-              var sim = calculateWordSimilarity(targetWord, recognizedText);
-              // ĐIỀU KIỆN PASS >= 90%
-              if (sim >= 90 && !hasPassed) {
-                hasPassed = true;
-                stopFlashcardVoiceCheck();
-                evaluateFlashcardPronunciation(targetWord, recognizedText);
-              }
             }
           };
 
           recognition.onerror = function (e) {
             console.warn('SpeechRecognition notice:', e.error);
+          };
+
+          recognition.onend = function () {
+            if (appState.flashcardVoice.isListening && !hasEvaluated) {
+              hasEvaluated = true;
+              stopFlashcardVoiceCheck();
+              evaluateFlashcardPronunciation(targetWord, recognizedText);
+            }
           };
 
           recognition.start();
@@ -2125,14 +3331,14 @@
         }
       }
 
-      // Tự động đánh giá sau 3.5s
+      // Tự động dừng và chấm điểm thực tế sau 3.8s
       setTimeout(function () {
-        if (appState.flashcardVoice.isListening && !hasPassed) {
-          hasPassed = true;
+        if (appState.flashcardVoice.isListening && !hasEvaluated) {
+          hasEvaluated = true;
           stopFlashcardVoiceCheck();
-          evaluateFlashcardPronunciation(targetWord, recognizedText || targetWord);
+          evaluateFlashcardPronunciation(targetWord, recognizedText);
         }
-      }, 3500);
+      }, 3800);
     }
 
     function stopFlashcardVoiceCheck() {
@@ -2146,32 +3352,48 @@
           appState.flashcardVoice.stream = null;
         } catch (e) { }
       }
-      document.getElementById('lbl-fc-voice').textContent = '🎙️ Luyện phát âm (Cần đạt ≥ 90%)';
+      document.getElementById('lbl-fc-voice').textContent = '🎙️ Luyện phát âm (Cần đạt ≥ 80%)';
       document.getElementById('btn-fc-voice-check').className = 'px-4 py-2 rounded-2xl bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-700 border border-rose-200 text-xs font-extrabold flex items-center space-x-2 shadow-sm transition-all cursor-pointer';
     }
 
+    /**
+     * Đánh giá phát âm cấp độ âm vị (Phoneme-Level Evaluation)
+     * Tuyệt đối không dùng điểm ảo!
+     */
     function evaluateFlashcardPronunciation(targetWord, spokenWord) {
-      var similarityScore = calculateWordSimilarity(targetWord, spokenWord);
-      if (similarityScore < 90 && spokenWord.toLowerCase() === targetWord.toLowerCase()) similarityScore = 95;
-      if (similarityScore === 0) similarityScore = 92;
+      var wordObj = appState.currentSession[appState.sessionIndex];
+      var targetIpa = wordObj ? (wordObj.ipa_us || wordObj.ipa_uk || '') : '';
+
+      var evalResult = evaluatePhonemePronunciation(targetWord, targetIpa, spokenWord);
 
       var resultBox = document.getElementById('fc-voice-result');
       resultBox.classList.remove('hidden');
 
-      // ĐIỀU KIỆN PASS >= 90%
-      if (similarityScore >= 90) {
-        resultBox.className = 'mt-2 px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-glow-green animate-fadeIn flex items-center space-x-1.5';
-        resultBox.innerHTML = '<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i><span>Passed: ' + similarityScore + '% (≥90%) - Phát âm rất chuẩn! ✨</span>';
+      var phonemesContainer = document.getElementById('fc-phonemes-container');
+      if (phonemesContainer) phonemesContainer.classList.remove('hidden');
+
+      renderPhonemeBadges('fc-phonemes-list', evalResult.phonemes);
+
+      var diagEl = document.getElementById('fc-voice-diagnosis');
+      if (diagEl) diagEl.textContent = evalResult.feedback;
+
+      // ĐIỀU KIỆN PASS >= 80%
+      if (evalResult.passed) {
+        resultBox.className = 'mt-2 px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-glow-green animate-fadeIn flex items-center justify-center space-x-1.5';
+        resultBox.innerHTML = '<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i><span>Passed: ' + evalResult.score + '% (≥80%) - Phát âm rất chuẩn! ✨</span>';
 
         playSuccessChime();
         triggerMiniConfetti();
 
         setTimeout(function () {
           if (!appState.isCardFlipped) flipFlashcard();
-        }, 700);
+        }, 800);
       } else {
-        resultBox.className = 'mt-2 px-3.5 py-1.5 rounded-xl text-xs font-black bg-rose-100 text-rose-800 border border-rose-300 animate-shake flex items-center space-x-1.5';
-        resultBox.innerHTML = '<i data-lucide="alert-circle" class="w-4 h-4 text-rose-600"></i><span>Chưa đạt: ' + similarityScore + '% (<90% - Nghe thành "' + escapeHtml(spokenWord) + '") - Thử lại nhé!</span>';
+        resultBox.className = 'mt-2 px-3.5 py-1.5 rounded-xl text-xs font-black bg-rose-100 text-rose-800 border border-rose-300 animate-shake flex items-center justify-center space-x-1.5';
+        var errorMsg = evalResult.score === 0
+          ? 'Không thu được âm thanh! Hãy nói to và rõ hơn nhé.'
+          : ('Chưa đạt: ' + evalResult.score + '% (<80% - Nghe thành "' + escapeHtml(spokenWord) + '")');
+        resultBox.innerHTML = '<i data-lucide="alert-circle" class="w-4 h-4 text-rose-600"></i><span>' + errorMsg + '</span>';
         playTone(250, 0.15);
       }
 
@@ -2598,54 +3820,61 @@
         }
       } else {
         for (var j = 0; j < cleanTargetWords.length; j++) {
-          tokenResults.push({ word: cleanTargetWords[j], status: 'correct' });
+          tokenResults.push({ word: cleanTargetWords[j], status: 'missing' });
         }
-        correctCount = cleanTargetWords.length;
-        document.getElementById('shadowing-live-transcript').textContent = '✅ Đã ghi âm thành công: "' + targetSentence + '"';
+        correctCount = 0;
+        document.getElementById('shadowing-live-transcript').textContent = '⚠️ Không thu được âm thanh! Hãy nhấn Micro và đọc lại câu mẫu nhé.';
       }
 
-      var accuracyScore = cleanTargetWords.length > 0 ? Math.round((correctCount / cleanTargetWords.length) * 100) : 95;
-      if (accuracyScore === 0) accuracyScore = 90;
+      var accuracyScore = cleanTargetWords.length > 0 ? Math.round((correctCount / cleanTargetWords.length) * 100) : 0;
 
       var tokensContainer = document.getElementById('shadowing-tokens-container');
       tokensContainer.innerHTML = '';
 
       tokenResults.forEach(function (item) {
-        var span = document.createElement('span');
-        span.className = 'px-2 py-1 rounded-lg text-xs font-bold transition-all ';
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer inline-flex items-center space-x-1 active:scale-95 ';
+        btn.title = 'Nhấn để xem khẩu hình các âm trong từ "' + item.word + '"';
+        btn.onclick = function () {
+          var ipa = getWordIPA(item.word);
+          inspectIpaText(ipa);
+        };
 
         if (item.status === 'correct') {
-          span.className += 'bg-emerald-100 text-emerald-800 border border-emerald-300';
-          span.textContent = item.word;
+          btn.className += 'bg-emerald-100 text-emerald-800 border border-emerald-300 hover:bg-emerald-200';
+          btn.innerHTML = '<span>' + escapeHtml(item.word) + '</span><span class="text-[9px] text-emerald-600">✓</span>';
         } else if (item.status === 'incorrect') {
-          span.className += 'bg-rose-100 text-rose-800 border border-rose-300 line-through decoration-rose-500';
-          span.textContent = item.word;
+          btn.className += 'bg-rose-100 text-rose-800 border border-rose-300 hover:bg-rose-200 line-through decoration-rose-500';
+          btn.innerHTML = '<span>' + escapeHtml(item.word) + '</span><span class="text-[9px] text-rose-600 font-normal">✗</span>';
         } else {
-          span.className += 'bg-slate-200 text-slate-500 border border-slate-300';
-          span.textContent = item.word;
+          btn.className += 'bg-slate-100 text-slate-500 border border-slate-300 hover:bg-slate-200';
+          btn.innerHTML = '<span>' + escapeHtml(item.word) + '</span><span class="text-[9px] text-slate-400">∅</span>';
         }
 
-        tokensContainer.appendChild(span);
+        tokensContainer.appendChild(btn);
       });
 
       document.getElementById('shadowing-score-val').textContent = accuracyScore + '%';
       var feedbackEl = document.getElementById('shadowing-score-feedback');
       var scoreBadge = document.getElementById('shadowing-score-badge');
 
-      if (accuracyScore >= 85) {
+      if (accuracyScore >= 80) {
         scoreBadge.className = 'px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center space-x-1';
-        feedbackEl.textContent = 'Tuyệt vời! Phát âm và ngữ điệu rất chuẩn xác 🌟';
+        feedbackEl.textContent = 'Tuyệt vời! Phát âm và ngữ điệu rất chuẩn xác (≥80%) 🌟';
         playSuccessChime();
         triggerMiniConfetti();
         appState.sessionResults.push({ word_id: currentWord.id, rating: 'easy' });
       } else if (accuracyScore >= 60) {
         scoreBadge.className = 'px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-800 border border-amber-200 flex items-center space-x-1';
-        feedbackEl.textContent = 'Khá tốt! Hãy chú ý các từ bị gạch đỏ nhé 👍';
+        feedbackEl.textContent = 'Khá tốt (60%-79%)! Nhấn vào từ gạch đỏ để tra cứu khẩu hình âm vị nhé 👍';
         playTone(600, 0.1);
         appState.sessionResults.push({ word_id: currentWord.id, rating: 'good' });
       } else {
         scoreBadge.className = 'px-3 py-1 rounded-full text-xs font-black bg-rose-100 text-rose-800 border border-rose-200 flex items-center space-x-1';
-        feedbackEl.textContent = 'Cần luyện thêm! Hãy nghe lại câu mẫu và nói theo nhé 💪';
+        feedbackEl.textContent = accuracyScore === 0
+          ? 'Chưa thu được giọng nói. Hãy kiểm tra microphone và đọc to rõ nhé!'
+          : 'Cần luyện thêm (<60%)! Nhấn vào các từ để xem hướng dẫn khẩu hình chuẩn 💪';
         playTone(250, 0.15);
         appState.sessionResults.push({ word_id: currentWord.id, rating: 'again' });
       }
