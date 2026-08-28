@@ -516,12 +516,31 @@
 
               <!-- Dynamic Speech Bubble -->
               <div
-                class="glass-speech-bubble p-3.5 rounded-2xl relative inline-block text-left text-xs font-semibold text-slate-700 leading-relaxed shadow-sm">
-                <span id="mascot-speech-text">"Kiên trì 15 phút mỗi ngày sẽ tạo nên sự khác biệt phi thường! 🚀"</span>
-                <div
-                  class="text-[10px] text-indigo-600 font-bold pt-1 flex items-center space-x-1 cursor-pointer hover:underline"
-                  onclick="pokeMascot()">
-                  <span>✨ Chạm vào Cú để nhận cảm hứng học tập</span>
+                class="glass-speech-bubble p-4 rounded-2xl relative inline-block text-left text-[13px] font-semibold text-slate-800 leading-snug shadow-sm border border-slate-200/60 max-w-lg">
+                <span id="mascot-speech-text">"Đừng có lướt lướt nữa, đọc to rõ ràng từng âm cuối /s/, /t/ cho tôi!
+                  🤨📏"</span>
+
+                <!-- Sleek Minimalist Micro Action Bar -->
+                <div class="pt-2.5 flex items-center flex-wrap gap-2 border-t border-slate-100/80 mt-2.5">
+                  <button type="button" onclick="pokeMascot()"
+                    class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 transition-all flex items-center space-x-1 cursor-pointer active:scale-95">
+                    <span>✨ Tương tác Cú</span>
+                  </button>
+                  <button type="button" onclick="feedGemToMascot()"
+                    class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 hover:bg-amber-100 text-amber-700 transition-all flex items-center space-x-1 cursor-pointer active:scale-95"
+                    title="Thưởng 1 Kim Cương cho Cú">
+                    <span>💎 Thưởng ngọc</span>
+                  </button>
+                  <button type="button" onclick="window.VocabMascot.togglePersona()"
+                    class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all flex items-center space-x-1 cursor-pointer active:scale-95"
+                    title="Đổi tính cách Cú">
+                    <span>🦉 Đổi tính cách</span>
+                  </button>
+                  <button type="button" onclick="window.VocabMascot.toggleMute()"
+                    class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all flex items-center space-x-1 cursor-pointer active:scale-95"
+                    title="Bật / Tắt âm thanh hiệu ứng">
+                    <span id="mascot-sound-icon">🔊</span>
+                  </button>
                 </div>
               </div>
 
@@ -541,88 +560,9 @@
               </div>
             </div>
 
-            <!-- Right: Pure Vector SVG 3D Animated Autonomous Owl Mascot -->
+            <!-- Right: Pure Vector SVG 3D Animated Autonomous Owl Mascot (Engine injected) -->
             <div id="mascot-wrapper"
-              class="flex flex-col items-center justify-center flex-shrink-0 transition-all duration-700">
-              <svg id="mascot-owl-svg" viewBox="0 0 120 120"
-                class="w-28 h-28 sm:w-32 sm:h-32 cursor-pointer select-none transition-transform duration-300 hover:scale-105 active:scale-95 animate-float-subtle"
-                onclick="pokeMascot()" title="Chạm vào tôi để xem Cú nhào lộn 3D & nghe lời khuyên!">
-                <defs>
-                  <linearGradient id="owlBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#818CF8" />
-                    <stop offset="50%" stop-color="#6366F1" />
-                    <stop offset="100%" stop-color="#4F46E5" />
-                  </linearGradient>
-                  <linearGradient id="owlBellyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#FFFFFF" />
-                    <stop offset="100%" stop-color="#F1F5F9" />
-                  </linearGradient>
-                  <linearGradient id="beakGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#FBBF24" />
-                    <stop offset="100%" stop-color="#F59E0B" />
-                  </linearGradient>
-                  <linearGradient id="capGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#1E293B" />
-                    <stop offset="100%" stop-color="#0F172A" />
-                  </linearGradient>
-                  <filter id="owlShadow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#4338CA" flood-opacity="0.22" />
-                  </filter>
-                </defs>
-
-                <!-- Paws / Feet -->
-                <ellipse cx="46" cy="108" rx="8" ry="4" fill="#F59E0B" />
-                <ellipse cx="74" cy="108" rx="8" ry="4" fill="#F59E0B" />
-
-                <!-- Main Body -->
-                <rect x="22" y="32" width="76" height="76" rx="38" fill="url(#owlBodyGrad)" filter="url(#owlShadow)" />
-
-                <!-- Left & Right Layered Wings -->
-                <path id="owl-left-wing" d="M22 62 Q12 75 24 88 Q28 75 28 64 Z" fill="#4338CA" opacity="0.9" />
-                <path id="owl-right-wing" d="M98 62 Q108 75 96 88 Q92 75 92 64 Z" fill="#4338CA" opacity="0.9" />
-
-                <!-- Belly Bib -->
-                <path d="M38 64 Q60 52 82 64 Q86 96 60 98 Q34 96 38 64 Z" fill="url(#owlBellyGrad)" />
-                <path d="M52 74 Q60 78 68 74" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round" fill="none" />
-                <path d="M48 82 Q60 86 72 82" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round" fill="none" />
-
-                <!-- Blushing Cheeks -->
-                <ellipse cx="36" cy="62" rx="5" ry="3.5" fill="#FDA4AF" opacity="0.8" />
-                <ellipse cx="84" cy="62" rx="5" ry="3.5" fill="#FDA4AF" opacity="0.8" />
-
-                <!-- Left Eye Group with Natural Blinking -->
-                <g id="owl-left-eye" class="animate-owl-blink">
-                  <circle cx="44" cy="50" r="14" fill="#FFFFFF" />
-                  <circle cx="44" cy="50" r="10" fill="#1E1B4B" />
-                  <circle cx="44" cy="50" r="6" fill="#3B82F6" opacity="0.8" />
-                  <circle cx="41" cy="47" r="3.5" fill="#FFFFFF" />
-                  <circle cx="46" cy="52" r="1.5" fill="#FFFFFF" />
-                </g>
-
-                <!-- Right Eye Group with Natural Blinking -->
-                <g id="owl-right-eye" class="animate-owl-blink-right">
-                  <circle cx="76" cy="50" r="14" fill="#FFFFFF" />
-                  <circle cx="76" cy="50" r="10" fill="#1E1B4B" />
-                  <circle cx="76" cy="50" r="6" fill="#3B82F6" opacity="0.8" />
-                  <circle cx="73" cy="47" r="3.5" fill="#FFFFFF" />
-                  <circle cx="78" cy="52" r="1.5" fill="#FFFFFF" />
-                </g>
-
-                <!-- Amber Beak -->
-                <polygon points="60,54 53,65 67,65" fill="url(#beakGrad)" rx="2" />
-
-                <!-- Graduation Hat with Wobble Animation -->
-                <g id="owl-hat-group" transform="translate(60, 26) rotate(-8) translate(-60, -26)">
-                  <path d="M42 26 Q60 18 78 26 L74 33 Q60 28 46 33 Z" fill="#0F172A" />
-                  <polygon points="60,10 92,23 60,34 28,23" fill="url(#capGrad)" />
-                  <circle cx="60" cy="22" r="2.5" fill="#FBBF24" />
-                  <path d="M60 22 Q72 26 78 36" stroke="#FBBF24" stroke-width="1.8" fill="none"
-                    stroke-linecap="round" />
-                  <circle cx="78" cy="37" r="2" fill="#F59E0B" />
-                </g>
-              </svg>
-              <span id="mascot-title-badge" class="text-[10px] font-bold text-slate-400 mt-1">Cú Giáo Sư
-                VocabFlow</span>
+              class="flex flex-col items-center justify-center flex-shrink-0 transition-all duration-700 min-h-[140px] min-w-[140px]">
             </div>
           </div>
         </div>
@@ -1979,6 +1919,23 @@
       } catch (e) { }
     }
 
+    function pokeMascot() {
+      if (window.VocabMascot && typeof window.VocabMascot.poke === 'function') {
+        window.VocabMascot.poke();
+      }
+    }
+
+    function feedGemToMascot() {
+      if (window.VocabMascot && typeof window.VocabMascot.feedGem === 'function') {
+        if ((appState.gems || 0) > 0) {
+          appState.gems = Math.max(0, appState.gems - 1);
+          saveStateToCache();
+          updateGamificationUI();
+        }
+        window.VocabMascot.feedGem();
+      }
+    }
+
     /**
      * MODULE 3: EXPRESSIVE NEURAL PROSODY ENGINE
      */
@@ -1996,20 +1953,59 @@
       getPreferredVoice: function (accent) {
         var langCode = accent === 'uk' ? 'en-GB' : 'en-US';
         var preferredNames = accent === 'uk'
-          ? ['Microsoft Sonia Online (Natural)', 'Microsoft Ryan Online (Natural)', 'Google UK English Female', 'Daniel (Enhanced)', 'Daniel']
-          : ['Microsoft Jenny Online (Natural)', 'Microsoft Guy Online (Natural)', 'Google US English', 'Samantha (Enhanced)', 'Samantha', 'Zira'];
+          ? [
+            'Microsoft Sonia Online (Natural)',
+            'Microsoft Ryan Online (Natural)',
+            'Microsoft Libby Online (Natural)',
+            'Google UK English Female',
+            'Google UK English Male',
+            'Daniel (Enhanced)',
+            'Daniel',
+            'Oliver',
+            'Hazel'
+          ]
+          : [
+            'Microsoft Jenny Online (Natural)',
+            'Microsoft Guy Online (Natural)',
+            'Microsoft Aria Online (Natural)',
+            'Microsoft Christopher Online (Natural)',
+            'Microsoft Eric Online (Natural)',
+            'Google US English',
+            'Samantha (Enhanced)',
+            'Samantha',
+            'Ava',
+            'Alex',
+            'Zira'
+          ];
 
+        // 1. Ưu tiên các giọng Neural / Natural cao cấp nhất của Microsoft / Google / Apple
         for (var i = 0; i < preferredNames.length; i++) {
-          var v = VoiceManager.voices.find(function (item) { return item.name && item.name.includes(preferredNames[i]); });
+          var v = VoiceManager.voices.find(function (item) {
+            return item.name && item.name.includes(preferredNames[i]);
+          });
           if (v) return v;
         }
-        return VoiceManager.voices.find(function (item) { return item.lang && item.lang.replace('_', '-').startsWith(langCode); });
+
+        // 2. Tìm bất kỳ giọng Online / Natural / Neural nào khớp với Accent
+        var neuralVoice = VoiceManager.voices.find(function (item) {
+          var name = (item.name || '').toLowerCase();
+          var lang = (item.lang || '').replace('_', '-').toLowerCase();
+          return lang.startsWith(langCode.toLowerCase()) && (name.includes('natural') || name.includes('neural') || name.includes('online') || name.includes('enhanced') || name.includes('google'));
+        });
+        if (neuralVoice) return neuralVoice;
+
+        // 3. Fallback theo chuẩn langCode
+        return VoiceManager.voices.find(function (item) {
+          var lang = (item.lang || '').replace('_', '-').toLowerCase();
+          return lang.startsWith(langCode.toLowerCase());
+        });
       },
       speak: function (text, accent = 'us', speed = 0.9, pitch = 1.0) {
         if (!window.speechSynthesis || !text) return;
         try {
           window.speechSynthesis.cancel();
-          var utterance = new SpeechSynthesisUtterance(text);
+          var cleanText = text.trim();
+          var utterance = new SpeechSynthesisUtterance(cleanText);
           utterance.rate = speed;
           utterance.pitch = pitch;
           utterance.lang = accent === 'uk' ? 'en-GB' : 'en-US';
@@ -2018,52 +2014,53 @@
           window.speechSynthesis.speak(utterance);
         } catch (e) { }
       },
-      speakSentenceExpressive: function (sentence, accent = 'us', baseSpeed = 0.9) {
-        if (!window.speechSynthesis || !sentence) return;
-        window.speechSynthesis.cancel();
-
-        // Tách câu thành các Thought Groups (nhóm tư duy) tại dấu phẩy hoặc liên từ
-        var clauses = sentence.split(/([,;:\(\)]|\b(?:and|but|because|although|while|that|which|when)\b)/i);
-        var queue = [];
-
-        for (var i = 0; i < clauses.length; i++) {
-          var part = (clauses[i] || '').trim();
-          if (!part || /^[,;:\(\)]$/.test(part)) continue;
-          var isLast = (i >= clauses.length - 2);
-          var isQuestion = sentence.trim().endsWith('?');
-          var isWhQuestion = isQuestion && /^(who|what|where|when|why|how)\b/i.test(sentence.trim());
-
-          var pitch = 1.0;
-          var rate = baseSpeed;
-
-          if (isLast) {
-            if (isQuestion && !isWhQuestion) {
-              pitch = 1.15; // Yes/No question lên giọng
-            } else {
-              pitch = 0.92; // Câu trần thuật hạ nhẹ cuối câu
-              rate = Math.max(0.75, baseSpeed * 0.92);
-            }
-          }
-          queue.push({ text: part, pitch: pitch, rate: rate });
+      speakSentenceExpressive: function (sentence, accent = 'us', speed = 0.9, onComplete = null) {
+        if (!sentence) {
+          if (typeof onComplete === 'function') onComplete();
+          return;
         }
 
-        var playIndex = 0;
-        function playNext() {
-          if (playIndex >= queue.length) return;
-          var item = queue[playIndex++];
-          var utt = new SpeechSynthesisUtterance(item.text);
-          utt.rate = item.rate;
-          utt.pitch = item.pitch;
-          utt.lang = accent === 'uk' ? 'en-GB' : 'en-US';
+        // Chuẩn hóa câu trọn vẹn: Không cắt nhỏ gây khựng ngắt, để Neural AI tự tính nhịp thở và nối âm
+        var cleanSentence = sentence.trim()
+          .replace(/\s+/g, ' ')
+          .replace(/\s+([,.;?!:])/g, '$1');
+
+        if (!window.speechSynthesis) {
+          if (typeof onComplete === 'function') onComplete();
+          return;
+        }
+
+        try {
+          window.speechSynthesis.cancel();
+          var utterance = new SpeechSynthesisUtterance(cleanSentence);
+          utterance.rate = speed || 0.9;
+          utterance.pitch = 1.0;
+          utterance.lang = accent === 'uk' ? 'en-GB' : 'en-US';
+
           var voice = VoiceManager.getPreferredVoice(accent);
-          if (voice) utt.voice = voice;
-          utt.onend = function () {
-            // Breathing micro-pause (180ms)
-            setTimeout(playNext, 180);
+          if (voice) utterance.voice = voice;
+
+          var hasCompleted = false;
+          var finishCallback = function () {
+            if (!hasCompleted) {
+              hasCompleted = true;
+              if (typeof onComplete === 'function') onComplete();
+            }
           };
-          window.speechSynthesis.speak(utt);
+
+          utterance.onend = finishCallback;
+          utterance.onerror = finishCallback;
+
+          window.speechSynthesis.speak(utterance);
+
+          // Timer bảo hộ chống hiện tượng đơ pipeline của trình duyệt
+          var estimatedDurationMs = Math.max(1500, (cleanSentence.split(' ').length / ((speed || 0.9) * 2.5)) * 1000 + 1500);
+          setTimeout(function () {
+            if (!hasCompleted) finishCallback();
+          }, estimatedDurationMs);
+        } catch (e) {
+          if (typeof onComplete === 'function') onComplete();
         }
-        playNext();
       }
     };
     VoiceManager.init();
@@ -2510,7 +2507,7 @@
      * =========================================================================================
      */
     function navigateTo(screenId) {
-      closeWordTokenPopover();
+      closeDockedWordInspector();
       cleanupEphemeralAudio();
 
       var screens = ['dashboard', 'flashcard', 'shadowing', 'dictation', 'words'];
@@ -2540,6 +2537,10 @@
         startShadowingSession();
       } else if (screenId === 'dictation' && (!appState.currentSession || appState.currentSession.length === 0 || appState.sessionMode !== 'dictation')) {
         startDictationSession();
+      }
+
+      if (window.VocabMascot && typeof window.VocabMascot.onScreenChange === 'function') {
+        window.VocabMascot.onScreenChange('screen-' + screenId);
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2754,6 +2755,7 @@
       var wordObj = appState.currentSession[appState.sessionIndex];
       if (!wordObj) return;
 
+      if (window.VocabMascot) window.VocabMascot.reactToRecording(true);
       ensureAudioContext();
       if (window.speechSynthesis) window.speechSynthesis.cancel();
       cleanupEphemeralAudio();
@@ -2784,6 +2786,7 @@
           })
           .catch(function () {
             showToast('Vui lòng cấp quyền Microphone trên trình duyệt để ghi âm', 'error');
+            if (window.VocabMascot) window.VocabMascot.reactToRecording(false);
           });
       } else {
         launchFlashcardSpeechRecognition(wordObj.word);
@@ -2849,6 +2852,7 @@
 
     function stopFlashcardVoiceCheck() {
       appState.flashcardVoice.isListening = false;
+      if (window.VocabMascot) window.VocabMascot.reactToRecording(false);
       var viz = document.getElementById('fc-recording-visualizer');
       if (viz) { viz.classList.add('hidden'); viz.classList.remove('flex'); }
 
@@ -2887,10 +2891,17 @@
       var diagEl = document.getElementById('fc-voice-diagnosis');
       if (diagEl) diagEl.textContent = evalResult.feedback;
 
+      if (window.VocabMascot) {
+        window.VocabMascot.reactToScore(evalResult.score, targetWord);
+      }
+
       if (evalResult.passed) {
+        appState.consecutiveLowScores = 0;
+        if (evalResult.score === 100 && window.VocabMascot && typeof window.VocabMascot.transformToCheerleader === 'function') {
+          window.VocabMascot.transformToCheerleader();
+        }
         resultBox.className = 'mt-1 px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-glow-emerald animate-fadeIn flex items-center justify-center space-x-1.5';
         resultBox.innerHTML = '<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i><span>Đạt ' + evalResult.score + '% (≥80%) - Chuẩn bản xứ! (+15 XP, +10 💎) ✨</span>';
-        flapMascotWings();
         triggerMiniConfetti();
         playJoyfulChime();
         addXP(15, 'Phát âm chuẩn ' + evalResult.score + '%');
@@ -2900,6 +2911,11 @@
           if (!appState.isCardFlipped) flipFlashcard();
         }, 800);
       } else {
+        appState.consecutiveLowScores = (appState.consecutiveLowScores || 0) + 1;
+        if (appState.consecutiveLowScores >= 3 && window.VocabMascot && typeof window.VocabMascot.performDramaFaint === 'function') {
+          window.VocabMascot.performDramaFaint();
+          appState.consecutiveLowScores = 0;
+        }
         resultBox.className = 'mt-1 px-3.5 py-1.5 rounded-xl text-xs font-black bg-rose-50 text-rose-800 border border-rose-200 animate-fadeIn flex items-center justify-center space-x-1.5';
         var errorMsg = evalResult.score === 0 ? 'Không thu được âm thanh! Hãy nói to rõ hơn.' : ('Chưa đạt: ' + evalResult.score + '% (<80% - Nghe thành "' + escapeHtml(spokenWord) + '")');
         resultBox.innerHTML = '<i data-lucide="alert-circle" class="w-3.5 h-3.5 text-rose-600"></i><span>' + errorMsg + '</span>';
@@ -3154,7 +3170,14 @@
       var wordObj = appState.currentSession[appState.sessionIndex];
       if (wordObj) {
         var targetSentence = wordObj.shadowing_sentence || wordObj.example || wordObj.word;
-        VoiceManager.speakSentenceExpressive(targetSentence, appState.shadowing.accent, appState.shadowing.speed);
+        if (window.VocabMascot && typeof window.VocabMascot.transformToDJ === 'function') {
+          window.VocabMascot.transformToDJ(true);
+        }
+        VoiceManager.speakSentenceExpressive(targetSentence, appState.shadowing.accent, appState.shadowing.speed, function () {
+          if (window.VocabMascot && typeof window.VocabMascot.transformToDJ === 'function') {
+            window.VocabMascot.transformToDJ(false);
+          }
+        });
       }
     }
 
@@ -3234,12 +3257,9 @@
       });
     }
 
-    document.addEventListener('click', function (e) {
-      var popover = document.getElementById('floating-word-popover');
-      if (popover && !popover.contains(e.target) && !e.target.classList.contains('word-token')) {
-        closeWordTokenPopover();
-      }
-    });
+    function closeWordTokenPopover() {
+      closeDockedWordInspector();
+    }
 
     /**
      * SHADOWING MICROPHONE & RECORDING
@@ -3252,6 +3272,7 @@
     function startShadowingRecording() {
       ensureAudioContext();
       if (window.speechSynthesis) window.speechSynthesis.cancel();
+      if (window.VocabMascot) window.VocabMascot.reactToRecording(true);
       appState.shadowing.isRecording = true;
       appState.shadowing.liveTranscript = '';
 
@@ -3308,6 +3329,7 @@
 
     function stopShadowingRecording(evaluate = true) {
       appState.shadowing.isRecording = false;
+      if (window.VocabMascot) window.VocabMascot.reactToRecording(false);
       var viz = document.getElementById('shadowing-recording-visualizer');
       if (viz) { viz.classList.add('hidden'); viz.classList.remove('flex'); }
 
@@ -3385,15 +3407,27 @@
       var feedbackEl = document.getElementById('shadowing-score-feedback');
       var scoreBadge = document.getElementById('shadowing-score-badge');
 
+      if (window.VocabMascot) {
+        window.VocabMascot.reactToScore(accuracyScore, currentWord ? currentWord.word : '');
+      }
+
       if (accuracyScore >= 80) {
+        appState.consecutiveLowScores = 0;
+        if (accuracyScore === 100 && window.VocabMascot && typeof window.VocabMascot.transformToCheerleader === 'function') {
+          window.VocabMascot.transformToCheerleader();
+        }
         scoreBadge.className = 'px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-200';
         feedbackEl.textContent = 'Xuất sắc! Ngữ điệu và phát âm chuẩn tự nhiên (≥80%) (+30 XP, +15 💎) ✨';
-        flapMascotWings();
         triggerMiniConfetti();
         playJoyfulChime();
         addXP(30, 'Shadowing xuất sắc (' + accuracyScore + '%)');
         addGems(15, 'Shadowing chuẩn');
       } else {
+        appState.consecutiveLowScores = (appState.consecutiveLowScores || 0) + 1;
+        if (appState.consecutiveLowScores >= 3 && window.VocabMascot && typeof window.VocabMascot.performDramaFaint === 'function') {
+          window.VocabMascot.performDramaFaint();
+          appState.consecutiveLowScores = 0;
+        }
         scoreBadge.className = 'px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-800 border border-amber-200';
         feedbackEl.textContent = 'Khá tốt! Chạm vào các từ để tra cứu khẩu hình âm vị nhé 👍';
         addXP(10, 'Shadowing khá tốt');
@@ -3909,10 +3943,17 @@
     }
 
     function addXP(amount, reason) {
+      var prevTier = calculateLearnerProgression().tier;
       appState.xp = (appState.xp || 0) + amount;
       saveStateToCache();
       updateLearnerLevelUI();
       showToast('+ ' + amount + ' XP: ' + reason, 'success');
+
+      var newProg = calculateLearnerProgression();
+      if (newProg.tier > prevTier && window.VocabMascot) {
+        var tierInfo = LEARNER_TIERS[newProg.tier] || { name: 'Cấp độ mới' };
+        window.VocabMascot.reactToLevelUp(tierInfo.name);
+      }
     }
 
     function addGems(amount, reason) {
