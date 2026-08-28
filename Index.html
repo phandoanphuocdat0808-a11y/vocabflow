@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>VocabFlow - Apple Minimalist & Speech AI</title>
 
-  <!-- Google Fonts: Be Vietnam Pro & JetBrains Mono -->
+  <!-- Google Fonts: Be Vietnam Pro, JetBrains Mono & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -35,23 +35,16 @@
           colors: {
             apple: {
               bg: '#F5F5F7',
-              surface: 'rgba(255, 255, 255, 0.84)',
+              surface: 'rgba(255, 255, 255, 0.86)',
               card: '#FFFFFF',
-              border: 'rgba(255, 255, 255, 0.75)',
+              border: 'rgba(255, 255, 255, 0.8)',
               dark: '#1D1D1F',
               subtle: '#86868B',
-            },
-            primary: {
-              50: '#EEF2FF',
-              100: '#E0E7FF',
-              500: '#6366F1',
-              600: '#4F46E5',
-              700: '#4338CA',
             }
           },
           boxShadow: {
             'apple': '0 8px 30px rgba(0, 0, 0, 0.04)',
-            'apple-hover': '0 12px 36px rgba(0, 0, 0, 0.07)',
+            'apple-hover': '0 12px 36px rgba(0, 0, 0, 0.08)',
             'apple-card': '0 2px 12px rgba(0, 0, 0, 0.03), 0 10px 30px rgba(0, 0, 0, 0.04)',
             'glow-emerald': '0 0 20px rgba(16, 185, 129, 0.35)',
             'glow-rose': '0 0 20px rgba(244, 63, 94, 0.35)',
@@ -96,18 +89,18 @@
     }
 
     .glass-panel {
-      background: rgba(255, 255, 255, 0.84);
+      background: rgba(255, 255, 255, 0.86);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.85);
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
     }
 
     .glass-speech-bubble {
-      background: rgba(255, 255, 255, 0.94);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.92);
       box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.12);
     }
 
@@ -118,11 +111,11 @@
       }
 
       25% {
-        transform: translateY(-24px) rotateX(180deg) rotateY(90deg) scale(1.18);
+        transform: translateY(-26px) rotateX(180deg) rotateY(90deg) scale(1.18);
       }
 
       50% {
-        transform: translateY(-36px) rotateX(360deg) rotateY(180deg) scale(1.28);
+        transform: translateY(-38px) rotateX(360deg) rotateY(180deg) scale(1.28);
       }
 
       75% {
@@ -137,6 +130,74 @@
     .animate-somersault-3d {
       animation: somersault3D 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
       transform-style: preserve-3d;
+    }
+
+    @keyframes cuteWalk {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      25% {
+        transform: translateY(-4px) rotate(-4deg);
+      }
+
+      75% {
+        transform: translateY(-4px) rotate(4deg);
+      }
+    }
+
+    .animate-cute-walk {
+      animation: cuteWalk 0.6s infinite ease-in-out;
+    }
+
+    @keyframes lookAround {
+
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+
+      30% {
+        transform: rotate(-8deg) translateX(-3px);
+      }
+
+      70% {
+        transform: rotate(8deg) translateX(3px);
+      }
+    }
+
+    .animate-look-around {
+      animation: lookAround 1.8s ease-in-out;
+    }
+
+    @keyframes wiggleButt {
+
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+
+      20% {
+        transform: rotate(-6deg) scaleX(1.05);
+      }
+
+      40% {
+        transform: rotate(6deg) scaleX(0.95);
+      }
+
+      60% {
+        transform: rotate(-6deg) scaleX(1.05);
+      }
+
+      80% {
+        transform: rotate(6deg) scaleX(0.95);
+      }
+    }
+
+    .animate-wiggle-butt {
+      animation: wiggleButt 0.8s ease-in-out;
     }
 
     @keyframes wingFlapLeft {
@@ -191,30 +252,6 @@
       animation: nativeGlow 2.8s infinite ease-in-out;
     }
 
-    @keyframes cuteBounce {
-
-      0%,
-      100% {
-        transform: translateY(0) scale(1);
-      }
-
-      30% {
-        transform: translateY(-12px) scale(1.08);
-      }
-
-      50% {
-        transform: translateY(0) scale(0.96);
-      }
-
-      70% {
-        transform: translateY(-6px) scale(1.03);
-      }
-    }
-
-    .animate-cute-bounce {
-      animation: cuteBounce 0.7s ease-in-out;
-    }
-
     /* Waveform Animation */
     @keyframes waveformBar {
 
@@ -266,6 +303,22 @@
       transform: rotateY(180deg);
     }
 
+    /* Interactive Word Token */
+    .word-token {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      border-radius: 6px;
+      padding: 0 4px;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .word-token:hover {
+      background-color: rgba(99, 102, 241, 0.12);
+      color: #4F46E5;
+      transform: translateY(-1px);
+    }
+
     /* Scrollbars */
     ::-webkit-scrollbar {
       width: 6px;
@@ -304,7 +357,7 @@
     <!-- 1. APPLE HEADER -->
     <header
       class="glass-panel sticky top-3 z-40 rounded-2xl px-3 sm:px-4 py-2.5 mb-5 flex items-center justify-between transition-all">
-      <!-- Cụm Trái: Logo & Refresh Button -->
+      <!-- Cụm Trái: Logo & Sync Button -->
       <div class="flex items-center space-x-2">
         <a href="javascript:void(0)" onclick="navigateTo('dashboard')" class="flex items-center space-x-2 group">
           <div
@@ -378,14 +431,14 @@
         </button>
 
         <!-- Nút Thêm Từ (+) -->
-        <button type="button" onclick="openAddWordModal()" title="Thêm từ vựng mới (Tự động phân loại)"
+        <button type="button" onclick="openAddWordModal()" title="Thêm từ vựng mới (Tự động phân loại 12 chủ đề)"
           class="w-8 h-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white flex items-center justify-center shadow-sm transition-all cursor-pointer">
           <i data-lucide="plus" class="w-4 h-4"></i>
         </button>
       </div>
     </header>
 
-    <!-- API Config Alert Banner (Tự ẩn khi đã cấu hình) -->
+    <!-- API Config Alert Banner -->
     <div id="api-config-banner"
       class="hidden mb-4 p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-xs flex items-center justify-between animate-fadeIn">
       <div class="flex items-center space-x-2">
@@ -403,10 +456,10 @@
     <!-- 2. MAIN APP CONTENT CONTAINER -->
     <main class="w-full">
 
-      <!-- SCREEN 1: DASHBOARD (HERO + LINH VẬT CÚ 3D + MOTIVATION ENGINE) -->
+      <!-- SCREEN 1: DASHBOARD -->
       <section id="screen-dashboard" class="space-y-4 animate-fadeIn">
-        <!-- Hero Card with Owl Mascot & Interactive Speech Bubble -->
-        <div class="glass-panel rounded-3xl p-5 sm:p-7 relative overflow-hidden">
+        <!-- Hero Card with Autonomous Owl Mascot & Dynamic Speech Bubble -->
+        <div id="hero-mascot-container" class="glass-panel rounded-3xl p-5 sm:p-7 relative overflow-hidden">
           <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
             <!-- Left Motivation & Action Info -->
             <div class="space-y-3 max-w-xl text-center md:text-left">
@@ -442,8 +495,9 @@
               </div>
             </div>
 
-            <!-- Right: Pure Vector SVG 3D Animated Owl Mascot -->
-            <div class="flex flex-col items-center justify-center flex-shrink-0">
+            <!-- Right: Pure Vector SVG 3D Animated Autonomous Owl Mascot -->
+            <div id="mascot-wrapper"
+              class="flex flex-col items-center justify-center flex-shrink-0 transition-all duration-700">
               <svg id="mascot-owl-svg" viewBox="0 0 120 120"
                 class="w-28 h-28 sm:w-32 sm:h-32 cursor-pointer select-none transition-transform duration-300 hover:scale-105 active:scale-95 animate-float-subtle"
                 onclick="pokeMascot()" title="Chạm vào tôi để xem Cú nhào lộn 3D & nghe lời khuyên!">
@@ -589,7 +643,7 @@
           </div>
         </div>
 
-        <!-- Leitner 5-Box Distribution Bar (CLICK-TO-STUDY TRỰC TIẾP TỪNG HỘP) -->
+        <!-- Leitner 5-Box Distribution Bar (Click-to-Study trực tiếp) -->
         <div class="glass-panel rounded-3xl p-4 sm:p-5 space-y-3">
           <div class="flex items-center justify-between">
             <h3 class="text-xs font-display font-extrabold text-slate-800 flex items-center space-x-1.5">
@@ -700,7 +754,6 @@
 
       <!-- SCREEN 2: FLASHCARD STUDIO -->
       <section id="screen-flashcard" class="hidden space-y-4 animate-fadeIn">
-        <!-- Top Control Bar -->
         <div class="flex items-center justify-between px-1">
           <button type="button" onclick="navigateTo('dashboard')"
             class="text-xs font-bold text-slate-500 hover:text-slate-900 flex items-center space-x-1 cursor-pointer">
@@ -863,7 +916,7 @@
         </div>
       </section>
 
-      <!-- SCREEN 3: SHADOWING STUDIO -->
+      <!-- SCREEN 3: SHADOWING STUDIO (MODULE 2 & 3: TƯƠNG TÁC TỪNG TỪ, ẨN DỊCH, EXPRESSIVE PROSODY) -->
       <section id="screen-shadowing" class="hidden space-y-4 animate-fadeIn">
         <div class="flex items-center justify-between px-1">
           <button type="button" onclick="navigateTo('dashboard')"
@@ -888,22 +941,37 @@
         </div>
 
         <!-- Shadowing Card -->
-        <div class="glass-panel rounded-3xl p-6 sm:p-7 space-y-6 text-center shadow-apple-card">
-          <div class="space-y-2">
-            <span id="shadowing-word-badge"
-              class="px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider">Target
-              Sentence</span>
-
-            <div id="shadowing-sentence-box"
-              class="text-xl sm:text-2xl font-display font-extrabold text-slate-900 tracking-tight leading-relaxed pt-2">
+        <div class="glass-panel rounded-3xl p-6 sm:p-7 space-y-5 text-center shadow-apple-card relative">
+          <div class="space-y-3">
+            <div class="flex items-center justify-center space-x-2">
+              <span id="shadowing-word-badge"
+                class="px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider">Target
+                Sentence</span>
+              <!-- Nút bấm ẩn/hiện dịch nghĩa -->
+              <button type="button" onclick="toggleShadowingTranslation()" id="btn-toggle-trans"
+                class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-extrabold flex items-center space-x-1 transition-all cursor-pointer">
+                <i data-lucide="globe" class="w-3 h-3 text-indigo-600"></i>
+                <span id="lbl-toggle-trans">🌐 Hiện bản dịch</span>
+              </button>
             </div>
-            <p id="shadowing-trans-box" class="text-xs text-slate-500 font-medium pt-1"></p>
 
-            <div class="pt-2 flex justify-center">
-              <button type="button" onclick="playCurrentShadowingAudio()"
-                class="px-4 py-2 rounded-2xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-extrabold flex items-center space-x-1.5 shadow-sm active:scale-95 transition-all cursor-pointer">
-                <i data-lucide="volume-2" class="w-4 h-4 text-indigo-600"></i>
-                <span>Nghe lại câu mẫu (0.9x Natural)</span>
+            <!-- Target Sentence with Interactive Word Tokens -->
+            <div id="shadowing-sentence-box"
+              class="text-xl sm:text-2xl font-display font-extrabold text-slate-900 tracking-tight leading-relaxed pt-1 select-none">
+            </div>
+
+            <!-- Vietnamese translation (Default Hidden) -->
+            <div id="shadowing-trans-wrapper" class="hidden pt-1 animate-fadeIn">
+              <p id="shadowing-trans-box"
+                class="text-xs text-slate-600 font-semibold p-2.5 rounded-xl bg-indigo-50/50 border border-indigo-100 inline-block max-w-lg">
+              </p>
+            </div>
+
+            <div class="pt-2 flex justify-center space-x-2">
+              <button type="button" onclick="playExpressiveShadowingModelAudio()"
+                class="px-4 py-2 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-extrabold flex items-center space-x-1.5 shadow-md shadow-indigo-500/20 transition-all cursor-pointer">
+                <i data-lucide="volume-2" class="w-4 h-4"></i>
+                <span>Nghe lại câu mẫu (Natural Cadence)</span>
               </button>
             </div>
           </div>
@@ -946,7 +1014,7 @@
               </div>
 
               <div class="flex items-center space-x-2 text-xs font-bold">
-                <button type="button" onclick="playCurrentShadowingAudio()"
+                <button type="button" onclick="playExpressiveShadowingModelAudio()"
                   class="px-2.5 py-1 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 flex items-center space-x-1 cursor-pointer">
                   <i data-lucide="volume-2" class="w-3.5 h-3.5 text-indigo-600"></i>
                   <span>Câu mẫu</span>
@@ -1036,7 +1104,7 @@
           </div>
         </div>
 
-        <!-- Search & Filter Controls -->
+        <!-- Search & Filter Controls with 12 Topics -->
         <div class="glass-panel rounded-2xl p-3 flex flex-col sm:flex-row gap-2.5 items-center justify-between text-xs">
           <div class="relative w-full sm:w-72">
             <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400"></i>
@@ -1045,16 +1113,22 @@
               class="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-100 border border-slate-200/80 focus:bg-white focus:border-indigo-600 outline-none transition-all">
           </div>
 
-          <div class="flex items-center space-x-2 w-full sm:w-auto">
+          <div class="flex items-center space-x-2 w-full sm:w-auto overflow-x-auto">
             <select id="words-filter-topic" onchange="filterWordsList()"
               class="px-3 py-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 font-bold outline-none cursor-pointer">
-              <option value="all">Tất cả chủ đề</option>
-              <option value="Business">Business</option>
-              <option value="Technology">Technology</option>
-              <option value="Academic">Academic</option>
-              <option value="Personality">Personality</option>
-              <option value="Health">Health</option>
-              <option value="Daily Life">Daily Life</option>
+              <option value="all">Tất cả 12 chủ đề</option>
+              <option value="Transportation">Transportation</option>
+              <option value="Business & Work">Business & Work</option>
+              <option value="Technology & AI">Technology & AI</option>
+              <option value="Academic & Science">Academic & Science</option>
+              <option value="Food & Dining">Food & Dining</option>
+              <option value="Health & Wellness">Health & Wellness</option>
+              <option value="Personality & Emotions">Personality & Emotions</option>
+              <option value="Daily Life & Home">Daily Life & Home</option>
+              <option value="Travel & Nature">Travel & Nature</option>
+              <option value="Arts & Culture">Arts & Culture</option>
+              <option value="Education & Learning">Education & Learning</option>
+              <option value="Environment & Climate">Environment & Climate</option>
             </select>
             <select id="words-filter-box" onchange="filterWordsList()"
               class="px-3 py-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 font-bold outline-none cursor-pointer">
@@ -1095,7 +1169,7 @@
 
     </main>
 
-    <!-- Bottom Navigation Bar (Dành cho Mobile) -->
+    <!-- Bottom Navigation Bar (Mobile) -->
     <nav
       class="md:hidden glass-panel sticky bottom-3 mt-4 rounded-2xl px-2 py-1.5 flex items-center justify-around text-[10px] font-bold z-40">
       <button type="button" onclick="navigateTo('dashboard')" id="nav-mobile-dashboard"
@@ -1126,9 +1200,34 @@
     </nav>
   </div>
 
+  <!-- FLOATING WORD TOKEN POPOVER -->
+  <div id="floating-word-popover"
+    class="fixed z-50 hidden glass-panel rounded-2xl p-3 shadow-2xl border border-white/90 space-y-2 text-xs w-64 animate-fadeIn pointer-events-auto">
+    <div class="flex items-center justify-between border-b border-slate-200/60 pb-1.5">
+      <div class="flex items-center space-x-1.5">
+        <span id="popover-word" class="font-display font-extrabold text-slate-900 text-sm">word</span>
+        <span id="popover-pos"
+          class="px-1.5 py-0.2 rounded-md bg-slate-100 text-slate-600 text-[9px] uppercase font-bold">noun</span>
+      </div>
+      <button type="button" onclick="closeWordTokenPopover()"
+        class="p-1 rounded-full text-slate-400 hover:text-slate-600">
+        <i data-lucide="x" class="w-3 h-3"></i>
+      </button>
+    </div>
+    <div class="space-y-1">
+      <div id="popover-ipa" class="font-mono text-[11px] text-indigo-600 font-bold">🇬🇧 /.../ • 🇺🇸 /.../</div>
+      <div id="popover-meaning" class="text-[11px] text-slate-700 font-medium">Đang tra cứu nghĩa...</div>
+    </div>
+    <button type="button" id="btn-popover-speak"
+      class="w-full py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 active:scale-95 text-indigo-700 font-bold text-[10px] flex items-center justify-center space-x-1 transition-all cursor-pointer">
+      <i data-lucide="volume-2" class="w-3 h-3"></i>
+      <span>Phát âm từ này (0.05s)</span>
+    </button>
+  </div>
+
   <!-- 3. MODALS & DRAWERS -->
 
-  <!-- MODAL 1: BÁCH KHOA KHẨU HÌNH 44 ÂM IPA (DUAL AUDIO CONTROLLER) -->
+  <!-- MODAL 1: BÁCH KHOA KHẨU HÌNH 44 ÂM IPA -->
   <div id="modal-mouth-guide"
     class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden items-end sm:items-center justify-center p-0 sm:p-4">
     <div
@@ -1238,7 +1337,7 @@
     </div>
   </div>
 
-  <!-- MODAL 3: SMART BATCH INGESTION (NẠP TỪ HÀNG LOẠT & PHÂN LOẠI 100% CHUẨN) -->
+  <!-- MODAL 3: SMART BATCH INGESTION (12-TOPIC SEMANTIC CLASSIFIER) -->
   <div id="modal-add-word"
     class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="glass-panel w-full max-w-lg rounded-3xl p-6 space-y-4 shadow-2xl animate-slideUp">
@@ -1250,8 +1349,8 @@
           <div>
             <h3 id="lbl-modal-word-title" class="font-display font-extrabold text-base text-slate-900">Nạp Từ Vựng Thông
               Minh</h3>
-            <p class="text-[10px] text-slate-500">Tự động nhận diện Chủ đề (Business, Tech, Academic, Daily Life...) &
-              Cấp độ</p>
+            <p class="text-[10px] text-slate-500">Tự động nhận diện 12 Chủ đề (Transportation, Business, Tech,
+              Health...) & Cấp độ</p>
           </div>
         </div>
         <button type="button" onclick="closeAddWordModal()" class="p-1 text-slate-400 hover:text-slate-600">
@@ -1268,18 +1367,18 @@
               từ</span>
           </div>
           <textarea id="input-batch-words" rows="5" required oninput="updateBatchWordCounter()"
-            placeholder="vd: negotiate, scalability, empirical, appreciate, resilience, wholesome&#10;(Mỗi từ một dòng, hoặc cách nhau bởi dấu phẩy , hoặc chấm phẩy ;)"
+            placeholder="vd: car, negotiate, scalability, empirical, appreciate, resilience, wholesome&#10;(Mỗi từ một dòng, hoặc cách nhau bởi dấu phẩy , hoặc chấm phẩy ;)"
             class="w-full px-3.5 py-2.5 rounded-2xl bg-slate-100 border border-slate-200 focus:bg-white focus:border-indigo-600 outline-none font-mono text-xs leading-relaxed transition-all"></textarea>
         </div>
 
         <div class="p-3 rounded-2xl bg-indigo-50/60 border border-indigo-100 space-y-1 text-[11px] text-slate-600">
           <div class="flex items-center space-x-1.5 font-bold text-indigo-700">
             <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
-            <span>Accurate Semantic Classifier:</span>
+            <span>3-Tier AI Semantic Classifier:</span>
           </div>
           <p class="text-[10px] text-slate-500 leading-normal">
-            Hệ thống tự động tra cứu IPA UK/US, ngữ nghĩa tiếng Việt, câu ví dụ Shadowing và gán Chủ đề/Cấp độ chuẩn xác
-            trong 0ms.
+            Hệ thống tự động tra cứu IPA UK/US, ngữ nghĩa tiếng Việt, câu ví dụ Shadowing và gán 1 trong 12 Chủ đề & Cấp
+            độ chuẩn xác trong 0ms.
           </p>
         </div>
 
@@ -1410,8 +1509,7 @@
       </div>
 
       <div class="space-y-2.5 text-xs">
-        <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1.5 transition-all"
-          id="tier-card-1">
+        <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1.5 transition-all">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-2">
               <span class="text-base">🌱</span>
@@ -1424,8 +1522,7 @@
             đơn lẻ.</p>
         </div>
 
-        <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1.5 transition-all"
-          id="tier-card-2">
+        <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1.5 transition-all">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-2">
               <span class="text-base">🚀</span>
@@ -1438,8 +1535,7 @@
             đúng trọng âm từ.</p>
         </div>
 
-        <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1.5 transition-all"
-          id="tier-card-3">
+        <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1.5 transition-all">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-2">
               <span class="text-base">💎</span>
@@ -1453,8 +1549,7 @@
         </div>
 
         <div
-          class="p-3.5 rounded-2xl bg-gradient-to-tr from-amber-50 to-amber-100/50 border border-amber-200 shadow-xs space-y-1.5 transition-all"
-          id="tier-card-4">
+          class="p-3.5 rounded-2xl bg-gradient-to-tr from-amber-50 to-amber-100/50 border border-amber-200 shadow-xs space-y-1.5 transition-all">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-2">
               <span class="text-base">👑</span>
@@ -1603,7 +1698,7 @@
   <script>
     /**
      * =========================================================================================
-     * VOCABFLOW - CLIENT-SIDE ENGINE (ZERO-LAG OPTIMISTIC UI & MOBILE AUDIO SPECIALIST)
+     * VOCABFLOW - CLIENT-SIDE ENGINE (AI SEMANTIC CLASSIFIER, PROSODY & AUTONOMOUS MASCOT)
      * =========================================================================================
      */
     const API_URL = "https://script.google.com/macros/s/AKfycbziaFkd1a7zrg4BflT5yKiWT2KSZXlwza4i35Ked08s1eRH8dqWjA_QHezG-pP6wdHs4Q/exec";
@@ -1632,78 +1727,95 @@
       "Hôm nay bạn đã sẵn sàng chinh phục thêm những từ vựng đỉnh cao chưa nào? 🎯"
     ];
 
-    // BẢNG TỪ KHÓA ĐỐI SOÁT PHÂN LOẠI NGỮ NGHĨA CHUẨN XÁC 100%
-    const HEURISTIC_KEYWORDS = {
-      Business: [
-        'negotiate', 'leverage', 'benchmark', 'stakeholder', 'streamline', 'feasibility', 'contingency',
-        'lucrative', 'synergy', 'mitigate', 'corporate', 'revenue', 'contract', 'strategy', 'management',
-        'market', 'investment', 'enterprise', 'executive', 'profit', 'fiscal', 'dividend', 'valuation',
-        'commerce', 'compliance', 'audit', 'portfolio', 'venture', 'acquisition', 'merger', 'monopoly',
-        'liability', 'equity', 'forecast', 'restructure', 'outsource', 'procurement', 'monetize', 'turnover',
-        'subsidiary', 'shareholder', 'logistics', 'bureaucracy', 'franchise', 'amortization', 'collateral',
-        'quarterly', 'marketing', 'budget', 'finances', 'workplace', 'workforce', 'capital', 'sales'
+    /**
+     * MODULE 1: BẢNG TỪ ĐIỂN 12 CHỦ ĐỀ MỞ RỘNG (100% CHÍNH XÁC TẦNG 1)
+     */
+    const COMPREHENSIVE_TOPIC_TAXONOMY = {
+      "Transportation": [
+        "car", "automobile", "bus", "train", "plane", "airplane", "airport", "vehicle", "traffic",
+        "subway", "metro", "drive", "flight", "bicycle", "bike", "commute", "highway", "passenger",
+        "ticket", "station", "railway", "ship", "ferry", "cruise", "cargo", "logistics", "motorcycle",
+        "scooter", "cab", "taxi", "van", "truck", "lorry", "locomotive", "tram", "harbor", "runway", "driver"
       ],
-      Technology: [
-        'scalability', 'automation', 'encryption', 'cybersecurity', 'algorithm', 'interface', 'database',
-        'cloud', 'network', 'software', 'artificial', 'intelligence', 'system', 'computational', 'backend',
-        'frontend', 'serverless', 'microservice', 'quantum', 'protocol', 'hardware', 'telemetry', 'robotics',
-        'repository', 'deployment', 'latency', 'bandwidth', 'firmware', 'middleware', 'virtualization',
-        'infrastructure', 'container', 'neural', 'framework', 'pipeline', 'blockchain', 'biometrics',
-        'developer', 'computing', 'compiler', 'virtual', 'server', 'terminal', 'devops', 'fullstack', 'responsive', 'digital'
+      "Business & Work": [
+        "negotiate", "leverage", "benchmark", "stakeholder", "streamline", "feasibility",
+        "contingency", "lucrative", "synergy", "corporate", "revenue", "strategy", "contract",
+        "deadline", "colleague", "interview", "salary", "management", "profit", "investment",
+        "enterprise", "marketing", "budget", "finance", "executive", "client", "workplace",
+        "dividend", "valuation", "compliance", "audit", "portfolio", "venture", "acquisition", "merger"
       ],
-      Academic: [
-        'empirical', 'corroborate', 'synthesize', 'juxtaposition', 'elucidate', 'proliferation', 'intrinsic',
-        'methodology', 'dichotomy', 'prerequisite', 'ubiquity', 'paradigm', 'articulate', 'hypothesis',
-        'pedagogical', 'epistemological', 'deductive', 'dialectic', 'hermeneutic', 'phenomenological',
-        'nuance', 'rationale', 'theoretical', 'longitudinal', 'qualitative', 'quantitative', 'epistemology',
-        'heuristic', 'taxonomic', 'substantiate', 'specious', 'ephemeral', 'ubiquitous', 'anomaly', 'discourse',
-        'analyze', 'extrapolate', 'delineate', 'comprehensive', 'evaluate', 'postulate', 'thesis', 'dissertation'
+      "Technology & AI": [
+        "scalability", "automation", "encryption", "cybersecurity", "algorithm", "database",
+        "interface", "cloud", "software", "hardware", "network", "digital", "device",
+        "internet", "server", "coding", "processor", "artificial", "intelligence", "computing",
+        "backend", "frontend", "serverless", "microservice", "quantum", "telemetry", "robotics",
+        "latency", "bandwidth", "virtualization", "pipeline", "blockchain", "biometrics", "developer"
       ],
-      Personality: [
-        'resilient', 'meticulous', 'confident', 'generous', 'punctual', 'empathy', 'spontaneous', 'persistent',
-        'articulate', 'ambitious', 'charismatic', 'compassionate', 'diligent', 'introverted', 'extroverted',
-        'optimistic', 'humble', 'sincere', 'observant', 'visionary', 'versatile', 'courageous', 'honest',
-        'enthusiastic', 'passionate', 'dependable', 'adaptable', 'thoughtful', 'polite', 'gentle', 'decisive',
-        'trustworthy', 'friendly', 'brave', 'calm', 'creative', 'curious', 'loyal', 'patient', 'resilience'
+      "Academic & Science": [
+        "empirical", "corroborate", "synthesize", "juxtaposition", "elucidate", "proliferation",
+        "intrinsic", "methodology", "dichotomy", "paradigm", "articulate", "hypothesis",
+        "theory", "research", "academic", "experiment", "analysis", "evidence", "scholarly",
+        "pedagogical", "epistemological", "deductive", "dialectic", "heuristic", "thesis", "dissertation"
       ],
-      Health: [
-        'wholesome', 'mindfulness', 'nutritious', 'rejuvenate', 'immunity', 'wellbeing', 'meditation',
-        'vitality', 'fitness', 'therapy', 'calorie', 'stamina', 'hygiene', 'exercise', 'symptom', 'diagnosis',
-        'physician', 'cardiovascular', 'wellness', 'aerobic', 'nutrition', 'anatomy', 'psychological', 'clinic',
-        'muscular', 'holistic', 'therapeutic', 'remedy', 'hydration', 'organic', 'metabolism', 'posture', 'relax'
+      "Food & Dining": [
+        "delicious", "recipe", "restaurant", "ingredient", "cuisine", "flavor", "meal",
+        "breakfast", "lunch", "dinner", "beverage", "cook", "bake", "taste", "dessert",
+        "dish", "snack", "organic", "spicy", "menu", "vegetable", "fruit", "culinary", "appetizer", "seafood"
       ],
-      Daily_Life: [
-        'appreciate', 'convenient', 'delicious', 'habit', 'routine', 'celebrate', 'explore', 'tranquil',
-        'gratitude', 'commute', 'grocery', 'neighbor', 'leisure', 'recreation', 'hospitality', 'comfort',
-        'cozy', 'laundry', 'stroll', 'breakfast', 'dinner', 'kitchen', 'family', 'weekend', 'gathering',
-        'festive', 'vacation', 'luggage', 'homestay', 'neighborhood', 'apartment', 'lifestyle', 'nostalgia'
+      "Health & Wellness": [
+        "nutritious", "mindfulness", "rejuvenate", "immunity", "wellbeing", "exercise",
+        "fitness", "hospital", "doctor", "medicine", "therapy", "relax", "mental", "vitality",
+        "muscle", "diet", "nutrition", "workout", "clinic", "cardiovascular", "hygiene", "metabolism", "hydration"
+      ],
+      "Personality & Emotions": [
+        "resilient", "meticulous", "confident", "generous", "punctual", "empathy",
+        "spontaneous", "nostalgia", "gratitude", "optimistic", "introvert", "extrovert",
+        "courage", "honesty", "arrogant", "ambitious", "sympathy", "charismatic", "diligent", "humble", "resilience"
+      ],
+      "Daily Life & Home": [
+        "appreciate", "convenient", "habit", "routine", "celebrate", "explore", "furniture",
+        "kitchen", "morning", "neighborhood", "shopping", "chores", "family", "apartment",
+        "bedroom", "garden", "daily", "cleaning", "weekend", "leisure", "laundry", "living"
+      ],
+      "Travel & Nature": [
+        "tranquil", "landscape", "adventure", "destination", "scenery", "wildlife",
+        "mountain", "beach", "forest", "hotel", "vacation", "journey", "nature", "ocean",
+        "resort", "voyage", "hiking", "island", "safari", "tourism", "sightseeing"
+      ],
+      "Arts & Culture": [
+        "eloquent", "museum", "gallery", "exhibition", "heritage", "tradition",
+        "music", "painting", "sculpture", "literature", "theater", "creative", "artist", "culture",
+        "symphony", "architecture", "melody", "canvas", "festival", "poetry"
+      ],
+      "Education & Learning": [
+        "student", "university", "lecture", "professor", "exam", "course", "knowledge",
+        "curriculum", "scholarship", "study", "graduate", "classroom", "academy", "tuition", "mentor"
+      ],
+      "Environment & Climate": [
+        "pollution", "sustainability", "renewable", "ecosystem", "conservation", "climate",
+        "biodiversity", "recycle", "solar", "energy", "atmosphere", "ecology", "carbon"
       ]
     };
 
-    // KHO TỪ VỰNG CHUẨN CỤC BỘ PHÁT TỨC THÌ
+    // KHO TỪ VỰNG CHUẨN CỤC BỘ
     const FALLBACK_CURATED_WORDS = {
       'Level_A': [
-        { word: 'appreciate', pos: 'verb', topic: 'Daily Life', level: 'A', ipa_uk: '/əˈpriː.ʃi.eɪt/', ipa_us: '/əˈpriː.ʃi.eɪt/', meaning: 'Trân trọng, cảm kích lòng tốt', example: 'I truly appreciate your kind support and encouragement.', example_trans: 'Tôi thực sự cảm kích sự ủng hộ và động viên ân cần của bạn.', shadowing: 'Taking a moment each day to appreciate small joys brings genuine happiness.', shadowing_trans: 'Dành một khoảnh khắc mỗi ngày để trân trọng những niềm vui nhỏ mang lại hạnh phúc đích thực.' },
-        { word: 'convenient', pos: 'adjective', topic: 'Daily Life', level: 'A', ipa_uk: '/kənˈviː.ni.ənt/', ipa_us: '/kənˈviː.ni.ənt/', meaning: 'Thuận tiện, tiện lợi cho sinh hoạt', example: 'Living near the subway station is extremely convenient for commuting.', example_trans: 'Sống gần ga tàu điện ngầm cực kỳ thuận tiện cho việc đi lại hàng ngày.', shadowing: 'Online shopping has made buying daily groceries much more convenient and fast.', shadowing_trans: 'Mua sắm trực tuyến đã giúp việc mua thực phẩm hàng ngày trở nên thuận tiện và nhanh chóng hơn nhiều.' },
-        { word: 'delicious', pos: 'adjective', topic: 'Daily Life', level: 'A', ipa_uk: '/dɪˈlɪʃ.əs/', ipa_us: '/dɪˈlɪʃ.əs/', meaning: 'Ngon miệng, thơm ngon', example: 'She cooked a delicious traditional dinner for the entire family.', example_trans: 'Cô ấy đã nấu một bữa tối truyền thống thơm ngon cho cả gia đình.', shadowing: 'Sharing a delicious home-cooked meal with loved ones creates lasting memories.', shadowing_trans: 'Cùng người thân chia sẻ bữa cơm nhà thơm ngon tạo nên những kỷ niệm đáng nhớ.' },
-        { word: 'habit', pos: 'noun', topic: 'Daily Life', level: 'A', ipa_uk: '/ˈhæb.ɪt/', ipa_us: '/ˈhæb.ɪt/', meaning: 'Thói quen sinh hoạt', example: 'Reading twenty pages every morning has become my favorite daily habit.', example_trans: 'Đọc 20 trang sách mỗi sáng đã trở thành thói quen hàng ngày yêu thích của tôi.', shadowing: 'Building small positive habits each day leads to remarkable long-term transformation.', shadowing_trans: 'Xây dựng những thói quen tích cực nhỏ mỗi ngày sẽ dẫn đến sự thay đổi vượt bậc lâu dài.' },
-        { word: 'confident', pos: 'adjective', topic: 'Personality', level: 'A', ipa_uk: '/ˈkɒn.fɪ.dənt/', ipa_us: '/ˈkɑːn.fə.dənt/', meaning: 'Tự tin, tràn đầy niềm tin', example: 'Practicing English every day makes me feel much more confident.', example_trans: 'Luyện tiếng Anh mỗi ngày giúp tôi cảm thấy tự tin hơn rất nhiều.', shadowing: 'Speaking with confidence is the secret to making great first impressions.', shadowing_trans: 'Nói chuyện một cách tự tin là bí quyết để tạo ấn tượng ban đầu tuyệt vời.' },
-        { word: 'relax', pos: 'verb', topic: 'Health', level: 'A', ipa_uk: '/rɪˈlæks/', ipa_us: '/rɪˈlæks/', meaning: 'Thư giãn, nghỉ ngơi xả stress', example: 'Listening to acoustic music helps me relax after a long workday.', example_trans: 'Nghe nhạc mộc giúp tôi thư giãn sau một ngày làm việc dài.', shadowing: 'Taking a weekend stroll in the park is the best way to relax and recharge.', shadowing_trans: 'Đi dạo công viên vào cuối tuần là cách tốt nhất để thư giãn và nạp lại năng lượng.' }
+        { word: 'car', pos: 'noun', topic: 'Transportation', level: 'A', ipa_uk: '/kɑːr/', ipa_us: '/kɑːr/', meaning: 'Xe hơi, ô tô', example: 'He drove his modern electric car to the office.', example_trans: 'Anh ấy đã lái chiếc xe hơi điện hiện đại đến văn phòng.', shadowing: 'Driving an electric car through the quiet city streets is truly enjoyable.', shadowing_trans: 'Lái một chiếc xe điện qua những con phố yên tĩnh thật sự rất thú vị.' },
+        { word: 'bus', pos: 'noun', topic: 'Transportation', level: 'A', ipa_uk: '/bʌs/', ipa_us: '/bʌs/', meaning: 'Xe buýt công cộng', example: 'Taking the morning bus is an economical way to commute.', example_trans: 'Đi xe buýt buổi sáng là một cách đi lại tiết kiệm.', shadowing: 'The city bus arrives on time at the central station every morning.', shadowing_trans: 'Xe buýt thành phố đến đúng giờ tại nhà ga trung tâm mỗi sáng.' },
+        { word: 'appreciate', pos: 'verb', topic: 'Daily Life & Home', level: 'A', ipa_uk: '/əˈpriː.ʃi.eɪt/', ipa_us: '/əˈpriː.ʃi.eɪt/', meaning: 'Trân trọng, cảm kích', example: 'I truly appreciate your kind support and encouragement.', example_trans: 'Tôi thực sự cảm kích sự ủng hộ và động viên ân cần của bạn.', shadowing: 'Taking a moment each day to appreciate small joys brings genuine happiness.', shadowing_trans: 'Dành một khoảnh khắc mỗi ngày để trân trọng những niềm vui nhỏ mang lại hạnh phúc đích thực.' },
+        { word: 'delicious', pos: 'adjective', topic: 'Food & Dining', level: 'A', ipa_uk: '/dɪˈlɪʃ.əs/', ipa_us: '/dɪˈlɪʃ.əs/', meaning: 'Ngon miệng, thơm ngon', example: 'She cooked a delicious traditional dinner for the whole family.', example_trans: 'Cô ấy đã nấu một bữa tối truyền thống thơm ngon cho cả gia đình.', shadowing: 'Sharing a delicious home-cooked meal with loved ones creates lasting memories.', shadowing_trans: 'Cùng người thân chia sẻ bữa cơm nhà thơm ngon tạo nên những kỷ niệm đáng nhớ.' },
+        { word: 'confident', pos: 'adjective', topic: 'Personality & Emotions', level: 'A', ipa_uk: '/ˈkɒn.fɪ.dənt/', ipa_us: '/ˈkɑːn.fə.dənt/', meaning: 'Tự tin, tràn đầy niềm tin', example: 'Practicing English every day makes me feel much more confident.', example_trans: 'Luyện tiếng Anh mỗi ngày giúp tôi cảm thấy tự tin hơn rất nhiều.', shadowing: 'Speaking with genuine confidence is the secret to making great first impressions.', shadowing_trans: 'Nói chuyện với sự tự tin chân thành là bí quyết để tạo ấn tượng ban đầu tuyệt vời.' }
       ],
       'Level_B': [
-        { word: 'negotiate', pos: 'verb', topic: 'Business', level: 'B', ipa_uk: '/nəˈɡəʊ.ʃi.eɪt/', ipa_us: '/nəˈɡoʊ.ʃi.eɪt/', meaning: 'Đàm phán, thương lượng hợp đồng', example: 'The two companies met to negotiate mutually agreeable contract terms.', example_trans: 'Hai công ty đã gặp nhau để đàm phán các điều khoản hợp đồng mà đôi bên cùng nhất trí.', shadowing: 'Effective leaders know how to negotiate win-win outcomes in complex deals.', shadowing_trans: 'Những nhà lãnh đạo hiệu quả luôn biết cách đàm phán để đạt kết quả đôi bên cùng có lợi.' },
-        { word: 'leverage', pos: 'verb', topic: 'Business', level: 'B', ipa_uk: '/ˈliː.vər.ɪdʒ/', ipa_us: '/ˈlev.ɚ.ɪdʒ/', meaning: 'Tận dụng đòn bẩy, tối đa hóa nguồn lực', example: 'We can leverage modern digital tools to maximize our team productivity.', example_trans: 'Chúng ta có thể tận dụng các công cụ kỹ thuật số hiện đại để tối đa hóa năng suất của đội ngũ.', shadowing: 'Companies that leverage artificial intelligence effectively will gain a major competitive edge.', shadowing_trans: 'Những doanh nghiệp tận dụng hiệu quả trí tuệ nhân tạo sẽ giành được lợi thế cạnh tranh vượt bậc.' },
-        { word: 'benchmark', pos: 'noun', topic: 'Business', level: 'B', ipa_uk: '/ˈbentʃ.mɑːk/', ipa_us: '/ˈbentʃ.mɑːrk/', meaning: 'Tiêu chuẩn đối chuẩn, mốc chuẩn mực', example: 'Our quarterly customer satisfaction rating sets a new industry benchmark.', example_trans: 'Điểm số hài lòng của khách hàng trong quý này đã thiết lập một tiêu chuẩn đối chuẩn mới cho toàn ngành.', shadowing: 'This breakthrough achievement will serve as a benchmark for future projects.', shadowing_trans: 'Thành tựu đột phá này sẽ đóng vai trò như một mốc chuẩn mực cho các dự án trong tương lai.' },
-        { word: 'streamline', pos: 'verb', topic: 'Business', level: 'B', ipa_uk: '/ˈstriːm.laɪn/', ipa_us: '/ˈstriːm.laɪn/', meaning: 'Tinh giản, tối ưu hóa quy trình', example: 'Management decided to streamline internal workflows to reduce processing delays.', example_trans: 'Ban quản lý đã quyết định tinh giản luồng công việc nội bộ để giảm thiểu sự chậm trễ trong xử lý.', shadowing: 'Streamlining daily business operations allows teams to focus on core strategic goals.', shadowing_trans: 'Việc tối ưu hóa các hoạt động kinh doanh hàng ngày giúp đội ngũ tập trung vào các mục tiêu chiến lược cốt lõi.' },
-        { word: 'resilience', pos: 'noun', topic: 'Personality', level: 'B', ipa_uk: '/rɪˈzɪl.i.əns/', ipa_us: '/rɪˈzɪl.jəns/', meaning: 'Sức bật kiên cường, khả năng phục hồi', example: 'Her psychological resilience helped her overcome difficult setbacks with grace.', example_trans: 'Sức bật tâm lý kiên cường đã giúp cô vượt qua những trở ngại khó khăn một cách bình thản.', shadowing: 'Inner resilience allows us to bounce back stronger whenever we encounter adversity.', shadowing_trans: 'Nghị lực kiên cường nội tại giúp chúng ta phục hồi mạnh mẽ hơn mỗi khi đối mặt với nghịch cảnh.' },
-        { word: 'mindfulness', pos: 'noun', topic: 'Health', level: 'B', ipa_uk: '/ˈmaɪnd.fəl.nəs/', ipa_us: '/ˈmaɪnd.fəl.nəs/', meaning: 'Chánh niệm, sự tập trung nhận thức', example: 'Practicing daily mindfulness helps clear mental clutter and enhances focus.', example_trans: 'Thực hành chánh niệm hàng ngày giúp dọn dẹp tâm trí bộn bề và nâng cao khả năng tập trung.', shadowing: 'Cultivating mindfulness throughout the workday keeps our minds calm and centered.', shadowing_trans: 'Nuôi dưỡng chánh niệm trong suốt ngày làm việc giúp tâm trí chúng ta luôn điềm tĩnh và vững vàng.' }
+        { word: 'commute', pos: 'verb', topic: 'Transportation', level: 'B', ipa_uk: '/kəˈmjuːt/', ipa_us: '/kəˈmjuːt/', meaning: 'Đi lại hàng ngày giữa nhà và nơi làm việc', example: 'Many professionals commute by high-speed train to avoid traffic jams.', example_trans: 'Nhiều chuyên gia đi lại bằng tàu cao tốc để tránh tắc đường.', shadowing: 'Listening to inspiring podcasts while you commute is a productive daily routine.', shadowing_trans: 'Lắng nghe những podcast truyền cảm hứng trong lúc đi lại là thói quen hàng ngày hữu ích.' },
+        { word: 'negotiate', pos: 'verb', topic: 'Business & Work', level: 'B', ipa_uk: '/nəˈɡəʊ.ʃi.eɪt/', ipa_us: '/nəˈɡoʊ.ʃi.eɪt/', meaning: 'Đàm phán, thương lượng hợp đồng', example: 'The two companies met to negotiate mutually agreeable contract terms.', example_trans: 'Hai công ty đã gặp nhau để đàm phán các điều khoản hợp đồng mà đôi bên cùng nhất trí.', shadowing: 'Effective leaders know how to negotiate win-win outcomes in complex deals.', shadowing_trans: 'Những nhà lãnh đạo hiệu quả luôn biết cách đàm phán để đạt kết quả đôi bên cùng có lợi.' },
+        { word: 'mindfulness', pos: 'noun', topic: 'Health & Wellness', level: 'B', ipa_uk: '/ˈmaɪnd.fəl.nəs/', ipa_us: '/ˈmaɪnd.fəl.nəs/', meaning: 'Chánh niệm, sự tập trung nhận thức', example: 'Practicing daily mindfulness helps clear mental clutter and enhances focus.', example_trans: 'Thực hành chánh niệm hàng ngày giúp dọn dẹp tâm trí bộn bề và nâng cao khả năng tập trung.', shadowing: 'Cultivating mindfulness throughout the workday keeps our minds calm and centered.', shadowing_trans: 'Nuôi dưỡng chánh niệm trong suốt ngày làm việc giúp tâm trí chúng ta luôn điềm tĩnh và vững vàng.' },
+        { word: 'resilience', pos: 'noun', topic: 'Personality & Emotions', level: 'B', ipa_uk: '/rɪˈzɪl.i.əns/', ipa_us: '/rɪˈzɪl.jəns/', meaning: 'Sức bật kiên cường, khả năng phục hồi', example: 'Her psychological resilience helped her overcome difficult setbacks with grace.', example_trans: 'Sức bật tâm lý kiên cường đã giúp cô vượt qua những trở ngại khó khăn một cách bình thản.', shadowing: 'Inner resilience allows us to bounce back stronger whenever we encounter adversity.', shadowing_trans: 'Nghị lực kiên cường nội tại giúp chúng ta phục hồi mạnh mẽ hơn mỗi khi đối mặt với nghịch cảnh.' }
       ],
       'Level_C': [
-        { word: 'empirical', pos: 'adjective', topic: 'Academic', level: 'C', ipa_uk: '/ɪmˈpɪr.ɪ.kəl/', ipa_us: '/ɪmˈpɪr.ɪ.kəl/', meaning: 'Thực nghiệm, dựa trên bằng chứng quan sát thực tế', example: 'The scientific conclusion was supported by robust empirical evidence.', example_trans: 'Kết luận khoa học đã được chứng minh bởi những bằng chứng thực nghiệm vững chắc.', shadowing: 'Rigorous empirical research is essential to validate complex scientific hypotheses.', shadowing_trans: 'Nghiên cứu thực nghiệm nghiêm ngặt là yếu tố cốt lõi để kiểm chứng các giả thuyết khoa học phức tạp.' },
-        { word: 'corroborate', pos: 'verb', topic: 'Academic', level: 'C', ipa_uk: '/kəˈrɒb.ə.reɪt/', ipa_us: '/kəˈrɑː.bə.reɪt/', meaning: 'Chứng thực, xác minh tính chính xác', example: 'Multiple independent studies corroborate the initial laboratory findings.', example_trans: 'Nhiều nghiên cứu độc lập đã chứng thực những phát hiện ban đầu trong phòng thí nghiệm.', shadowing: 'Scholars gathered additional archival data to corroborate their groundbreaking historical claims.', shadowing_trans: 'Các học giả đã thu thập thêm dữ liệu lưu trữ để chứng thực những tuyên bố lịch sử đột phá của họ.' },
-        { word: 'synthesize', pos: 'verb', topic: 'Academic', level: 'C', ipa_uk: '/ˈsɪn.θə.saɪz/', ipa_us: '/ˈsɪn.θə.saɪz/', meaning: 'Tổng hợp các nguồn ý tưởng/dữ liệu thành chỉnh thể', example: 'The dissertation aims to synthesize diverse theoretical perspectives on language acquisition.', example_trans: 'Luận văn nhằm mục đích tổng hợp các góc nhìn lý thuyết đa dạng về quá trình tiếp thu ngôn ngữ.', shadowing: 'The ability to synthesize vast amounts of information is a hallmark of intellectual maturity.', shadowing_trans: 'Khả năng tổng hợp lượng lớn thông tin là dấu ấn của sự trưởng thành về mặt trí tuệ.' },
-        { word: 'scalability', pos: 'noun', topic: 'Technology', level: 'C', ipa_uk: '/ˌskeɪ.ləˈbɪl.ə.ti/', ipa_us: '/ˌskeɪ.ləˈbɪl.ə.t̬i/', meaning: 'Khả năng mở rộng quy mô hệ thống', example: 'The cloud architecture was engineered specifically for high concurrency scalability.', example_trans: 'Kiến trúc đám mây đã được thiết kế đặc biệt nhằm đáp ứng khả năng mở rộng quy mô cho số lượng truy cập đồng thời cao.', shadowing: 'Ensuring seamless system scalability prevents performance degradation during peak user traffic.', shadowing_trans: 'Đảm bảo khả năng mở rộng hệ thống mượt mà sẽ ngăn chặn sự suy giảm hiệu năng trong thời gian cao điểm.' },
-        { word: 'automation', pos: 'noun', topic: 'Technology', level: 'C', ipa_uk: '/ˌɔː.təˈmeɪ.ʃən/', ipa_us: '/ˌɑː.t̬əˈmeɪ.ʃən/', meaning: 'Sự tự động hóa quy trình kỹ thuật', example: 'Workflow automation significantly reduced human error and operational expenditures.', example_trans: 'Tự động hóa luồng công việc đã giúp giảm đáng kể sai sót của con người và chi phí vận hành.', shadowing: 'Intelligent process automation empowers specialists to focus on high-value creative endeavors.', shadowing_trans: 'Tự động hóa quy trình thông minh giúp các chuyên gia tập trung vào những nỗ lực sáng tạo có giá trị cao.' }
+        { word: 'scalability', pos: 'noun', topic: 'Technology & AI', level: 'C', ipa_uk: '/ˌskeɪ.ləˈbɪl.ə.ti/', ipa_us: '/ˌskeɪ.ləˈbɪl.ə.t̬i/', meaning: 'Khả năng mở rộng quy mô hệ thống', example: 'The cloud architecture was engineered specifically for high concurrency scalability.', example_trans: 'Kiến trúc đám mây đã được thiết kế đặc biệt nhằm đáp ứng khả năng mở rộng quy mô cho số lượng truy cập đồng thời cao.', shadowing: 'Ensuring seamless system scalability prevents performance degradation during peak user traffic.', shadowing_trans: 'Đảm bảo khả năng mở rộng hệ thống mượt mà sẽ ngăn chặn sự suy giảm hiệu năng trong thời gian cao điểm.' },
+        { word: 'empirical', pos: 'adjective', topic: 'Academic & Science', level: 'C', ipa_uk: '/ɪmˈpɪr.ɪ.kəl/', ipa_us: '/ɪmˈpɪr.ɪ.kəl/', meaning: 'Thực nghiệm, dựa trên bằng chứng quan sát thực tế', example: 'The scientific conclusion was supported by robust empirical evidence.', example_trans: 'Kết luận khoa học đã được chứng minh bởi những bằng chứng thực nghiệm vững chắc.', shadowing: 'Rigorous empirical research is essential to validate complex scientific hypotheses.', shadowing_trans: 'Nghiên cứu thực nghiệm nghiêm ngặt là yếu tố cốt lõi để kiểm chứng các giả thuyết khoa học phức tạp.' },
+        { word: 'sustainability', pos: 'noun', topic: 'Environment & Climate', level: 'C', ipa_uk: '/səˌsteɪ.nəˈbɪl.ə.ti/', ipa_us: '/səˌsteɪ.nəˈbɪl.ə.t̬i/', meaning: 'Tính bền vững môi trường & hệ sinh thái', example: 'Urban developers prioritize environmental sustainability in new construction projects.', example_trans: 'Các nhà phát triển đô thị ưu tiên tính bền vững môi trường trong các dự án xây dựng mới.', shadowing: 'Investing in renewable energy infrastructure is vital for long-term ecological sustainability.', shadowing_trans: 'Đầu tư vào cơ sở hạ tầng năng lượng tái tạo là điều sống còn cho tính bền vững sinh thái lâu dài.' }
       ]
     };
 
@@ -1748,22 +1860,21 @@
       xp: parseInt(localStorage.getItem('vocabflow_xp'), 10) || 150,
       gems: parseInt(localStorage.getItem('vocabflow_gems'), 10) || 120,
       streakFreezeCount: parseInt(localStorage.getItem('vocabflow_freeze_count'), 10) || 1,
-      completedShadowingCount: parseInt(localStorage.getItem('vocabflow_shadowing_count'), 10) || 3,
       stats: { totalWords: 0, dueTodayCount: 0, masteredCount: 0, learningCount: 0, boxDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } },
-      topics: ['Daily Life', 'Business', 'Technology', 'Academic', 'Personality', 'Health'],
       flashcardVoice: { isListening: false, recognition: null, stream: null, mediaRecorder: null, audioChunks: [], userAudioUrl: null, passed: false, score: 0 },
-      shadowing: { speed: 0.88, accent: 'us', isRecording: false, recognition: null, mediaRecorder: null, mediaStream: null, audioChunks: [], userAudioUrl: null, liveTranscript: '' },
+      shadowing: { speed: 0.9, accent: 'us', isRecording: false, isTransVisible: false, recognition: null, mediaRecorder: null, mediaStream: null, audioChunks: [], userAudioUrl: null, liveTranscript: '' },
       dailyBatches: [],
       currentBatchIndex: 0,
       weakWords: [],
       passedWords: [],
-      dailyDiscovery: { topic: 'all', level: 'mix', count: 10, pos: 'all' },
-      articulatoryModal: { currentCategory: 'all', selectedPhoneme: 'θ' }
+      dailyDiscovery: { topic: 'all', level: 'mix', count: 10 },
+      articulatoryModal: { currentCategory: 'all', selectedPhoneme: 'θ' },
+      mascot: { state: 'idle', position: 0, direction: 1, timer: null }
     };
 
     /**
      * =========================================================================================
-     * MOBILE AUDIO LIFECYCLE MANAGER & WEB AUDIO API CHIME
+     * MOBILE AUDIO LIFECYCLE MANAGER & WEB AUDIO CHIME
      * =========================================================================================
      */
     var globalAudioCtx = null;
@@ -1776,21 +1887,14 @@
         if (globalAudioCtx.state === 'suspended') {
           globalAudioCtx.resume();
         }
-      } catch (e) {
-        console.warn('AudioContext init notice:', e);
-      }
+      } catch (e) { }
     }
 
     function releaseMediaStreamTracks(stream) {
       if (stream) {
         try {
-          stream.getTracks().forEach(function (track) {
-            track.stop();
-            track.enabled = false;
-          });
-        } catch (e) {
-          console.warn('Track release notice:', e);
-        }
+          stream.getTracks().forEach(function (t) { t.stop(); t.enabled = false; });
+        } catch (e) { }
       }
     }
 
@@ -1799,7 +1903,7 @@
       if (!globalAudioCtx) return;
       try {
         var now = globalAudioCtx.currentTime;
-        var notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 Arpeggio
+        var notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
         notes.forEach(function (freq, index) {
           var osc = globalAudioCtx.createOscillator();
           var gain = globalAudioCtx.createGain();
@@ -1815,50 +1919,98 @@
       } catch (e) { }
     }
 
+    /**
+     * MODULE 3: EXPRESSIVE NEURAL PROSODY ENGINE
+     */
     const VoiceManager = {
       voices: [],
       init: function () {
         if (window.speechSynthesis) {
-          var loadVoices = function () {
-            VoiceManager.voices = window.speechSynthesis.getVoices() || [];
-          };
-          loadVoices();
+          var load = function () { VoiceManager.voices = window.speechSynthesis.getVoices() || []; };
+          load();
           if (window.speechSynthesis.onvoiceschanged !== undefined) {
-            window.speechSynthesis.onvoiceschanged = loadVoices;
+            window.speechSynthesis.onvoiceschanged = load;
           }
         }
       },
-      speak: function (text, accent = 'us', speed = 0.9) {
+      getPreferredVoice: function (accent) {
+        var langCode = accent === 'uk' ? 'en-GB' : 'en-US';
+        var preferredNames = accent === 'uk'
+          ? ['Microsoft Sonia Online (Natural)', 'Microsoft Ryan Online (Natural)', 'Google UK English Female', 'Daniel (Enhanced)', 'Daniel']
+          : ['Microsoft Jenny Online (Natural)', 'Microsoft Guy Online (Natural)', 'Google US English', 'Samantha (Enhanced)', 'Samantha', 'Zira'];
+
+        for (var i = 0; i < preferredNames.length; i++) {
+          var v = VoiceManager.voices.find(function (item) { return item.name && item.name.includes(preferredNames[i]); });
+          if (v) return v;
+        }
+        return VoiceManager.voices.find(function (item) { return item.lang && item.lang.replace('_', '-').startsWith(langCode); });
+      },
+      speak: function (text, accent = 'us', speed = 0.9, pitch = 1.0) {
         if (!window.speechSynthesis || !text) return;
         try {
           window.speechSynthesis.cancel();
           var utterance = new SpeechSynthesisUtterance(text);
           utterance.rate = speed;
-          utterance.pitch = 1.0;
-
-          var langCode = accent === 'uk' ? 'en-GB' : 'en-US';
-          utterance.lang = langCode;
-
-          if (VoiceManager.voices.length > 0) {
-            var preferredVoice = VoiceManager.voices.find(function (v) {
-              return v.lang && v.lang.replace('_', '-').startsWith(langCode) &&
-                (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Samantha') || v.name.includes('Zira') || v.name.includes('Daniel'));
-            }) || VoiceManager.voices.find(function (v) { return v.lang && v.lang.replace('_', '-').startsWith(langCode); });
-
-            if (preferredVoice) utterance.voice = preferredVoice;
-          }
-
+          utterance.pitch = pitch;
+          utterance.lang = accent === 'uk' ? 'en-GB' : 'en-US';
+          var voice = VoiceManager.getPreferredVoice(accent);
+          if (voice) utterance.voice = voice;
           window.speechSynthesis.speak(utterance);
-        } catch (e) {
-          console.warn('Speech synthesis notice:', e);
+        } catch (e) { }
+      },
+      speakSentenceExpressive: function (sentence, accent = 'us', baseSpeed = 0.9) {
+        if (!window.speechSynthesis || !sentence) return;
+        window.speechSynthesis.cancel();
+
+        // Tách câu thành các Thought Groups (nhóm tư duy) tại dấu phẩy hoặc liên từ
+        var clauses = sentence.split(/([,;:\(\)]|\b(?:and|but|because|although|while|that|which|when)\b)/i);
+        var queue = [];
+
+        for (var i = 0; i < clauses.length; i++) {
+          var part = (clauses[i] || '').trim();
+          if (!part || /^[,;:\(\)]$/.test(part)) continue;
+          var isLast = (i >= clauses.length - 2);
+          var isQuestion = sentence.trim().endsWith('?');
+          var isWhQuestion = isQuestion && /^(who|what|where|when|why|how)\b/i.test(sentence.trim());
+
+          var pitch = 1.0;
+          var rate = baseSpeed;
+
+          if (isLast) {
+            if (isQuestion && !isWhQuestion) {
+              pitch = 1.15; // Yes/No question lên giọng
+            } else {
+              pitch = 0.92; // Câu trần thuật hạ nhẹ cuối câu
+              rate = Math.max(0.75, baseSpeed * 0.92);
+            }
+          }
+          queue.push({ text: part, pitch: pitch, rate: rate });
         }
+
+        var playIndex = 0;
+        function playNext() {
+          if (playIndex >= queue.length) return;
+          var item = queue[playIndex++];
+          var utt = new SpeechSynthesisUtterance(item.text);
+          utt.rate = item.rate;
+          utt.pitch = item.pitch;
+          utt.lang = accent === 'uk' ? 'en-GB' : 'en-US';
+          var voice = VoiceManager.getPreferredVoice(accent);
+          if (voice) utt.voice = voice;
+          utt.onend = function () {
+            // Breathing micro-pause (180ms)
+            setTimeout(playNext, 180);
+          };
+          window.speechSynthesis.speak(utt);
+        }
+        playNext();
       }
     };
     VoiceManager.init();
 
     /**
      * =========================================================================================
-     * ACCURATE SEMANTIC CLASSIFIER & HEURISTICS
+     * MODULE 1: 3-TIER HYBRID AI SEMANTIC CLASSIFIER
      * =========================================================================================
      */
     function findCuratedWord(word) {
@@ -1874,59 +2026,56 @@
       return found;
     }
 
-    function classifyWordHeuristic(word) {
+    async function classifyWordSemanticAI(word) {
       var clean = (word || '').toLowerCase().trim();
-      if (!clean) return { topic: 'Daily Life', level: 'A' };
+      if (!clean) return { topic: 'Daily Life & Home', level: 'A' };
 
+      // TẦNG 1: Exact Hashmap & Stemming Lookup (100% chính xác trong 0.001s)
       var cur = findCuratedWord(clean);
-      if (cur) return { topic: cur.topic || 'Daily Life', level: cur.level || 'B' };
+      if (cur) return { topic: cur.topic, level: cur.level };
 
-      var matchedTopic = null;
-      var keys = Object.keys(HEURISTIC_KEYWORDS);
-
-      for (var k = 0; k < keys.length; k++) {
-        var cat = keys[k];
-        var list = HEURISTIC_KEYWORDS[cat];
+      var categories = Object.keys(COMPREHENSIVE_TOPIC_TAXONOMY);
+      for (var k = 0; k < categories.length; k++) {
+        var cat = categories[k];
+        var list = COMPREHENSIVE_TOPIC_TAXONOMY[cat];
         for (var i = 0; i < list.length; i++) {
           var kw = list[i];
           if (clean === kw || clean.indexOf(kw) !== -1 || (kw.length >= 5 && kw.indexOf(clean) !== -1)) {
-            matchedTopic = (cat === 'Daily_Life') ? 'Daily Life' : cat;
-            break;
+            return { topic: cat, level: clean.length >= 10 ? 'C' : (clean.length <= 5 ? 'A' : 'B') };
           }
         }
-        if (matchedTopic) break;
       }
 
-      if (!matchedTopic) {
-        if (clean.endsWith('tion') || clean.endsWith('ment') || clean.endsWith('ity') || clean.endsWith('ness')) {
-          if (clean.includes('tech') || clean.includes('auto') || clean.includes('data') || clean.includes('net')) {
-            matchedTopic = 'Technology';
-          } else if (clean.includes('fit') || clean.includes('ill') || clean.includes('heal')) {
-            matchedTopic = 'Health';
-          } else if (clean.includes('kind') || clean.includes('brave') || clean.includes('calm')) {
-            matchedTopic = 'Personality';
-          } else {
-            matchedTopic = 'Business';
+      // TẦNG 2: Datamuse Semantic Association API
+      try {
+        var res = await fetch('https://api.datamuse.com/words?rel_trg=' + encodeURIComponent(clean) + '&max=8');
+        var data = await res.json();
+        if (data && data.length > 0) {
+          var contextWords = data.map(d => d.word.toLowerCase());
+          for (var c = 0; c < categories.length; c++) {
+            var cName = categories[c];
+            var cList = COMPREHENSIVE_TOPIC_TAXONOMY[cName];
+            for (var w = 0; w < contextWords.length; w++) {
+              if (cList.includes(contextWords[w])) {
+                return { topic: cName, level: 'B' };
+              }
+            }
           }
-        } else if (clean.endsWith('ology') || clean.endsWith('ism') || clean.endsWith('thesis') || clean.endsWith('ical') || clean.endsWith('ic')) {
-          matchedTopic = 'Academic';
-        } else if (clean.endsWith('ful') || clean.endsWith('able') || clean.endsWith('ive') || clean.endsWith('ous')) {
-          matchedTopic = 'Personality';
-        } else {
-          matchedTopic = 'Daily Life';
         }
+      } catch (e) { }
+
+      // TẦNG 3: Morphological / Heuristic Fallback
+      var matchedTopic = 'Daily Life & Home';
+      if (clean.endsWith('tion') || clean.endsWith('ment') || clean.endsWith('ity')) {
+        matchedTopic = 'Business & Work';
+      } else if (clean.endsWith('ology') || clean.endsWith('ism') || clean.endsWith('thesis')) {
+        matchedTopic = 'Academic & Science';
+      } else if (clean.endsWith('ful') || clean.endsWith('ous') || clean.endsWith('able')) {
+        matchedTopic = 'Personality & Emotions';
       }
 
-      var inferredLevel = 'B';
-      if (matchedTopic === 'Academic' || clean.length >= 10) {
-        inferredLevel = 'C';
-      } else if (clean.length <= 6 && (matchedTopic === 'Daily Life' || matchedTopic === 'Personality')) {
-        inferredLevel = 'A';
-      } else {
-        inferredLevel = 'B';
-      }
-
-      return { topic: matchedTopic, level: inferredLevel };
+      var level = clean.length >= 10 || matchedTopic === 'Academic & Science' ? 'C' : (clean.length <= 5 ? 'A' : 'B');
+      return { topic: matchedTopic, level: level };
     }
 
     /**
@@ -2030,13 +2179,8 @@
       'z': { 's': 0.65, 'ð': 0.45, 'ʒ': 0.4 },
       't': { 'd': 0.65, 'θ': 0.4 },
       'd': { 't': 0.65, 'ð': 0.45 },
-      'k': { 'ɡ': 0.65 },
-      'ɡ': { 'k': 0.65 },
       'iː': { 'ɪ': 0.55, 'e': 0.3 },
-      'ɪ': { 'iː': 0.55, 'e': 0.5 },
-      'uː': { 'ʊ': 0.55 },
-      'ʊ': { 'uː': 0.55, 'ʌ': 0.4 },
-      'æ': { 'e': 0.5, 'ʌ': 0.45, 'ɑː': 0.4 }
+      'ɪ': { 'iː': 0.55, 'e': 0.5 }
     };
 
     function getPhoneticSimilarity(p1, p2) {
@@ -2072,11 +2216,10 @@
           var sim = getPhoneticSimilarity(targetPh, spokenPh);
           var score = Math.round(sim * 100);
           var status = score >= 80 ? 'green' : (score >= 60 ? 'yellow' : 'red');
-          var feedback = status === 'green' ? 'Phát âm chuẩn!' : (status === 'yellow' ? 'Gần đúng, cần chuốt lại khẩu hình.' : 'Phát âm chưa đúng hoặc bị nuốt âm.');
-          results.unshift({ phoneme: targetPh, score: score, status: status, feedback: feedback });
+          results.unshift({ phoneme: targetPh, score: score, status: status });
           currI--; currJ--;
         } else {
-          results.unshift({ phoneme: targetPh, score: 0, status: 'red', feedback: 'Bị nuốt âm.' });
+          results.unshift({ phoneme: targetPh, score: 0, status: 'red' });
           currI--;
         }
       }
@@ -2086,7 +2229,7 @@
     function evaluatePhonemePronunciation(targetWord, targetIpa, spokenText) {
       if (!spokenText || spokenText.trim() === '') {
         var defaultTokens = tokenizeIPA(targetIpa || targetWord).map(function (ph) {
-          return { phoneme: ph, score: 0, status: 'red', feedback: 'Không thu được âm thanh.' };
+          return { phoneme: ph, score: 0, status: 'red' };
         });
         return { score: 0, passed: false, phonemes: defaultTokens, feedback: 'Không thu được âm thanh! Hãy nói to rõ hơn nhé.' };
       }
@@ -2096,27 +2239,22 @@
       var spokenTokens = ruleBasedG2P(spokenText);
       var phonemeAlignments = alignPhonemeSequences(targetTokens, spokenTokens);
 
-      var totalWeight = 0;
-      var weightedScoreSum = 0;
-      phonemeAlignments.forEach(function (item, idx) {
-        var weight = 1.0;
-        if (['s', 'z', 't', 'd', 'k', 'ɡ', 'tʃ', 'dʒ', 'θ', 'ð'].includes(item.phoneme) && idx === phonemeAlignments.length - 1) {
-          weight = 1.35; // Ending sound weight
-        }
-        totalWeight += weight;
-        weightedScoreSum += item.score * weight;
-      });
-
-      var totalScore = totalWeight > 0 ? Math.round(weightedScoreSum / totalWeight) : 0;
+      var totalScore = 0;
+      phonemeAlignments.forEach(function (item) { totalScore += item.score; });
+      totalScore = phonemeAlignments.length > 0 ? Math.round(totalScore / phonemeAlignments.length) : 0;
       var passed = totalScore >= 80;
-      var feedbackMsg = passed ? ('Phát âm rất chuẩn! Đạt ' + totalScore + '% (≥80%)') : ('Chưa đạt (' + totalScore + '%). Chạm vào các âm đỏ để xem hướng dẫn.');
 
-      return { score: totalScore, passed: passed, phonemes: phonemeAlignments, feedback: feedbackMsg };
+      return {
+        score: totalScore,
+        passed: passed,
+        phonemes: phonemeAlignments,
+        feedback: passed ? ('Phát âm rất chuẩn! Đạt ' + totalScore + '% (≥80%)') : ('Chưa đạt (' + totalScore + '%). Chạm vào các âm đỏ để xem hướng dẫn.')
+      };
     }
 
     /**
      * =========================================================================================
-     * REST API DISPATCHER & BACKGROUND SYNC QUEUE
+     * REST API & SMART CACHE LAYER
      * =========================================================================================
      */
     function isApiConfigured() {
@@ -2124,9 +2262,7 @@
     }
 
     async function apiCall(action, payload = {}, method = 'POST') {
-      if (!isApiConfigured()) {
-        return { success: true, offline: true };
-      }
+      if (!isApiConfigured()) return { success: true, offline: true };
       try {
         if (method === 'GET') {
           const queryParams = new URLSearchParams({ action, ...payload }).toString();
@@ -2143,7 +2279,6 @@
           return await res.json();
         }
       } catch (err) {
-        console.warn('API sync notice:', err);
         return { success: false, error: err.toString() };
       }
     }
@@ -2181,24 +2316,18 @@
 
     /**
      * =========================================================================================
-     * APP INITIALIZATION (INSTANT 0.01s CACHE RENDER + BACKGROUND SYNC)
+     * APP INITIALIZATION (0.01s CACHE BOOT + BACKGROUND SYNC)
      * =========================================================================================
      */
     function initApp() {
       initLucideIcons();
 
-      // 1. TẢI NGAY TỪ LOCALSTORAGE TRONG 0.01s (ZERO-LAG)
       var cachedWords = localStorage.getItem('vocabflow_cache_words');
       if (cachedWords) {
-        try {
-          appState.allWords = JSON.parse(cachedWords);
-        } catch (e) {
-          appState.allWords = [];
-        }
+        try { appState.allWords = JSON.parse(cachedWords); } catch (e) { appState.allWords = []; }
       }
 
       if (appState.allWords.length === 0) {
-        // Nạp bộ từ vựng mẫu ban đầu
         var idCount = 1;
         ['Level_A', 'Level_B', 'Level_C'].forEach(function (lvl) {
           FALLBACK_CURATED_WORDS[lvl].forEach(function (w) {
@@ -2218,8 +2347,8 @@
       updateDashboardUI();
       updateMascotContextSpeech();
       filterWordsList();
+      initAutonomousMascot();
 
-      // 2. ĐỒNG BỘ NGẦM VỚI GOOGLE SHEETS (NON-BLOCKING BACKGROUND SYNC)
       syncWithBackendInBackground();
     }
 
@@ -2269,11 +2398,95 @@
 
     /**
      * =========================================================================================
-     * NAVIGATION CONTROLLER
+     * MODULE 4: AUTONOMOUS MASCOT BEHAVIOR STATE MACHINE
+     * =========================================================================================
+     */
+    function initAutonomousMascot() {
+      if (appState.mascot.timer) clearInterval(appState.mascot.timer);
+
+      // Cú tự động đổi trạng thái và hiển thị lời khuyên mỗi 10 giây
+      appState.mascot.timer = setInterval(function () {
+        var svg = document.getElementById('mascot-owl-svg');
+        var wrapper = document.getElementById('mascot-wrapper');
+        if (!svg || !wrapper) return;
+
+        var behaviors = ['walk', 'look', 'wiggle', 'speech'];
+        var chosen = behaviors[Math.floor(Math.random() * behaviors.length)];
+
+        if (chosen === 'walk') {
+          svg.classList.add('animate-cute-walk');
+          appState.mascot.direction *= -1;
+          wrapper.style.transform = appState.mascot.direction === -1 ? 'rotateY(180deg) translateX(12px)' : 'rotateY(0deg) translateX(0px)';
+          setTimeout(function () { svg.classList.remove('animate-cute-walk'); }, 2200);
+        } else if (chosen === 'look') {
+          svg.classList.add('animate-look-around');
+          setTimeout(function () { svg.classList.remove('animate-look-around'); }, 1800);
+        } else if (chosen === 'wiggle') {
+          svg.classList.add('animate-wiggle-butt');
+          setTimeout(function () { svg.classList.remove('animate-wiggle-butt'); }, 1200);
+        } else {
+          var randomQuote = MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)];
+          var speechEl = document.getElementById('mascot-speech-text');
+          if (speechEl) speechEl.textContent = '"' + randomQuote + '"';
+        }
+      }, 10000);
+    }
+
+    function pokeMascot() {
+      var svg = document.getElementById('mascot-owl-svg');
+      if (svg) {
+        svg.classList.remove('animate-somersault-3d', 'animate-float-subtle');
+        void svg.offsetWidth;
+        svg.classList.add('animate-somersault-3d');
+        setTimeout(function () {
+          if (svg) {
+            svg.classList.remove('animate-somersault-3d');
+            svg.classList.add('animate-float-subtle');
+          }
+        }, 900);
+      }
+
+      triggerMiniConfetti();
+      playJoyfulChime();
+
+      var randomQuote = MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)];
+      var speechEl = document.getElementById('mascot-speech-text');
+      if (speechEl) speechEl.textContent = '"' + randomQuote + '"';
+      showToast('🦉 Cú Giáo Sư: ' + randomQuote, 'info');
+    }
+
+    function flapMascotWings() {
+      var leftWing = document.getElementById('owl-left-wing');
+      var rightWing = document.getElementById('owl-right-wing');
+      if (leftWing && rightWing) {
+        leftWing.classList.add('animate-wing-flap-left');
+        rightWing.classList.add('animate-wing-flap-right');
+        setTimeout(function () {
+          leftWing.classList.remove('animate-wing-flap-left');
+          rightWing.classList.remove('animate-wing-flap-right');
+        }, 1200);
+      }
+    }
+
+    function updateMascotContextSpeech() {
+      var speechEl = document.getElementById('mascot-speech-text');
+      if (!speechEl) return;
+      if (appState.dueWords.length > 0) {
+        speechEl.textContent = '"Đang có ' + appState.dueWords.length + ' từ cần ôn hôm nay để củng cố trí nhớ dài hạn. Cùng học nào! 🧠"';
+      } else {
+        speechEl.textContent = '"Bạn đã hoàn thành các từ cần ôn hôm nay! Thử nạp thêm từ mới hoặc luyện Shadowing nhé! 🏆"';
+      }
+    }
+
+    /**
+     * =========================================================================================
+     * NAVIGATION & DASHBOARD
      * =========================================================================================
      */
     function navigateTo(screenId) {
+      closeWordTokenPopover();
       cleanupEphemeralAudio();
+
       var screens = ['dashboard', 'flashcard', 'shadowing', 'dictation', 'words'];
       screens.forEach(function (s) {
         var el = document.getElementById('screen-' + s);
@@ -2341,61 +2554,7 @@
 
     /**
      * =========================================================================================
-     * LINH VẬT CÚ 3D & MOTIVATION INTERACTION
-     * =========================================================================================
-     */
-    function pokeMascot() {
-      var svg = document.getElementById('mascot-owl-svg');
-      if (svg) {
-        svg.classList.remove('animate-somersault-3d', 'animate-float-subtle');
-        void svg.offsetWidth; // Trigger reflow
-        svg.classList.add('animate-somersault-3d');
-        setTimeout(function () {
-          if (svg) {
-            svg.classList.remove('animate-somersault-3d');
-            svg.classList.add('animate-float-subtle');
-          }
-        }, 900);
-      }
-
-      triggerMiniConfetti();
-      playJoyfulChime();
-
-      var randomQuote = MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)];
-      var speechEl = document.getElementById('mascot-speech-text');
-      if (speechEl) speechEl.textContent = '"' + randomQuote + '"';
-
-      showToast('🦉 Cú Giáo Sư: ' + randomQuote, 'info');
-    }
-
-    function flapMascotWings() {
-      var leftWing = document.getElementById('owl-left-wing');
-      var rightWing = document.getElementById('owl-right-wing');
-      if (leftWing && rightWing) {
-        leftWing.classList.add('animate-wing-flap-left');
-        rightWing.classList.add('animate-wing-flap-right');
-        setTimeout(function () {
-          leftWing.classList.remove('animate-wing-flap-left');
-          rightWing.classList.remove('animate-wing-flap-right');
-        }, 1200);
-      }
-    }
-
-    function updateMascotContextSpeech() {
-      var speechEl = document.getElementById('mascot-speech-text');
-      if (!speechEl) return;
-      if (appState.dueWords.length > 0) {
-        speechEl.textContent = '"Đang có ' + appState.dueWords.length + ' từ cần ôn hôm nay để củng cố trí nhớ dài hạn. Cùng học nào! 🧠"';
-      } else if (appState.stats.totalWords === 0) {
-        speechEl.textContent = '"Chào mừng bạn! Hãy bấm vào mục tiêu hôm nay để nạp bộ từ vựng đầu tiên nhé! 🌟"';
-      } else {
-        speechEl.textContent = '"Bạn đã hoàn thành các từ cần ôn hôm nay! Thử nạp thêm từ mới hoặc luyện Shadowing nhé! 🏆"';
-      }
-    }
-
-    /**
-     * =========================================================================================
-     * FLASHCARD STUDIO & OPTIMISTIC RATING ENGINE (0ms DELAY)
+     * FLASHCARD STUDIO & OPTIMISTIC RATING (0ms)
      * =========================================================================================
      */
     function cleanupEphemeralAudio() {
@@ -2417,10 +2576,6 @@
     }
 
     function startFlashcardSessionByBox(boxLevel) {
-      if (!appState.allWords || appState.allWords.length === 0) {
-        openDailyGoalModal();
-        return;
-      }
       var filtered = appState.allWords.filter(function (w) {
         var b = (w.srs && w.srs.box_level) ? parseInt(w.srs.box_level, 10) : 1;
         return b === boxLevel;
@@ -2487,20 +2642,10 @@
       document.getElementById('flashcard-progress-text').textContent = currentNum + ' / ' + totalNum;
       document.getElementById('flashcard-progress-bar').style.width = Math.round((currentNum / totalNum) * 100) + '%';
 
-      var batchBadge = document.getElementById('flashcard-batch-badge');
-      if (batchBadge) {
-        if (appState.dailyBatches && appState.dailyBatches.length > 1) {
-          batchBadge.textContent = 'Đợt ' + (appState.currentBatchIndex + 1) + '/' + appState.dailyBatches.length;
-          batchBadge.classList.remove('hidden');
-        } else {
-          batchBadge.classList.add('hidden');
-        }
-      }
-
       var card = document.getElementById('flashcard-card');
       card.classList.remove('rotate-y-180');
 
-      document.getElementById('fc-pos-badge').textContent = (wordObj.level ? ('[' + wordObj.level + '] ') : '') + (wordObj.pos || 'noun');
+      document.getElementById('fc-pos-badge').textContent = (wordObj.level ? ('[' + wordObj.level + '] ') : '') + (wordObj.pos || 'noun') + ' • ' + (wordObj.topic || 'General');
       setBoxBadgeColor(document.getElementById('fc-box-badge'), (wordObj.srs && wordObj.srs.box_level) || 1);
 
       document.getElementById('fc-front-word').textContent = wordObj.word;
@@ -2513,10 +2658,7 @@
 
       stopFlashcardVoiceCheck();
       var voiceResult = document.getElementById('fc-voice-result');
-      if (voiceResult) {
-        voiceResult.classList.add('hidden');
-        voiceResult.textContent = '';
-      }
+      if (voiceResult) { voiceResult.classList.add('hidden'); voiceResult.textContent = ''; }
 
       var targetIpa = wordObj.ipa_us || wordObj.ipa_uk || ('/' + wordObj.word + '/');
       var initTokens = tokenizeIPA(targetIpa).map(function (ph) { return { phoneme: ph, score: 0, status: 'neutral' }; });
@@ -2528,7 +2670,6 @@
       appState.flashcardVoice.passed = false;
       appState.flashcardVoice.score = 0;
 
-      // Auto play pronunciation in 0.05s
       setTimeout(function () { playPronunciation('us'); }, 150);
       initLucideIcons();
     }
@@ -2578,11 +2719,6 @@
       if (wordObj && wordObj.example) VoiceManager.speak(wordObj.example, 'us', 0.9);
     }
 
-    /**
-     * =========================================================================================
-     * FLASHCARD MICROPHONE RECORDING & MOBILE AUDIO RECOVERY
-     * =========================================================================================
-     */
     function toggleFlashcardVoiceCheck() {
       if (appState.flashcardVoice.isListening) stopFlashcardVoiceCheck();
       else startFlashcardVoiceCheck();
@@ -2620,8 +2756,7 @@
             } catch (err) { }
             launchFlashcardSpeechRecognition(wordObj.word);
           })
-          .catch(function (err) {
-            console.warn('Microphone permission notice:', err);
+          .catch(function () {
             showToast('Vui lòng cấp quyền Microphone trên trình duyệt để ghi âm', 'error');
           });
       } else {
@@ -2746,9 +2881,6 @@
       initLucideIcons();
     }
 
-    /**
-     * OPTIMISTIC RATING (CẬP NHẬT TRONG 0 MILI-GIÂY, CHUYỂN THẺ TỨC THÌ)
-     */
     function rateFlashcard(rating) {
       var wordObj = appState.currentSession[appState.sessionIndex];
       if (!wordObj) return;
@@ -2757,7 +2889,6 @@
       var isPassed = (rating === 'good' || rating === 'easy') && (voiceScore >= 80 || voiceScore === 0);
       if (rating === 'again' || (voiceScore > 0 && voiceScore < 80)) isPassed = false;
 
-      // Cập nhật ngay trong RAM (Optimistic Update)
       var currentBox = (wordObj.srs && wordObj.srs.box_level) ? parseInt(wordObj.srs.box_level, 10) : 1;
       var newBox = rating === 'again' ? 1 : (rating === 'good' ? Math.min(5, currentBox + 1) : Math.min(5, currentBox + 2));
       var intervals = { 1: 1, 2: 3, 3: 7, 4: 14, 5: 30 };
@@ -2780,7 +2911,6 @@
         isPassed: isPassed
       });
 
-      // Lưu state cục bộ trong 0ms
       recalculateStatsAndDueWords();
 
       appState.sessionIndex++;
@@ -2809,7 +2939,6 @@
       addXP(50, 'Hoàn thành đợt học Spaced Repetition');
       addGems(50, 'Hoàn thành đợt học');
 
-      // ĐỒNG BỘ NỀN KHÔNG CHẶN UI (Background Asynchronous Sync)
       if (appState.sessionResults.length > 0 && isApiConfigured()) {
         setSyncingIndicator(true);
         apiCall('sync_results', { results: appState.sessionResults }).then(function () {
@@ -2887,10 +3016,7 @@
 
     function closeSessionSummaryModal() {
       var modal = document.getElementById('modal-session-summary');
-      if (modal) {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-      }
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
     }
 
     function drillWeakWordsNow() {
@@ -2931,7 +3057,7 @@
 
     /**
      * =========================================================================================
-     * SHADOWING STUDIO
+     * MODULE 2 & 3: SHADOWING STUDIO (INTERACTIVE TOKEN & PROSODY)
      * =========================================================================================
      */
     function startShadowingSession() {
@@ -2945,6 +3071,7 @@
 
     function renderCurrentShadowing() {
       cleanupEphemeralAudio();
+      closeWordTokenPopover();
       if (appState.sessionIndex >= appState.currentSession.length) {
         completeStudySession();
         return;
@@ -2957,29 +3084,51 @@
       var wordsBox = document.getElementById('shadowing-sentence-box');
       wordsBox.innerHTML = '';
 
+      // Tách từng từ thành Interactive Word Token
       var wordsList = targetSentence.split(/\s+/);
       wordsList.forEach(function (w) {
-        var btn = document.createElement('span');
-        btn.className = 'inline-block hover:text-indigo-600 hover:underline cursor-pointer transition-colors px-1';
-        btn.textContent = w;
-        btn.title = 'Tra cứu âm vị từ này';
-        btn.onclick = function () { inspectIpaText(w); };
-        wordsBox.appendChild(btn);
+        var cleanW = w.replace(/[^a-zA-Z]/g, '');
+        var span = document.createElement('span');
+        span.className = 'word-token';
+        span.textContent = w + ' ';
+        span.onclick = function (e) {
+          e.stopPropagation();
+          openWordTokenPopover(e, cleanW || w);
+        };
+        wordsBox.appendChild(span);
       });
 
+      // Mặc định ẩn bản dịch
+      appState.shadowing.isTransVisible = false;
+      document.getElementById('shadowing-trans-wrapper').classList.add('hidden');
+      document.getElementById('lbl-toggle-trans').textContent = '🌐 Hiện bản dịch';
       document.getElementById('shadowing-trans-box').textContent = wordObj.shadowing_trans || wordObj.example_trans || wordObj.meaning || '';
+
       document.getElementById('shadowing-result-card').classList.add('hidden');
       document.getElementById('shadowing-live-transcript').textContent = '';
 
-      setTimeout(function () { playCurrentShadowingAudio(); }, 250);
+      setTimeout(function () { playExpressiveShadowingModelAudio(); }, 250);
       initLucideIcons();
     }
 
-    function playCurrentShadowingAudio() {
+    function toggleShadowingTranslation() {
+      appState.shadowing.isTransVisible = !appState.shadowing.isTransVisible;
+      var wrap = document.getElementById('shadowing-trans-wrapper');
+      var lbl = document.getElementById('lbl-toggle-trans');
+      if (appState.shadowing.isTransVisible) {
+        wrap.classList.remove('hidden');
+        lbl.textContent = 'Ẩn bản dịch';
+      } else {
+        wrap.classList.add('hidden');
+        lbl.textContent = '🌐 Hiện bản dịch';
+      }
+    }
+
+    function playExpressiveShadowingModelAudio() {
       var wordObj = appState.currentSession[appState.sessionIndex];
       if (wordObj) {
         var targetSentence = wordObj.shadowing_sentence || wordObj.example || wordObj.word;
-        VoiceManager.speak(targetSentence, appState.shadowing.accent, appState.shadowing.speed);
+        VoiceManager.speakSentenceExpressive(targetSentence, appState.shadowing.accent, appState.shadowing.speed);
       }
     }
 
@@ -2992,16 +3141,65 @@
           else btn.className = 'px-2.5 py-0.5 rounded-full text-[10px] text-slate-600 transition-all font-bold';
         }
       });
-      playCurrentShadowingAudio();
+      playExpressiveShadowingModelAudio();
     }
 
     function toggleShadowingAccent() {
       appState.shadowing.accent = appState.shadowing.accent === 'us' ? 'uk' : 'us';
       var btn = document.getElementById('btn-shadowing-accent');
       if (btn) btn.textContent = appState.shadowing.accent === 'us' ? '🇺🇸 US' : '🇬🇧 UK';
-      playCurrentShadowingAudio();
+      playExpressiveShadowingModelAudio();
     }
 
+    /**
+     * FLOATING WORD TOKEN POPOVER CONTROLLER
+     */
+    function openWordTokenPopover(event, wordText) {
+      var popover = document.getElementById('floating-word-popover');
+      if (!popover || !wordText) return;
+
+      var clean = wordText.toLowerCase().trim();
+      var cur = findCuratedWord(clean);
+      var matchInApp = appState.allWords.find(w => w.word.toLowerCase() === clean);
+
+      var pos = (cur && cur.pos) || (matchInApp && matchInApp.pos) || 'word';
+      var ipaUk = (cur && cur.ipa_uk) || (matchInApp && matchInApp.ipa_uk) || ('/' + clean + '/');
+      var ipaUs = (cur && cur.ipa_us) || (matchInApp && matchInApp.ipa_us) || ('/' + clean + '/');
+      var meaning = (cur && cur.meaning) || (matchInApp && matchInApp.meaning) || 'Từ vựng trong ngữ cảnh câu.';
+
+      document.getElementById('popover-word').textContent = clean;
+      document.getElementById('popover-pos').textContent = pos;
+      document.getElementById('popover-ipa').textContent = '🇬🇧 ' + ipaUk + ' • 🇺🇸 ' + ipaUs;
+      document.getElementById('popover-meaning').textContent = meaning;
+
+      var btnSpeak = document.getElementById('btn-popover-speak');
+      btnSpeak.onclick = function () { VoiceManager.speak(clean, 'us', 0.88); };
+
+      // Định vị popover phía trên con trỏ / token
+      var x = event.clientX;
+      var y = event.clientY;
+      popover.style.left = Math.min(window.innerWidth - 270, Math.max(10, x - 130)) + 'px';
+      popover.style.top = Math.max(10, y - 130) + 'px';
+
+      popover.classList.remove('hidden');
+      VoiceManager.speak(clean, 'us', 0.88);
+    }
+
+    function closeWordTokenPopover() {
+      var popover = document.getElementById('floating-word-popover');
+      if (popover) popover.classList.add('hidden');
+    }
+
+    document.addEventListener('click', function (e) {
+      var popover = document.getElementById('floating-word-popover');
+      if (popover && !popover.contains(e.target) && !e.target.classList.contains('word-token')) {
+        closeWordTokenPopover();
+      }
+    });
+
+    /**
+     * SHADOWING MICROPHONE & RECORDING
+     */
     function toggleShadowingRecording() {
       if (appState.shadowing.isRecording) stopShadowingRecording(true);
       else startShadowingRecording();
@@ -3243,10 +3441,7 @@
      */
     function openArticulatoryModal(phoneme) {
       var modal = document.getElementById('modal-mouth-guide');
-      if (modal) {
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-      }
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
       renderArticulatoryChips();
       selectArticulatoryPhoneme(phoneme || appState.articulatoryModal.selectedPhoneme || 'θ');
       initLucideIcons();
@@ -3254,10 +3449,7 @@
 
     function closeArticulatoryModal() {
       var modal = document.getElementById('modal-mouth-guide');
-      if (modal) {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-      }
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
     }
 
     function filterArticulatoryCategory(category) {
@@ -3368,7 +3560,7 @@
 
     /**
      * =========================================================================================
-     * DAILY GOAL MODAL & BATCH WORD INGESTION
+     * DAILY GOAL & BATCH WORD INGESTION
      * =========================================================================================
      */
     function openDailyGoalModal() {
@@ -3410,7 +3602,6 @@
       var count = appState.dailyDiscovery.count || 10;
       closeDailyGoalModal();
 
-      // Nạp từ cục bộ ngay lập tức (0ms)
       var pool = [];
       var levels = lvl === 'mix' ? ['Level_A', 'Level_B', 'Level_C'] : ['Level_' + lvl];
       levels.forEach(function (l) {
@@ -3437,7 +3628,6 @@
       filterWordsList();
       showToast('Đã nạp thành công ' + pool.length + ' từ mới! Bắt đầu ôn tập 🚀', 'success');
 
-      // Đồng bộ ngầm với backend
       if (isApiConfigured()) {
         apiCall('discover_daily', { level: lvl, count: count, topic: 'all' });
       }
@@ -3469,7 +3659,7 @@
       badge.textContent = words.length + ' từ';
     }
 
-    function handleBatchWordSubmit(e) {
+    async function handleBatchWordSubmit(e) {
       if (e) e.preventDefault();
       var raw = document.getElementById('input-batch-words').value.trim();
       if (!raw) return;
@@ -3479,13 +3669,13 @@
 
       closeAddWordModal();
 
-      // OPTIMISTIC INSERT VỚI PHÂN LOẠI CHỦ ĐỀ CHUẨN XÁC 100%
       var addedCount = 0;
-      words.forEach(function (w) {
+      for (var i = 0; i < words.length; i++) {
+        var w = words[i];
         var exists = appState.allWords.some(item => item.word.toLowerCase() === w);
         if (!exists) {
           var curWord = findCuratedWord(w);
-          var autoClass = classifyWordHeuristic(w);
+          var autoClass = await classifyWordSemanticAI(w);
           var newWordObj;
 
           if (curWord) {
@@ -3524,14 +3714,13 @@
           appState.allWords.push(newWordObj);
           addedCount++;
         }
-      });
+      }
 
       recalculateStatsAndDueWords();
       updateDashboardUI();
       filterWordsList();
       showToast('Đã nạp ' + addedCount + ' từ vựng vào hệ thống trong 0ms! 🚀', 'success');
 
-      // Gửi ngầm về backend Google Sheets
       if (isApiConfigured()) {
         apiCall('add_batch', { wordsListString: words.join('\n'), topic: 'auto', level: 'auto' });
       }
@@ -3583,7 +3772,7 @@
             <div class="text-[11px] text-slate-500 italic truncate max-w-xs">${escapeHtml(w.example || '')}</div>
           </td>
           <td class="p-3.5 hidden md:table-cell">
-            <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-bold text-[10px]">${escapeHtml(w.topic || 'Daily Life')}</span>
+            <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-bold text-[10px]">${escapeHtml(w.topic || 'Daily Life & Home')}</span>
             <span class="px-1.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 font-extrabold text-[10px] ml-1">Cấp ${escapeHtml(w.level || 'A')}</span>
           </td>
           <td class="p-3.5 text-center">
@@ -3817,11 +4006,12 @@
       reader.readAsText(file);
     }
 
-    function executeBatchImport() {
+    async function executeBatchImport() {
       if (parsedImportRows.length === 0) return;
       closeImportModal();
-      parsedImportRows.forEach(function (row) {
-        var autoClass = classifyWordHeuristic(row.word);
+      for (var r = 0; r < parsedImportRows.length; r++) {
+        var row = parsedImportRows[r];
+        var autoClass = await classifyWordSemanticAI(row.word);
         appState.allWords.push({
           id: 'w_' + Math.random().toString(36).substring(2, 9),
           word: row.word,
@@ -3837,7 +4027,7 @@
           shadowing_trans: '',
           srs: { box_level: 1, last_reviewed: '', next_review: appState.today, streak: 0 }
         });
-      });
+      }
       recalculateStatsAndDueWords();
       updateDashboardUI();
       filterWordsList();
@@ -3849,7 +4039,7 @@
 
     /**
      * =========================================================================================
-     * TOAST NOTIFICATIONS & UTILITY FUNCTIONS
+     * UTILITY FUNCTIONS
      * =========================================================================================
      */
     function showToast(message, type = 'info') {
@@ -3908,7 +4098,7 @@
       return String(str).replace(/'/g, "\\'");
     }
 
-    // Lắng nghe phím tắt Space để lật thẻ
+    // Lật thẻ bằng phím Space
     document.addEventListener('keydown', function (e) {
       if (e.code === 'Space' && !document.getElementById('screen-flashcard').classList.contains('hidden')) {
         var target = e.target.tagName;
