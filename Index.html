@@ -518,6 +518,9 @@
           </button>
 
           <div class="flex items-center space-x-2">
+            <span id="flashcard-batch-badge"
+              class="hidden sm:inline px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-extrabold text-[10px] border border-indigo-100">Đợt
+              1</span>
             <span id="flashcard-progress-text" class="text-xs font-mono font-bold text-slate-500">1 / 1</span>
             <div class="w-20 sm:w-28 bg-slate-200 h-1.5 rounded-full overflow-hidden">
               <div id="flashcard-progress-bar" class="bg-indigo-600 h-full rounded-full transition-all duration-300"
@@ -546,7 +549,7 @@
               </div>
 
               <!-- Main Target Word & Loa -->
-              <div class="text-center my-auto space-y-3">
+              <div class="text-center my-auto space-y-2">
                 <h2 id="fc-front-word"
                   class="text-3xl sm:text-4xl font-display font-black text-slate-900 tracking-tight">word</h2>
 
@@ -563,15 +566,22 @@
                 </div>
 
                 <!-- PHONEME PILL RIBBON (1 HÀNG DUY NHẤT GỌN GÀNG, KHÔNG CHE KHUẤT NÚT) -->
-                <div id="fc-phonemes-container" class="pt-2 px-1" onclick="event.stopPropagation()">
-                  <div id="fc-phonemes-list" class="flex flex-wrap items-center justify-center gap-1.5 py-1.5">
+                <div id="fc-phonemes-container" class="pt-1 px-1" onclick="event.stopPropagation()">
+                  <div id="fc-phonemes-list" class="flex flex-wrap items-center justify-center gap-1.5 py-1">
                     <!-- Dynamic Pill Badges: e.g. [/r/ 95%] [/ɪ/ 88%] [/z/ 45%] -->
                   </div>
                   <div id="fc-voice-diagnosis" class="text-[11px] text-slate-500 font-medium pt-0.5"></div>
                 </div>
 
-                <!-- Voice Result Toast -->
-                <div id="fc-voice-result" class="hidden text-xs font-bold py-1"></div>
+                <!-- Voice Result Toast & Ephemeral User Audio Replay Button -->
+                <div id="fc-voice-result" class="hidden text-xs font-bold py-0.5"></div>
+                <div class="flex justify-center" onclick="event.stopPropagation()">
+                  <button type="button" id="btn-fc-user-audio" onclick="playFlashcardUserAudio()"
+                    class="hidden mt-1 px-3 py-1 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-extrabold flex items-center justify-center space-x-1.5 shadow-sm active:scale-95 transition-all cursor-pointer">
+                    <i data-lucide="headphones" class="w-3.5 h-3.5 text-indigo-600"></i>
+                    <span>🎧 Nghe lại giọng bạn vừa đọc</span>
+                  </button>
+                </div>
               </div>
 
               <!-- Bottom Action Buttons -->
@@ -1060,44 +1070,139 @@
     </div>
   </div>
 
-  <!-- MODAL 3: ADD / EDIT WORD -->
+  <!-- MODAL 3: SMART BATCH INGESTION (NẠP TỪ HÀNG LOẠT & TỰ ĐỘNG PHÂN LOẠI) -->
   <div id="modal-add-word"
     class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl animate-slideUp">
+    <div class="glass-panel w-full max-w-lg rounded-3xl p-6 space-y-4 shadow-2xl animate-slideUp">
       <div class="flex items-center justify-between">
-        <h3 id="lbl-modal-word-title" class="font-display font-extrabold text-base text-slate-900">Thêm Từ Mới</h3>
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 id="lbl-modal-word-title" class="font-display font-extrabold text-base text-slate-900">Nạp Từ Vựng Hàng
+              Loạt</h3>
+            <p class="text-[10px] text-slate-500">Tự động nhận diện Chủ đề (Business, Tech, Academic, Daily) & Cấp độ
+              (A, B, C)</p>
+          </div>
+        </div>
         <button type="button" onclick="closeAddWordModal()" class="p-1 text-slate-400 hover:text-slate-600">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <form onsubmit="handleWordSubmit(event)" class="space-y-3 text-xs">
+      <form onsubmit="handleBatchWordSubmit(event)" class="space-y-3 text-xs">
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Từ tiếng Anh (*)</label>
-          <input type="text" id="input-word-text" required placeholder="vd: resilient"
-            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 border border-slate-200 focus:bg-white focus:border-indigo-600 outline-none font-bold">
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Chủ đề</label>
-            <input type="text" id="input-word-topic" placeholder="Daily Life"
-              class="w-full px-3 py-2 rounded-xl bg-slate-100 border border-slate-200 focus:bg-white outline-none">
+          <div class="flex items-center justify-between mb-1">
+            <label class="block font-bold text-slate-700">Dán danh sách từ tiếng Anh (*)</label>
+            <span id="badge-batch-counter"
+              class="text-[10px] font-extrabold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-full">0
+              từ</span>
           </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Cấp độ</label>
-            <select id="input-word-level"
-              class="w-full px-3 py-2 rounded-xl bg-slate-100 border border-slate-200 focus:bg-white outline-none font-bold">
-              <option value="A">Cấp A (Đời sống)</option>
-              <option value="B" selected>Cấp B (Công việc)</option>
-              <option value="C">Cấp C (Học thuật)</option>
-            </select>
-          </div>
+          <textarea id="input-batch-words" rows="5" required oninput="updateBatchWordCounter()"
+            placeholder="vd: negotiate, scalability, empirical, appreciate, resilience&#10;(Mỗi từ một dòng, hoặc cách nhau bởi dấu phẩy , hoặc chấm phẩy ;)"
+            class="w-full px-3.5 py-2.5 rounded-2xl bg-slate-100 border border-slate-200 focus:bg-white focus:border-indigo-600 outline-none font-mono text-xs leading-relaxed transition-all"></textarea>
         </div>
-        <button type="submit" id="btn-save-word"
-          class="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-extrabold text-xs shadow-md shadow-indigo-500/20 transition-all cursor-pointer">
-          Lưu vào Google Sheets
+
+        <div class="p-3 rounded-2xl bg-indigo-50/60 border border-indigo-100 space-y-1 text-[11px] text-slate-600">
+          <div class="flex items-center space-x-1.5 font-bold text-indigo-700">
+            <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+            <span>Heuristic Semantic Classifier:</span>
+          </div>
+          <p class="text-[10px] text-slate-500 leading-normal">
+            Hệ thống tự động tra cứu IPA UK/US, ngữ nghĩa tiếng Việt, câu ví dụ Shadowing và gán Chủ đề/Cấp độ thông
+            minh cho từng từ.
+          </p>
+        </div>
+
+        <button type="submit" id="btn-save-batch-words"
+          class="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-extrabold text-xs shadow-md shadow-indigo-500/20 transition-all cursor-pointer flex items-center justify-center space-x-1.5">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>Phân loại & Lưu vào Google Sheets 🚀</span>
         </button>
       </form>
+    </div>
+  </div>
+
+  <!-- MODAL 5: SESSION SUMMARY & WEAK-WORD DRILL LOOP (TỔNG KẾT PHIÊN & LUYỆN LẠI TỪ YẾU) -->
+  <div id="modal-session-summary"
+    class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-lg rounded-3xl p-6 space-y-4 shadow-2xl animate-slideUp">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <div
+            class="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-base">
+            🏆
+          </div>
+          <div>
+            <h3 class="font-display font-extrabold text-base text-slate-900">Tổng Kết Phiên Học</h3>
+            <p id="summary-batch-title" class="text-[10px] text-slate-500">Tiến độ Spaced Repetition hôm nay</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeSessionSummaryModal()" class="p-1 text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Stats Summary Ribbon -->
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="p-3 rounded-2xl bg-slate-100/70 border border-slate-200/60">
+          <span class="text-[10px] font-bold text-slate-500 uppercase">Tổng từ</span>
+          <div id="summary-stat-total" class="text-lg font-black font-display text-slate-900">0</div>
+        </div>
+        <div class="p-3 rounded-2xl bg-emerald-50 border border-emerald-200/80">
+          <span class="text-[10px] font-bold text-emerald-700 uppercase">Đạt (≥80%)</span>
+          <div id="summary-stat-passed" class="text-lg font-black font-display text-emerald-700">0</div>
+        </div>
+        <div class="p-3 rounded-2xl bg-rose-50 border border-rose-200/80">
+          <span class="text-[10px] font-bold text-rose-700 uppercase">Cần củng cố</span>
+          <div id="summary-stat-weak" class="text-lg font-black font-display text-rose-700">0</div>
+        </div>
+      </div>
+
+      <!-- Weak Words Drill Area -->
+      <div id="summary-weak-section" class="space-y-2">
+        <div class="flex items-center justify-between text-xs font-bold">
+          <span class="text-rose-700 flex items-center space-x-1">
+            <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-rose-600"></i>
+            <span>Các từ chưa đạt chuẩn:</span>
+          </span>
+          <span id="summary-weak-count-pill"
+            class="text-[10px] bg-rose-100 text-rose-800 px-2 py-0.5 rounded-full font-extrabold">0 từ</span>
+        </div>
+        <div id="summary-weak-list"
+          class="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-2 bg-rose-50/50 rounded-2xl border border-rose-100">
+        </div>
+      </div>
+
+      <!-- Passed Words Area -->
+      <div id="summary-passed-section" class="space-y-1.5">
+        <span class="text-xs font-bold text-emerald-700 flex items-center space-x-1">
+          <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span>Các từ phát âm chuẩn:</span>
+        </span>
+        <div id="summary-passed-list"
+          class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto p-2 bg-emerald-50/50 rounded-2xl border border-emerald-100">
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-2 pt-1">
+        <button type="button" id="btn-drill-weak" onclick="drillWeakWordsNow()"
+          class="w-full py-3 rounded-2xl bg-rose-600 hover:bg-rose-700 active:scale-95 text-white font-extrabold text-xs shadow-md shadow-rose-500/20 transition-all cursor-pointer flex items-center justify-center space-x-1.5">
+          <i data-lucide="flame" class="w-4 h-4"></i>
+          <span>🔥 Luyện lại ngay <span id="lbl-drill-weak-count">0</span> từ chưa chuẩn</span>
+        </button>
+        <button type="button" id="btn-next-batch" onclick="startNextDailyBatch()"
+          class="hidden w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-extrabold text-xs shadow-md shadow-indigo-500/20 transition-all cursor-pointer flex items-center justify-center space-x-1.5">
+          <i data-lucide="arrow-right-circle" class="w-4 h-4"></i>
+          <span>Tiến tới đợt tiếp theo 🚀</span>
+        </button>
+        <button type="button" onclick="closeSessionSummaryModal(); navigateTo('dashboard');"
+          class="w-full py-2.5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-xs transition-all cursor-pointer">
+          Về màn hình Tổng quan
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1721,13 +1826,23 @@
       },
       topics: ['Daily Life', 'Business', 'Technology', 'Academic', 'Communication', 'Health', 'Personality'],
 
-      // Flashcard Voice Check State
+      // Flashcard Voice Check State (Ephemeral RAM Audio Buffer)
       flashcardVoice: {
         isListening: false,
         recognition: null,
         stream: null,
-        passed: false
+        mediaRecorder: null,
+        audioChunks: [],
+        userAudioUrl: null,
+        passed: false,
+        score: 0
       },
+
+      // Daily Batches & Anti-Burnout State
+      dailyBatches: [],
+      currentBatchIndex: 0,
+      weakWords: [],
+      passedWords: [],
 
       // Daily Discovery State (Default: Mix all levels)
       dailyDiscovery: {
@@ -1737,9 +1852,9 @@
         pos: 'all'
       },
 
-      // Shadowing State (Natural Cadence TTS)
+      // Shadowing State (Natural Cadence TTS & Ephemeral RAM Audio)
       shadowing: {
-        speed: 0.9,
+        speed: 0.88,
         accent: 'us',
         isRecording: false,
         recognition: null,
@@ -1757,9 +1872,134 @@
       }
     };
 
+    // TỪ ĐIỂN TỪ KHÓA ĐỐI SOÁT PHÂN LOẠI NGỮ NGHĨA TỰ ĐỘNG (HEURISTIC SEMANTIC CLASSIFIER)
+    const HEURISTIC_KEYWORDS = {
+      Business: [
+        'negotiate', 'leverage', 'benchmark', 'stakeholder', 'streamline', 'feasibility', 'contingency',
+        'lucrative', 'synergy', 'mitigate', 'corporate', 'revenue', 'contract', 'strategy', 'management',
+        'market', 'investment', 'enterprise', 'executive', 'profit', 'fiscal', 'dividend', 'valuation',
+        'commerce', 'compliance', 'audit', 'portfolio', 'venture', 'acquisition', 'merger', 'monopoly',
+        'liability', 'equity', 'forecast', 'restructure', 'outsource', 'procurement', 'monetize', 'turnover',
+        'subsidiary', 'shareholder', 'logistics', 'bureaucracy', 'franchise', 'amortization', 'collateral'
+      ],
+      Technology: [
+        'scalability', 'automation', 'encryption', 'cybersecurity', 'algorithm', 'interface', 'database',
+        'cloud', 'network', 'software', 'artificial', 'intelligence', 'system', 'computational', 'backend',
+        'frontend', 'serverless', 'microservice', 'quantum', 'protocol', 'hardware', 'telemetry', 'robotics',
+        'repository', 'deployment', 'latency', 'bandwidth', 'firmware', 'middleware', 'virtualization',
+        'infrastructure', 'container', 'neural', 'framework', 'pipeline', 'blockchain', 'biometrics'
+      ],
+      Academic: [
+        'empirical', 'corroborate', 'synthesize', 'juxtaposition', 'elucidate', 'proliferation', 'intrinsic',
+        'methodology', 'dichotomy', 'prerequisite', 'ubiquity', 'paradigm', 'articulate', 'hypothesis',
+        'pedagogical', 'epistemological', 'deductive', 'dialectic', 'hermeneutic', 'phenomenological',
+        'nuance', 'rationale', 'theoretical', 'longitudinal', 'qualitative', 'quantitative', 'epistemology',
+        'heuristic', 'taxonomic', 'substantiate', 'specious', 'ephemeral', 'ubiquitous', 'anomaly', 'discourse'
+      ],
+      Daily_Life: [
+        'appreciate', 'convenient', 'delicious', 'habit', 'routine', 'confident', 'generous', 'punctual',
+        'wholesome', 'empathy', 'spontaneous', 'nostalgia', 'meticulous', 'resilience', 'mindfulness',
+        'gratitude', 'tranquil', 'rejuvenate', 'nutritious', 'immunity', 'lifestyle', 'wellness', 'exercise',
+        'meditation', 'emotional', 'optimistic', 'recreation', 'cherish', 'serenity', 'compassion', 'belonging'
+      ]
+    };
+
+    function findCuratedWord(cleanWord) {
+      if (appState && appState.allWords && appState.allWords.length > 0) {
+        var found = appState.allWords.find(function (w) {
+          return (w.word || '').toLowerCase() === cleanWord;
+        });
+        if (found) return found;
+      }
+      return null;
+    }
+
+    function classifyWordHeuristic(word) {
+      var clean = (word || '').toLowerCase().trim();
+      if (!clean) return { topic: 'General', level: 'B' };
+
+      var cur = findCuratedWord(clean);
+      if (cur) return { topic: cur.topic || 'General', level: cur.level || 'B' };
+
+      var matchedTopic = 'General';
+      var keys = Object.keys(HEURISTIC_KEYWORDS);
+      for (var k = 0; k < keys.length; k++) {
+        var cat = keys[k];
+        var list = HEURISTIC_KEYWORDS[cat];
+        for (var i = 0; i < list.length; i++) {
+          var kw = list[i];
+          if (clean === kw || clean.indexOf(kw) !== -1 || kw.indexOf(clean) !== -1) {
+            matchedTopic = (cat === 'Daily_Life') ? 'Daily Life' : cat;
+            break;
+          }
+        }
+        if (matchedTopic !== 'General') break;
+      }
+
+      // Suy luận cấp độ (Level A, B, C)
+      var inferredLevel = 'B';
+      if (matchedTopic === 'Academic' || clean.length >= 11) {
+        inferredLevel = 'C';
+      } else if (clean.length <= 6 && (matchedTopic === 'Daily Life' || matchedTopic === 'General')) {
+        inferredLevel = 'A';
+      } else {
+        inferredLevel = 'B';
+      }
+
+      return { topic: matchedTopic, level: inferredLevel };
+    }
+
     /**
      * =========================================================================================
-     * VOICE MANAGER: SEPARATION OF US (EN-US) VS UK (EN-GB) & NATURAL CADENCE TTS
+     * THOUGHT-GROUP CHUNKING ENGINE (NGẮT NHỊP THEO CỤM TƯ DUY TỰ NHIÊN)
+     * =========================================================================================
+     */
+    function chunkSentenceIntoThoughtGroups(sentence) {
+      if (!sentence) return [];
+      var clean = sentence.trim();
+
+      // Regex tách theo dấu câu và các liên từ/cụm giới từ ngắt nhịp tự nhiên
+      var rawParts = clean.split(/([,;:—–\-]|\b(?:and|but|because|although|while|when|that|which|where|if|since|so that|as well as|in order to|along with|throughout the|such as|due to)\b)/i);
+
+      var chunks = [];
+      var currentChunk = '';
+
+      for (var i = 0; i < rawParts.length; i++) {
+        var part = rawParts[i].trim();
+        if (!part) continue;
+
+        if (/^[,;:—–\-]$/.test(part)) {
+          currentChunk = (currentChunk + part).trim();
+          if (currentChunk) {
+            chunks.push(currentChunk);
+            currentChunk = '';
+          }
+        } else if (/^(and|but|because|although|while|when|that|which|where|if|since|so that|as well as|in order to|along with|throughout the|such as|due to)$/i.test(part)) {
+          if (currentChunk.split(/\s+/).length >= 3) {
+            chunks.push(currentChunk.trim());
+            currentChunk = part + ' ';
+          } else {
+            currentChunk = (currentChunk + ' ' + part).trim() + ' ';
+          }
+        } else {
+          if (currentChunk && (currentChunk + ' ' + part).split(/\s+/).length > 7) {
+            chunks.push(currentChunk.trim());
+            currentChunk = part;
+          } else {
+            currentChunk = (currentChunk ? (currentChunk + ' ' + part) : part).trim();
+          }
+        }
+      }
+      if (currentChunk.trim()) {
+        chunks.push(currentChunk.trim());
+      }
+
+      return chunks.filter(Boolean);
+    }
+
+    /**
+     * =========================================================================================
+     * VOICE MANAGER: SEPARATION OF US (EN-US) VS UK (EN-GB) & THOUGHT-GROUP CADENCE
      * =========================================================================================
      */
     const VoiceManager = {
@@ -1822,6 +2062,66 @@
         if (voice) utterance.voice = voice;
 
         window.speechSynthesis.speak(utterance);
+      },
+
+      speakThoughtGroups: function (sentence, accent = 'us', speed = 0.88, onComplete) {
+        if (!window.speechSynthesis || !sentence) return;
+        window.speechSynthesis.cancel();
+
+        var chunks = chunkSentenceIntoThoughtGroups(sentence);
+        if (chunks.length <= 1) {
+          this.speak(sentence, accent, speed);
+          if (onComplete) {
+            setTimeout(onComplete, 1200);
+          }
+          return;
+        }
+
+        var chunkIndex = 0;
+        var isQuestion = sentence.trim().endsWith('?');
+
+        function speakNextChunk() {
+          if (chunkIndex >= chunks.length) {
+            if (onComplete) onComplete();
+            return;
+          }
+
+          var chunkText = chunks[chunkIndex];
+          var isLast = (chunkIndex === chunks.length - 1);
+          var utterance = new SpeechSynthesisUtterance(chunkText);
+          utterance.lang = accent === 'uk' ? 'en-GB' : 'en-US';
+          utterance.rate = speed;
+
+          // Ngữ điệu: hạ nhẹ cao độ ở cuối câu trần thuật (0.92), nâng ở câu hỏi (1.15)
+          if (isLast) {
+            utterance.pitch = isQuestion ? 1.15 : 0.92;
+          } else {
+            utterance.pitch = 1.0;
+          }
+
+          var voice = VoiceManager.getBestVoice(accent);
+          if (voice) utterance.voice = voice;
+
+          utterance.onend = function () {
+            chunkIndex++;
+            if (chunkIndex < chunks.length) {
+              // Micro-pause: 140ms - 180ms mô phỏng nhịp lấy hơi bản xứ
+              setTimeout(speakNextChunk, 160);
+            } else {
+              if (onComplete) onComplete();
+            }
+          };
+
+          utterance.onerror = function () {
+            chunkIndex++;
+            if (chunkIndex < chunks.length) setTimeout(speakNextChunk, 100);
+            else if (onComplete) onComplete();
+          };
+
+          window.speechSynthesis.speak(utterance);
+        }
+
+        speakNextChunk();
       }
     };
 
@@ -1845,14 +2145,14 @@
     function playCurrentExampleAudio() {
       var wordObj = appState.currentSession[appState.sessionIndex];
       if (!wordObj || !wordObj.example) return;
-      VoiceManager.speak(wordObj.example, 'us', 0.9);
+      VoiceManager.speakThoughtGroups(wordObj.example, 'us', 0.88);
     }
 
     function playCurrentShadowingAudio() {
       var wordObj = appState.currentSession[appState.sessionIndex];
       if (!wordObj) return;
       var sentence = wordObj.shadowing_sentence || wordObj.example || wordObj.word;
-      VoiceManager.speak(sentence, appState.shadowing.accent, appState.shadowing.speed);
+      VoiceManager.speakThoughtGroups(sentence, appState.shadowing.accent, appState.shadowing.speed);
     }
 
     function playDictationAudio(accent = 'us') {
@@ -2270,6 +2570,7 @@
     }
 
     function navigateTo(screenId) {
+      cleanupEphemeralAudio();
       var screens = ['dashboard', 'flashcard', 'shadowing', 'dictation', 'words'];
       screens.forEach(function (s) {
         var el = document.getElementById('screen-' + s);
@@ -2344,9 +2645,27 @@
 
     /**
      * =========================================================================================
-     * FLASHCARD ENGINE (WITH 1-ROW COMPACT PHONEME PILL RIBBON)
+     * FLASHCARD ENGINE (ANTI-BURNOUT DAILY BATCHING & WEAK-WORD DRILL LOOP)
      * =========================================================================================
      */
+    function cleanupEphemeralAudio() {
+      if (appState.flashcardVoice.userAudioUrl) {
+        try { URL.revokeObjectURL(appState.flashcardVoice.userAudioUrl); } catch (e) { }
+        appState.flashcardVoice.userAudioUrl = null;
+        appState.flashcardVoice.audioChunks = [];
+      }
+      if (appState.shadowing.userAudioUrl) {
+        try { URL.revokeObjectURL(appState.shadowing.userAudioUrl); } catch (e) { }
+        appState.shadowing.userAudioUrl = null;
+        appState.shadowing.audioChunks = [];
+      }
+      var fcAudioBtn = document.getElementById('btn-fc-user-audio');
+      if (fcAudioBtn) {
+        fcAudioBtn.classList.add('hidden');
+        fcAudioBtn.classList.remove('flex');
+      }
+    }
+
     function startFlashcardSession() {
       var sessionPool = appState.dueWords.length > 0 ? appState.dueWords.slice() : appState.allWords.slice();
 
@@ -2356,10 +2675,20 @@
         return;
       }
 
-      appState.currentSession = shuffleArray(sessionPool);
+      sessionPool = shuffleArray(sessionPool);
+
+      // Anti-burnout Daily Batching: chia thành từng đợt 15 từ
+      appState.dailyBatches = [];
+      for (var i = 0; i < sessionPool.length; i += 15) {
+        appState.dailyBatches.push(sessionPool.slice(i, i + 15));
+      }
+      appState.currentBatchIndex = 0;
+      appState.currentSession = appState.dailyBatches[0] || [];
       appState.sessionIndex = 0;
       appState.sessionResults = [];
       appState.sessionMode = 'flashcard';
+      appState.weakWords = [];
+      appState.passedWords = [];
 
       var screens = ['dashboard', 'flashcard', 'shadowing', 'dictation', 'words'];
       screens.forEach(function (s) {
@@ -2372,6 +2701,8 @@
     }
 
     function renderCurrentFlashcard() {
+      cleanupEphemeralAudio();
+
       if (appState.sessionIndex >= appState.currentSession.length) {
         completeStudySession();
         return;
@@ -2384,6 +2715,16 @@
       var totalNum = appState.currentSession.length;
       document.getElementById('flashcard-progress-text').textContent = currentNum + ' / ' + totalNum;
       document.getElementById('flashcard-progress-bar').style.width = Math.round((currentNum / totalNum) * 100) + '%';
+
+      var batchBadge = document.getElementById('flashcard-batch-badge');
+      if (batchBadge) {
+        if (appState.dailyBatches && appState.dailyBatches.length > 1) {
+          batchBadge.textContent = 'Đợt ' + (appState.currentBatchIndex + 1) + '/' + appState.dailyBatches.length;
+          batchBadge.classList.remove('hidden');
+        } else {
+          batchBadge.classList.add('hidden');
+        }
+      }
 
       var card = document.getElementById('flashcard-card');
       card.classList.remove('rotate-y-180');
@@ -2417,6 +2758,7 @@
       if (diagEl) diagEl.textContent = '💡 Chạm vào âm vị để xem khẩu hình chi tiết.';
 
       appState.flashcardVoice.passed = false;
+      appState.flashcardVoice.score = 0;
 
       // Auto play US audio softly
       setTimeout(function () {
@@ -2488,11 +2830,30 @@
       if (!wordObj) return;
 
       if (window.speechSynthesis) window.speechSynthesis.cancel();
+      cleanupEphemeralAudio();
 
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ audio: true })
           .then(function (stream) {
             appState.flashcardVoice.stream = stream;
+            try {
+              var recorder = new MediaRecorder(stream);
+              appState.flashcardVoice.audioChunks = [];
+              recorder.ondataavailable = function (e) {
+                if (e.data.size > 0) appState.flashcardVoice.audioChunks.push(e.data);
+              };
+              recorder.onstop = function () {
+                var blob = new Blob(appState.flashcardVoice.audioChunks, { type: 'audio/webm' });
+                appState.flashcardVoice.userAudioUrl = URL.createObjectURL(blob);
+                var fcAudioBtn = document.getElementById('btn-fc-user-audio');
+                if (fcAudioBtn) {
+                  fcAudioBtn.classList.remove('hidden');
+                  fcAudioBtn.classList.add('flex');
+                }
+              };
+              recorder.start();
+              appState.flashcardVoice.mediaRecorder = recorder;
+            } catch (err) { }
             launchFlashcardSpeechRecognition(wordObj.word);
           })
           .catch(function (err) {
@@ -2570,6 +2931,9 @@
       if (appState.flashcardVoice.recognition) {
         try { appState.flashcardVoice.recognition.stop(); } catch (e) { }
       }
+      if (appState.flashcardVoice.mediaRecorder && appState.flashcardVoice.mediaRecorder.state !== 'inactive') {
+        try { appState.flashcardVoice.mediaRecorder.stop(); } catch (e) { }
+      }
       if (appState.flashcardVoice.stream) {
         try {
           appState.flashcardVoice.stream.getTracks().forEach(function (t) { t.stop(); });
@@ -2580,11 +2944,25 @@
       document.getElementById('btn-fc-voice-check').className = 'px-4 py-2 rounded-2xl bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-700 border border-rose-200 text-xs font-extrabold flex items-center space-x-2 shadow-sm transition-all cursor-pointer';
     }
 
+    function playFlashcardUserAudio() {
+      if (appState.flashcardVoice.userAudioUrl) {
+        var audio = new Audio(appState.flashcardVoice.userAudioUrl);
+        audio.play().catch(function () {
+          showToast('Không thể phát âm thanh vừa thu âm', 'error');
+        });
+      } else {
+        showToast('Chưa có bản ghi âm!', 'info');
+      }
+    }
+
     function evaluateFlashcardPronunciation(targetWord, spokenWord) {
       var wordObj = appState.currentSession[appState.sessionIndex];
       var targetIpa = wordObj ? (wordObj.ipa_us || wordObj.ipa_uk || '') : '';
 
       var evalResult = evaluatePhonemePronunciation(targetWord, targetIpa, spokenWord);
+
+      appState.flashcardVoice.score = evalResult.score;
+      appState.flashcardVoice.passed = evalResult.passed;
 
       var resultBox = document.getElementById('fc-voice-result');
       resultBox.classList.remove('hidden');
@@ -2595,16 +2973,16 @@
       if (diagEl) diagEl.textContent = evalResult.feedback;
 
       if (evalResult.passed) {
-        resultBox.className = 'mt-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-glow-emerald animate-fadeIn flex items-center justify-center space-x-1.5';
+        resultBox.className = 'mt-1 px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-glow-emerald animate-fadeIn flex items-center justify-center space-x-1.5';
         resultBox.innerHTML = '<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i><span>Đạt ' + evalResult.score + '% (≥80%) - Chuẩn bản xứ! ✨</span>';
 
         triggerMiniConfetti();
 
         setTimeout(function () {
           if (!appState.isCardFlipped) flipFlashcard();
-        }, 800);
+        }, 900);
       } else {
-        resultBox.className = 'mt-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black bg-rose-50 text-rose-800 border border-rose-200 animate-fadeIn flex items-center justify-center space-x-1.5';
+        resultBox.className = 'mt-1 px-3.5 py-1.5 rounded-xl text-xs font-black bg-rose-50 text-rose-800 border border-rose-200 animate-fadeIn flex items-center justify-center space-x-1.5';
         var errorMsg = evalResult.score === 0
           ? 'Không thu được âm thanh! Hãy nói to rõ hơn.'
           : ('Chưa đạt: ' + evalResult.score + '% (<80% - Nghe thành "' + escapeHtml(spokenWord) + '")');
@@ -2618,7 +2996,20 @@
       var wordObj = appState.currentSession[appState.sessionIndex];
       if (!wordObj) return;
 
-      appState.sessionResults.push({ word_id: wordObj.id, rating: rating });
+      var voiceScore = appState.flashcardVoice.score || 0;
+      var isPassed = (rating === 'good' || rating === 'easy') && (voiceScore >= 80 || voiceScore === 0);
+      if (rating === 'again' || rating === 'hard' || (voiceScore > 0 && voiceScore < 80)) {
+        isPassed = false;
+      }
+
+      appState.sessionResults.push({
+        word_id: wordObj.id,
+        wordObj: wordObj,
+        score: voiceScore,
+        rating: rating,
+        isPassed: isPassed
+      });
+
       appState.sessionIndex++;
 
       if (appState.sessionIndex < appState.currentSession.length) {
@@ -2629,19 +3020,137 @@
     }
 
     async function completeStudySession() {
-      showToast('Chúc mừng bạn đã hoàn thành phiên học! 🎉', 'success');
+      cleanupEphemeralAudio();
       triggerMiniConfetti();
 
+      var passedList = [];
+      var weakList = [];
+
+      appState.sessionResults.forEach(function (res) {
+        if (res.isPassed) {
+          passedList.push(res.wordObj);
+        } else {
+          weakList.push(res.wordObj);
+        }
+      });
+
+      appState.passedWords = passedList;
+      appState.weakWords = weakList;
+
+      // Sync results to backend
       if (appState.sessionResults.length > 0) {
         setSyncingIndicator(true);
-        await apiCall('sync_results', { results: appState.sessionResults });
+        apiCall('sync_results', { results: appState.sessionResults });
         setSyncingIndicator(false);
       }
 
+      openSessionSummaryModal();
+      loadInitialData();
+    }
+
+    function openSessionSummaryModal() {
+      var modal = document.getElementById('modal-session-summary');
+      if (!modal) return;
+
+      var total = appState.sessionResults.length;
+      var passedCount = appState.passedWords.length;
+      var weakCount = appState.weakWords.length;
+
+      document.getElementById('summary-stat-total').textContent = total;
+      document.getElementById('summary-stat-passed').textContent = passedCount;
+      document.getElementById('summary-stat-weak').textContent = weakCount;
+
+      var titleEl = document.getElementById('summary-batch-title');
+      if (appState.dailyBatches && appState.dailyBatches.length > 1) {
+        titleEl.textContent = 'Tiến độ Đợt ' + (appState.currentBatchIndex + 1) + ' / ' + appState.dailyBatches.length;
+      } else {
+        titleEl.textContent = 'Hoàn thành phiên học xuất sắc!';
+      }
+
+      // Render weak words list
+      var weakContainer = document.getElementById('summary-weak-list');
+      weakContainer.innerHTML = '';
+      if (weakCount > 0) {
+        document.getElementById('summary-weak-section').classList.remove('hidden');
+        document.getElementById('summary-weak-count-pill').textContent = weakCount + ' từ';
+        document.getElementById('lbl-drill-weak-count').textContent = weakCount;
+        document.getElementById('btn-drill-weak').classList.remove('hidden');
+
+        appState.weakWords.forEach(function (w) {
+          var chip = document.createElement('span');
+          chip.className = 'px-2.5 py-1 rounded-xl bg-white border border-rose-200 text-rose-800 text-xs font-bold shadow-xs';
+          chip.textContent = w.word + (w.meaning ? (' - ' + w.meaning.split(',')[0]) : '');
+          weakContainer.appendChild(chip);
+        });
+      } else {
+        document.getElementById('summary-weak-section').classList.add('hidden');
+        document.getElementById('btn-drill-weak').classList.add('hidden');
+      }
+
+      // Render passed words list
+      var passedContainer = document.getElementById('summary-passed-list');
+      passedContainer.innerHTML = '';
+      if (passedCount > 0) {
+        document.getElementById('summary-passed-section').classList.remove('hidden');
+        appState.passedWords.forEach(function (w) {
+          var chip = document.createElement('span');
+          chip.className = 'px-2.5 py-1 rounded-xl bg-white border border-emerald-200 text-emerald-800 text-xs font-bold shadow-xs';
+          chip.textContent = '✨ ' + w.word;
+          passedContainer.appendChild(chip);
+        });
+      } else {
+        document.getElementById('summary-passed-section').classList.add('hidden');
+      }
+
+      // Next Batch button
+      var nextBatchBtn = document.getElementById('btn-next-batch');
+      if (appState.dailyBatches && appState.currentBatchIndex + 1 < appState.dailyBatches.length) {
+        nextBatchBtn.classList.remove('hidden');
+        nextBatchBtn.innerHTML = '<i data-lucide="arrow-right-circle" class="w-4 h-4"></i><span>Tiến tới Đợt ' + (appState.currentBatchIndex + 2) + ' (' + appState.dailyBatches[appState.currentBatchIndex + 1].length + ' từ) 🚀</span>';
+      } else {
+        nextBatchBtn.classList.add('hidden');
+      }
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      initLucideIcons();
+    }
+
+    function closeSessionSummaryModal() {
+      var modal = document.getElementById('modal-session-summary');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function drillWeakWordsNow() {
+      if (!appState.weakWords || appState.weakWords.length === 0) return;
+      closeSessionSummaryModal();
+      showToast('Khởi động vòng lặp luyện ' + appState.weakWords.length + ' từ chưa đạt! 🔥', 'info');
+
+      appState.currentSession = appState.weakWords.slice();
       appState.sessionIndex = 0;
       appState.sessionResults = [];
-      navigateTo('dashboard');
-      loadInitialData();
+      appState.sessionMode = 'flashcard';
+
+      navigateTo('flashcard');
+      renderCurrentFlashcard();
+    }
+
+    function startNextDailyBatch() {
+      if (!appState.dailyBatches || appState.currentBatchIndex + 1 >= appState.dailyBatches.length) return;
+      closeSessionSummaryModal();
+
+      appState.currentBatchIndex++;
+      appState.currentSession = appState.dailyBatches[appState.currentBatchIndex];
+      appState.sessionIndex = 0;
+      appState.sessionResults = [];
+      appState.sessionMode = 'flashcard';
+
+      showToast('Bắt đầu Đợt ' + (appState.currentBatchIndex + 1) + ' (' + appState.currentSession.length + ' từ) 🚀', 'info');
+      navigateTo('flashcard');
+      renderCurrentFlashcard();
     }
 
     function setBoxBadgeColor(el, boxNum) {
@@ -2679,6 +3188,7 @@
     }
 
     function renderCurrentShadowing() {
+      cleanupEphemeralAudio();
       if (appState.sessionIndex >= appState.currentSession.length) {
         completeStudySession();
         return;
@@ -3226,36 +3736,86 @@
     }
 
     function openAddWordModal() {
-      document.getElementById('modal-add-word').classList.remove('hidden');
-      document.getElementById('modal-add-word').classList.add('flex');
+      var modal = document.getElementById('modal-add-word');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        var input = document.getElementById('input-batch-words');
+        if (input) {
+          input.value = '';
+          updateBatchWordCounter();
+          input.focus();
+        }
+      }
     }
 
     function closeAddWordModal() {
-      document.getElementById('modal-add-word').classList.add('hidden');
-      document.getElementById('modal-add-word').classList.remove('flex');
+      var modal = document.getElementById('modal-add-word');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
     }
 
-    async function handleWordSubmit(e) {
-      if (e) e.preventDefault();
-      var word = document.getElementById('input-word-text').value.trim();
-      var topic = document.getElementById('input-word-topic').value.trim() || 'General';
-      var level = document.getElementById('input-word-level').value || 'B';
+    function updateBatchWordCounter() {
+      var input = document.getElementById('input-batch-words');
+      var badge = document.getElementById('badge-batch-counter');
+      if (!input || !badge) return;
 
-      if (!word) return;
+      var raw = input.value || '';
+      var words = raw.split(/[\n,;]+/).map(w => w.trim()).filter(Boolean);
+      badge.textContent = words.length + ' từ';
+    }
+
+    async function handleBatchWordSubmit(e) {
+      if (e) e.preventDefault();
+      var raw = document.getElementById('input-batch-words').value.trim();
+      if (!raw) return;
+
+      var words = raw.split(/[\n,;]+/).map(w => w.trim().toLowerCase()).filter(Boolean);
+      if (words.length === 0) {
+        showToast('Vui lòng nhập ít nhất 1 từ vựng!', 'error');
+        return;
+      }
+
       closeAddWordModal();
-      showToast('Đang lưu từ vựng "' + word + '"...', 'info');
+      showToast('Đang phân loại & nạp ' + words.length + ' từ vựng...', 'info');
+
+      // Tự động phân loại ngữ nghĩa Heuristic cho từng từ ở client
+      words.forEach(function (w) {
+        var existing = appState.allWords.find(item => item.word.toLowerCase() === w);
+        if (!existing) {
+          var autoClass = classifyWordHeuristic(w);
+          var newWordObj = {
+            id: 'w_local_' + Math.random().toString(36).substring(2, 9),
+            word: w,
+            ipa_uk: '/' + w + '/',
+            ipa_us: '/' + w + '/',
+            pos: 'noun',
+            meaning: w,
+            example: 'Understanding ' + w + ' is crucial for continuous improvement.',
+            example_trans: 'Hiểu rõ ' + w + ' là điều cốt yếu để không ngừng tiến bộ.',
+            topic: autoClass.topic,
+            level: autoClass.level,
+            shadowing_sentence: 'We can practice using ' + w + ' regularly in natural communication.',
+            shadowing_trans: 'Chúng ta có thể luyện tập sử dụng ' + w + ' thường xuyên trong giao tiếp tự nhiên.',
+            srs: { box_level: 1, last_reviewed: '', next_review: appState.today, streak: 0 }
+          };
+          appState.allWords.push(newWordObj);
+        }
+      });
 
       setSyncingIndicator(true);
-      var res = await apiCall('add_word', { word: word, topic: topic, level: level });
+      var res = await apiCall('add_batch', { wordsListString: words.join('\n'), topic: 'auto', level: 'auto' });
       setSyncingIndicator(false);
 
       if (res && res.success) {
-        showToast('Đã thêm từ vựng thành công!', 'success');
+        showToast('Nạp thành công ' + words.length + ' từ vào hệ thống! 🚀', 'success');
       } else {
-        showToast('Đã lưu từ vựng vào bộ nhớ.', 'info');
+        showToast('Đã lưu ' + words.length + ' từ vào bộ nhớ cục bộ.', 'info');
       }
 
-      loadInitialData();
+      await loadInitialData();
     }
 
     function openImportModal() {
