@@ -135,18 +135,113 @@
 
       0%,
       100% {
-        filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.7)) drop-shadow(0 0 24px rgba(245, 158, 11, 0.35));
+        filter: drop-shadow(0 0 14px rgba(251, 191, 36, 0.75)) drop-shadow(0 0 28px rgba(245, 158, 11, 0.4));
         transform: scale(1);
       }
 
       50% {
-        filter: drop-shadow(0 0 22px rgba(251, 191, 36, 0.95)) drop-shadow(0 0 36px rgba(245, 158, 11, 0.55));
-        transform: scale(1.04);
+        filter: drop-shadow(0 0 24px rgba(251, 191, 36, 1)) drop-shadow(0 0 40px rgba(245, 158, 11, 0.65));
+        transform: scale(1.05);
       }
     }
 
     .mascot-native-aura {
       animation: nativeGlow 2.8s infinite ease-in-out;
+    }
+
+    /* 3D Somersault & Wing Flap Keyframes for Owl Mascot */
+    @keyframes somersault3D {
+      0% {
+        transform: rotate(0deg) scale(1);
+      }
+
+      25% {
+        transform: translateY(-24px) rotateX(180deg) rotateY(90deg) scale(1.18);
+      }
+
+      50% {
+        transform: translateY(-36px) rotateX(360deg) rotateY(180deg) scale(1.28);
+      }
+
+      75% {
+        transform: translateY(-16px) rotateX(360deg) rotateY(270deg) scale(1.12);
+      }
+
+      100% {
+        transform: translateY(0) rotateX(360deg) rotateY(360deg) scale(1);
+      }
+    }
+
+    .animate-somersault-3d {
+      animation: somersault3D 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      transform-style: preserve-3d;
+    }
+
+    @keyframes wingFlapLeft {
+
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+
+      50% {
+        transform: rotate(-35deg) scaleY(1.15);
+      }
+    }
+
+    @keyframes wingFlapRight {
+
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+
+      50% {
+        transform: rotate(35deg) scaleY(1.15);
+      }
+    }
+
+    .animate-wing-flap-left {
+      transform-origin: 24px 64px;
+      animation: wingFlapLeft 0.22s infinite ease-in-out;
+    }
+
+    .animate-wing-flap-right {
+      transform-origin: 96px 64px;
+      animation: wingFlapRight 0.22s infinite ease-in-out;
+    }
+
+    /* Live Audio Waveform Animation */
+    @keyframes waveformBar {
+
+      0%,
+      100% {
+        height: 4px;
+      }
+
+      50% {
+        height: 20px;
+      }
+    }
+
+    .waveform-bar-1 {
+      animation: waveformBar 0.5s infinite ease-in-out 0.1s;
+    }
+
+    .waveform-bar-2 {
+      animation: waveformBar 0.4s infinite ease-in-out 0.2s;
+    }
+
+    .waveform-bar-3 {
+      animation: waveformBar 0.6s infinite ease-in-out 0.05s;
+    }
+
+    .waveform-bar-4 {
+      animation: waveformBar 0.45s infinite ease-in-out 0.3s;
+    }
+
+    .waveform-bar-5 {
+      animation: waveformBar 0.55s infinite ease-in-out 0.15s;
     }
 
     /* 3D Flashcard Transitions */
@@ -682,6 +777,22 @@
                   <div id="fc-voice-diagnosis" class="text-[11px] text-slate-500 font-medium pt-0.5"></div>
                 </div>
 
+                <!-- Live Recording Waveform & Status Visualizer for Flashcard -->
+                <div id="fc-recording-visualizer"
+                  class="hidden py-1.5 flex flex-col items-center justify-center space-y-1"
+                  onclick="event.stopPropagation()">
+                  <div class="flex items-center justify-center space-x-1 h-6">
+                    <div class="w-1 bg-rose-500 rounded-full waveform-bar-1"></div>
+                    <div class="w-1 bg-rose-500 rounded-full waveform-bar-2"></div>
+                    <div class="w-1 bg-rose-500 rounded-full waveform-bar-3"></div>
+                    <div class="w-1 bg-rose-500 rounded-full waveform-bar-4"></div>
+                    <div class="w-1 bg-rose-500 rounded-full waveform-bar-5"></div>
+                  </div>
+                  <span id="fc-live-transcript-text"
+                    class="text-[11px] font-mono text-rose-600 font-bold animate-pulse">Đang lắng nghe... Hãy phát âm to
+                    rõ</span>
+                </div>
+
                 <!-- Voice Result Toast & Ephemeral User Audio Replay Button -->
                 <div id="fc-voice-result" class="hidden text-xs font-bold py-0.5"></div>
                 <div class="flex justify-center" onclick="event.stopPropagation()">
@@ -843,6 +954,17 @@
           </div>
 
           <!-- Live Transcript & Waveform -->
+          <div id="shadowing-recording-visualizer" class="hidden py-1 flex-col items-center justify-center space-y-1">
+            <div class="flex items-center justify-center space-x-1.5 h-6">
+              <div class="w-1.5 bg-rose-500 rounded-full waveform-bar-1"></div>
+              <div class="w-1.5 bg-rose-500 rounded-full waveform-bar-2"></div>
+              <div class="w-1.5 bg-rose-500 rounded-full waveform-bar-3"></div>
+              <div class="w-1.5 bg-rose-500 rounded-full waveform-bar-4"></div>
+              <div class="w-1.5 bg-rose-500 rounded-full waveform-bar-5"></div>
+            </div>
+            <span class="text-xs font-mono text-rose-600 font-bold animate-pulse">Đang thu âm luồng PCM... Nói đuổi theo
+              câu mẫu</span>
+          </div>
           <div id="shadowing-live-transcript" class="text-xs font-mono text-slate-500 min-h-[24px]"></div>
 
           <!-- Result & Scoring Feedback Card -->
@@ -1592,25 +1714,522 @@
       "Hôm nay bạn đã sẵn sàng chinh phục thêm những từ vựng đỉnh cao chưa nào? 🎯"
     ];
 
-    // KHO TỪ VỰNG DỰ PHÒNG CHUẨN KHI OFFLINE
-    const FALLBACK_CURATED_WORDS = {
+    // KHO TỪ VỰNG THÔNG MINH ĐA CHỦ ĐỀ KÈM DỊCH NGHĨA CÂU & SHADOWING
+    const SMART_CURATED_WORDS = {
+      // CẤP ĐỘ A: Giao tiếp thực tế hàng ngày & Nền tảng (A1 - A2)
       'Level_A': [
-        { word: 'appreciate', pos: 'verb', topic: 'Daily Life', level: 'A', ipa_uk: '/əˈpriː.ʃi.eɪt/', ipa_us: '/əˈpriː.ʃi.eɪt/', meaning: 'Trân trọng, cảm kích lòng tốt', example: 'I truly appreciate your kind support and encouragement.', example_trans: 'Tôi thực sự cảm kích sự ủng hộ và động viên ân cần của bạn.', shadowing: 'Taking a moment each day to appreciate small joys brings genuine happiness.', shadowing_trans: 'Dành một khoảnh khắc mỗi ngày để trân trọng những niềm vui nhỏ mang lại hạnh phúc đích thực.' },
-        { word: 'convenient', pos: 'adjective', topic: 'Daily Life', level: 'A', ipa_uk: '/kənˈviː.ni.ənt/', ipa_us: '/kənˈviː.ni.ənt/', meaning: 'Thuận tiện, tiện lợi cho sinh hoạt', example: 'Living near the subway station is extremely convenient for commuting.', example_trans: 'Sống gần ga tàu điện ngầm cực kỳ thuận tiện cho việc đi lại hàng ngày.', shadowing: 'Online shopping has made buying daily groceries much more convenient and fast.', shadowing_trans: 'Mua sắm trực tuyến đã giúp việc mua thực phẩm hàng ngày trở nên thuận tiện và nhanh chóng hơn nhiều.' },
-        { word: 'delicious', pos: 'adjective', topic: 'Daily Life', level: 'A', ipa_uk: '/dɪˈlɪʃ.əs/', ipa_us: '/dɪˈlɪʃ.əs/', meaning: 'Ngon miệng, thơm ngon', example: 'She cooked a delicious traditional dinner for the entire family.', example_trans: 'Cô ấy đã nấu một bữa tối truyền thống thơm ngon cho cả gia đình.', shadowing: 'Sharing a delicious home-cooked meal with loved ones creates lasting memories.', shadowing_trans: 'Cùng người thân chia sẻ bữa cơm nhà thơm ngon tạo nên những kỷ niệm đáng nhớ.' },
-        { word: 'habit', pos: 'noun', topic: 'Daily Life', level: 'A', ipa_uk: '/ˈhæb.ɪt/', ipa_us: '/ˈhæb.ɪt/', meaning: 'Thói quen sinh hoạt', example: 'Reading twenty pages every morning has become my favorite daily habit.', example_trans: 'Đọc 20 trang sách mỗi sáng đã trở thành thói quen hàng ngày yêu thích của tôi.', shadowing: 'Building small positive habits each day leads to remarkable long-term transformation.', shadowing_trans: 'Xây dựng những thói quen tích cực nhỏ mỗi ngày sẽ dẫn đến sự thay đổi vượt bậc lâu dài.' },
-        { word: 'confident', pos: 'adjective', topic: 'Personality', level: 'A', ipa_uk: '/ˈkɒn.fɪ.dənt/', ipa_us: '/ˈkɑːn.fə.dənt/', meaning: 'Tự tin, tràn đầy niềm tin', example: 'Practicing English every day makes me feel much more confident.', example_trans: 'Luyện tiếng Anh mỗi ngày giúp tôi cảm thấy tự tin hơn rất nhiều.', shadowing: 'Speaking with confidence is the secret to making great first impressions.', shadowing_trans: 'Nói chuyện một cách tự tin là bí quyết để tạo ấn tượng ban đầu tuyệt vời.' }
+        {
+          word: 'appreciate', pos: 'verb', topic: 'Daily Life', level: 'A', ipa_uk: '/əˈpriː.ʃi.eɪt/', ipa_us: '/əˈpriː.ʃi.eɪt/',
+          meaning: 'Trân trọng, cảm kích lòng tốt',
+          example: 'I truly appreciate your kind support and encouragement.',
+          example_trans: 'Tôi thực sự cảm kích sự ủng hộ và động viên ân cần của bạn.',
+          shadowing: 'Taking a moment each day to appreciate small joys brings genuine happiness.',
+          shadowing_trans: 'Dành một khoảnh khắc mỗi ngày để trân trọng những niềm vui nhỏ mang lại hạnh phúc đích thực.'
+        },
+        {
+          word: 'convenient', pos: 'adjective', topic: 'Daily Life', level: 'A', ipa_uk: '/kənˈviː.ni.ənt/', ipa_us: '/kənˈviː.ni.ənt/',
+          meaning: 'Thuận tiện, tiện lợi cho sinh hoạt',
+          example: 'Living near the subway station is extremely convenient for commuting.',
+          example_trans: 'Sống gần ga tàu điện ngầm cực kỳ thuận tiện cho việc đi lại hàng ngày.',
+          shadowing: 'Online shopping has made buying daily groceries much more convenient and fast.',
+          shadowing_trans: 'Mua sắm trực tuyến đã giúp việc mua thực phẩm hàng ngày trở nên thuận tiện và nhanh chóng hơn nhiều.'
+        },
+        {
+          word: 'delicious', pos: 'adjective', topic: 'Daily Life', level: 'A', ipa_uk: '/dɪˈlɪʃ.əs/', ipa_us: '/dɪˈlɪʃ.əs/',
+          meaning: 'Ngon miệng, thơm ngon',
+          example: 'She cooked a delicious traditional dinner for the entire family.',
+          example_trans: 'Cô ấy đã nấu một bữa tối truyền thống thơm ngon cho cả gia đình.',
+          shadowing: 'Sharing a delicious home-cooked meal with loved ones creates lasting memories.',
+          shadowing_trans: 'Cùng người thân chia sẻ bữa cơm nhà thơm ngon tạo nên những kỷ niệm đáng nhớ.'
+        },
+        {
+          word: 'habit', pos: 'noun', topic: 'Daily Life', level: 'A', ipa_uk: '/ˈhæb.ɪt/', ipa_us: '/ˈhæb.ɪt/',
+          meaning: 'Thói quen sinh hoạt',
+          example: 'Reading twenty pages every morning has become my favorite daily habit.',
+          example_trans: 'Đọc 20 trang sách mỗi sáng đã trở thành thói quen hàng ngày yêu thích của tôi.',
+          shadowing: 'Building small positive habits each day leads to remarkable long-term transformation.',
+          shadowing_trans: 'Xây dựng những thói quen tích cực nhỏ mỗi ngày sẽ dẫn đến sự thay đổi vượt bậc lâu dài.'
+        },
+        {
+          word: 'encourage', pos: 'verb', topic: 'Communication', level: 'A', ipa_uk: '/ɪnˈkʌr.ɪdʒ/', ipa_us: '/ɪnˈkɝː.ɪdʒ/',
+          meaning: 'Khuyến khích, động viên tinh thần',
+          example: 'Teachers should always encourage students to ask creative questions.',
+          example_trans: 'Giáo viên nên luôn khuyến khích học sinh đặt ra những câu hỏi sáng tạo.',
+          shadowing: 'Good mentors encourage us to step out of our comfort zone and pursue our dreams.',
+          shadowing_trans: 'Những người hướng dẫn tốt luôn động viên chúng ta bước ra khỏi vùng an toàn để theo đuổi ước mơ.'
+        },
+        {
+          word: 'schedule', pos: 'noun', topic: 'Business', level: 'A', ipa_uk: '/ˈʃedʒ.uːl/', ipa_us: '/ˈskedʒ.uːl/',
+          meaning: 'Lịch trình, thời gian biểu',
+          example: 'Let me check my calendar to find a suitable time in our schedule.',
+          example_trans: 'Để tôi kiểm tra lịch làm việc để tìm thời gian phù hợp trong lịch trình.',
+          shadowing: 'Maintaining a balanced daily schedule helps reduce stress and boost productivity.',
+          shadowing_trans: 'Duy trì một thời gian biểu cân bằng mỗi ngày giúp giảm bớt căng thẳng và tăng năng suất.'
+        },
+        {
+          word: 'confident', pos: 'adjective', topic: 'Personality', level: 'A', ipa_uk: '/ˈkɒn.fɪ.dənt/', ipa_us: '/ˈkɑːn.fə.dənt/',
+          meaning: 'Tự tin, tràn đầy niềm tin',
+          example: 'Practicing English every day makes me feel much more confident.',
+          example_trans: 'Luyện tiếng Anh mỗi ngày giúp tôi cảm thấy tự tin hơn rất nhiều.',
+          shadowing: 'Speaking with confidence is the secret to making great first impressions.',
+          shadowing_trans: 'Nói chuyện một cách tự tin là bí quyết để tạo ấn tượng ban đầu tuyệt vời.'
+        },
+        {
+          word: 'curious', pos: 'adjective', topic: 'Personality', level: 'A', ipa_uk: '/ˈkjʊə.ri.əs/', ipa_us: '/ˈkjʊr.i.əs/',
+          meaning: 'Tò mò, ham học hỏi khám phá',
+          example: 'Children are naturally curious about the world around them.',
+          example_trans: 'Trẻ em vốn có tính tò mò tự nhiên về thế giới xung quanh chúng.',
+          shadowing: 'Staying curious and open-minded allows us to discover exciting new opportunities.',
+          shadowing_trans: 'Luôn tò mò ham học hỏi và cởi mở giúp chúng ta khám phá những cơ hội mới đầy thú vị.'
+        },
+        {
+          word: 'relax', pos: 'verb', topic: 'Health', level: 'A', ipa_uk: '/rɪˈlæks/', ipa_us: '/rɪˈlæks/',
+          meaning: 'Thư giãn, nghỉ ngơi xả stress',
+          example: 'Listening to acoustic music helps me relax after a long workday.',
+          example_trans: 'Nghe nhạc mộc giúp tôi thư giãn sau một ngày làm việc dài.',
+          shadowing: 'Taking a weekend stroll in the park is the best way to relax and recharge.',
+          shadowing_trans: 'Đi dạo công viên vào cuối tuần là cách tốt nhất để thư giãn và nạp lại năng lượng.'
+        },
+        {
+          word: 'routine', pos: 'noun', topic: 'Daily Life', level: 'A', ipa_uk: '/ruːˈtiːn/', ipa_us: '/ruːˈtiːn/',
+          meaning: 'Lề thói hằng ngày, nề nếp sinh hoạt',
+          example: 'My morning routine includes meditation and a healthy breakfast.',
+          example_trans: 'Thói quen buổi sáng của tôi bao gồm thiền định và một bữa sáng lành mạnh.',
+          shadowing: 'A consistent daily routine provides structure and calm in a busy world.',
+          shadowing_trans: 'Một nếp sinh hoạt đều đặn hàng ngày mang lại trật tự và sự bình yên trong cuộc sống bận rộn.'
+        },
+        {
+          word: 'experience', pos: 'noun', topic: 'Daily Life', level: 'A', ipa_uk: '/ɪkˈspɪə.ri.əns/', ipa_us: '/ɪkˈspɪr.i.əns/',
+          meaning: 'Trải nghiệm, kinh nghiệm sống',
+          example: 'Traveling abroad gave him invaluable cultural experience.',
+          example_trans: 'Đi du lịch nước ngoài đã mang lại cho anh ấy những trải nghiệm văn hóa vô giá.',
+          shadowing: 'Every new challenge is a valuable experience that helps us grow wiser.',
+          shadowing_trans: 'Mỗi thử thách mới là một kinh nghiệm quý báu giúp chúng ta trưởng thành và thông thái hơn.'
+        },
+        {
+          word: 'generous', pos: 'adjective', topic: 'Personality', level: 'A', ipa_uk: '/ˈdʒen.ər.əs/', ipa_us: '/ˈdʒen.ɚ.əs/',
+          meaning: 'Hào phóng, rộng lượng tốt bụng',
+          example: 'They made a generous donation to help local animal shelters.',
+          example_trans: 'Họ đã quyên góp một khoản tiền hào phóng để giúp đỡ trạm cứu hộ động vật địa phương.',
+          shadowing: 'A generous heart and kind attitude will always attract wonderful friends.',
+          shadowing_trans: 'Một tấm lòng rộng lượng và thái độ tốt bụng sẽ luôn thu hút những người bạn tuyệt vời.'
+        },
+        {
+          word: 'punctual', pos: 'adjective', topic: 'Personality', level: 'A', ipa_uk: '/ˈpʌŋk.tʃu.əl/', ipa_us: '/ˈpʌŋk.tʃu.əl/',
+          meaning: 'Đúng giờ, giữ đúng hẹn',
+          example: 'Being punctual shows deep respect for other people\'s time.',
+          example_trans: 'Đúng giờ thể hiện sự tôn trọng sâu sắc đối với thời gian của người khác.',
+          shadowing: 'Arriving on time and being punctual is an essential habit for career success.',
+          shadowing_trans: 'Đến đúng giờ và luôn giữ đúng hẹn là thói quen thiết yếu để thành công trong sự nghiệp.'
+        },
+        {
+          word: 'celebrate', pos: 'verb', topic: 'Daily Life', level: 'A', ipa_uk: '/ˈsel.ə.breɪt/', ipa_us: '/ˈsel.ə.breɪt/',
+          meaning: 'Kỷ niệm, ăn mừng thành quả',
+          example: 'We gathered with close friends to celebrate her graduation.',
+          example_trans: 'Chúng tôi đã tụ họp cùng bạn bè thân thiết để ăn mừng lễ tốt nghiệp của cô ấy.',
+          shadowing: 'It is important to pause and celebrate our small wins along the learning journey.',
+          shadowing_trans: 'Việc dừng lại để ăn mừng những chiến thắng nhỏ trên hành trình học tập là vô cùng quan trọng.'
+        },
+        {
+          word: 'explore', pos: 'verb', topic: 'Daily Life', level: 'A', ipa_uk: '/ɪkˈsplɔːr/', ipa_us: '/ɪkˈsplɔːr/',
+          meaning: 'Khám phá miền đất mới, trải nghiệm',
+          example: 'They plan to explore the historic old town this weekend.',
+          example_trans: 'Họ dự định sẽ đi khám phá khu phố cổ lịch sử vào cuối tuần này.',
+          shadowing: 'Exploring new neighborhoods and trying local cuisine makes traveling unforgettable.',
+          shadowing_trans: 'Khám phá các khu phố mới và thưởng thức ẩm thực bản địa khiến chuyến du lịch trở nên khó quên.'
+        }
       ],
+
+      // CẤP ĐỘ B: Trung cấp, Công việc & Giao tiếp tự tin (B1 - B2)
       'Level_B': [
-        { word: 'resilience', pos: 'noun', topic: 'Personality', level: 'B', ipa_uk: '/rɪˈzɪl.i.əns/', ipa_us: '/rɪˈzɪl.jəns/', meaning: 'Sức bật kiên cường, khả năng phục hồi sau khó khăn', example: 'Her psychological resilience helped her overcome difficult setbacks with grace.', example_trans: 'Sức bật tâm lý kiên cường đã giúp cô vượt qua những trở ngại khó khăn một cách bình thản.', shadowing: 'Inner resilience allows us to bounce back stronger whenever we encounter adversity.', shadowing_trans: 'Nghị lực kiên cường nội tại giúp chúng ta phục hồi mạnh mẽ hơn mỗi khi đối mặt với nghịch cảnh.' },
-        { word: 'negotiate', pos: 'verb', topic: 'Business', level: 'B', ipa_uk: '/nəˈɡəʊ.ʃi.eɪt/', ipa_us: '/nəˈɡoʊ.ʃi.eɪt/', meaning: 'Đàm phán, thương lượng hợp đồng', example: 'The two companies met to negotiate mutually agreeable contract terms.', example_trans: 'Hai công ty đã gặp nhau để đàm phán các điều khoản hợp đồng mà đôi bên cùng nhất trí.', shadowing: 'Effective leaders know how to negotiate win-win outcomes in complex deals.', shadowing_trans: 'Những nhà lãnh đạo hiệu quả luôn biết cách đàm phán để đạt kết quả đôi bên cùng có lợi.' },
-        { word: 'leverage', pos: 'verb', topic: 'Business', level: 'B', ipa_uk: '/ˈliː.vər.ɪdʒ/', ipa_us: '/ˈlev.ɚ.ɪdʒ/', meaning: 'Tận dụng đòn bẩy, tối đa hóa nguồn lực', example: 'We can leverage modern digital tools to maximize our team productivity.', example_trans: 'Chúng ta có thể tận dụng các công cụ kỹ thuật số hiện đại để tối đa hóa năng suất của đội ngũ.', shadowing: 'Companies that leverage artificial intelligence effectively will gain a major competitive edge.', shadowing_trans: 'Những doanh nghiệp tận dụng hiệu quả trí tuệ nhân tạo sẽ giành được lợi thế cạnh tranh vượt bậc.' },
-        { word: 'meticulous', pos: 'adjective', topic: 'Personality', level: 'B', ipa_uk: '/məˈtɪk.jə.ləs/', ipa_us: '/məˈtɪk.jə.ləs/', meaning: 'Tỉ mỉ, cẩn trọng từng chi tiết', example: 'Her meticulous attention to detail ensured that the final design was flawless.', example_trans: 'Sự chú ý tỉ mỉ đến từng chi tiết của cô ấy đã đảm bảo rằng thiết kế cuối cùng là hoàn hảo.', shadowing: 'A meticulous approach to quality assurance guarantees customer satisfaction and trust.', shadowing_trans: 'Cách tiếp cận tỉ mỉ trong đảm bảo chất lượng sẽ bảo chứng cho sự hài lòng và niềm tin của khách hàng.' }
+        {
+          word: 'negotiate', pos: 'verb', topic: 'Business', level: 'B', ipa_uk: '/nəˈɡəʊ.ʃi.eɪt/', ipa_us: '/nəˈɡoʊ.ʃi.eɪt/',
+          meaning: 'Đàm phán, thương lượng hợp đồng',
+          example: 'The two companies met to negotiate mutually agreeable contract terms.',
+          example_trans: 'Hai công ty đã gặp nhau để đàm phán các điều khoản hợp đồng mà đôi bên cùng nhất trí.',
+          shadowing: 'Effective leaders know how to negotiate win-win outcomes in complex deals.',
+          shadowing_trans: 'Những nhà lãnh đạo hiệu quả luôn biết cách đàm phán để đạt kết quả đôi bên cùng có lợi.'
+        },
+        {
+          word: 'leverage', pos: 'verb', topic: 'Business', level: 'B', ipa_uk: '/ˈliː.vər.ɪdʒ/', ipa_us: '/ˈlev.ɚ.ɪdʒ/',
+          meaning: 'Tận dụng đòn bẩy, tối đa hóa nguồn lực',
+          example: 'We can leverage modern digital tools to maximize our team productivity.',
+          example_trans: 'Chúng ta có thể tận dụng các công cụ kỹ thuật số hiện đại để tối đa hóa năng suất của đội ngũ.',
+          shadowing: 'Companies that leverage artificial intelligence effectively will gain a major competitive edge.',
+          shadowing_trans: 'Những doanh nghiệp tận dụng hiệu quả trí tuệ nhân tạo sẽ giành được lợi thế cạnh tranh vượt bậc.'
+        },
+        {
+          word: 'benchmark', pos: 'noun', topic: 'Business', level: 'B', ipa_uk: '/ˈbentʃ.mɑːk/', ipa_us: '/ˈbentʃ.mɑːrk/',
+          meaning: 'Tiêu chuẩn đối chuẩn, mốc chuẩn mực',
+          example: 'Our quarterly customer satisfaction rating sets a new industry benchmark.',
+          example_trans: 'Điểm số hài lòng của khách hàng trong quý này đã thiết lập một tiêu chuẩn đối chuẩn mới cho toàn ngành.',
+          shadowing: 'This breakthrough achievement will serve as a benchmark for future projects.',
+          shadowing_trans: 'Thành tựu đột phá này sẽ đóng vai trò như một mốc chuẩn mực cho các dự án trong tương lai.'
+        },
+        {
+          word: 'streamline', pos: 'verb', topic: 'Business', level: 'B', ipa_uk: '/ˈstriːm.laɪn/', ipa_us: '/ˈstriːm.laɪn/',
+          meaning: 'Tinh giản, tối ưu hóa quy trình',
+          example: 'Management decided to streamline internal workflows to reduce processing delays.',
+          example_trans: 'Ban quản lý đã quyết định tinh giản luồng công việc nội bộ để giảm thiểu sự chậm trễ trong xử lý.',
+          shadowing: 'Streamlining daily business operations allows teams to focus on core strategic goals.',
+          shadowing_trans: 'Việc tối ưu hóa các hoạt động kinh doanh hàng ngày giúp đội ngũ tập trung vào các mục tiêu chiến lược cốt lõi.'
+        },
+        {
+          word: 'stakeholder', pos: 'noun', topic: 'Business', level: 'B', ipa_uk: '/ˈsteɪkˌhəʊl.dər/', ipa_us: '/ˈsteɪkˌhoʊl.dɚ/',
+          meaning: 'Bên liên quan, đối tác hữu quan',
+          example: 'Project managers must maintain active communication with all key stakeholders.',
+          example_trans: 'Các nhà quản lý dự án phải duy trì giao tiếp chủ động với tất cả các bên liên quan trọng yếu.',
+          shadowing: 'Balancing the expectations of diverse stakeholders requires empathy and clear communication.',
+          shadowing_trans: 'Việc cân bằng kỳ vọng của nhiều bên liên quan đòi hỏi sự thấu cảm và giao tiếp rõ ràng.'
+        },
+        {
+          word: 'feasibility', pos: 'noun', topic: 'Business', level: 'B', ipa_uk: '/ˌfiː.zəˈbɪl.ə.ti/', ipa_us: '/ˌfiː.zəˈbɪl.ə.t̬i/',
+          meaning: 'Tính khả thi của dự án',
+          example: 'The engineering team conducted a detailed feasibility study before starting.',
+          example_trans: 'Đội ngũ kỹ thuật đã tiến hành một nghiên cứu tính khả thi chi tiết trước khi bắt đầu.',
+          shadowing: 'A thorough feasibility assessment ensures we invest financial resources wisely.',
+          shadowing_trans: 'Một đánh giá tính khả thi kỹ lưỡng đảm bảo chúng ta đầu tư nguồn lực tài chính một cách khôn ngoan.'
+        },
+        {
+          word: 'contingency', pos: 'noun', topic: 'Business', level: 'B', ipa_uk: '/kənˈtɪn.dʒən.si/', ipa_us: '/kənˈtɪn.dʒən.si/',
+          meaning: 'Phương án dự phòng rủi ro',
+          example: 'We developed a contingency plan in case unexpected supply chain issues arise.',
+          example_trans: 'Chúng tôi đã xây dựng một kế hoạch dự phòng đề phòng sự cố chuỗi cung ứng bất ngờ phát sinh.',
+          shadowing: 'Having a well-designed contingency plan protects businesses against severe market volatility.',
+          shadowing_trans: 'Có một kế hoạch dự phòng được thiết kế tốt sẽ bảo vệ doanh nghiệp trước những biến động khốc liệt của thị trường.'
+        },
+        {
+          word: 'lucrative', pos: 'adjective', topic: 'Business', level: 'B', ipa_uk: '/ˈluː.krə.tɪv/', ipa_us: '/ˈluː.krə.t̬ɪv/',
+          meaning: 'Sinh lợi cao, mang lại nhiều lợi nhuận',
+          example: 'The tech startup secured a lucrative investment contract from a global fund.',
+          example_trans: 'Công ty khởi nghiệp công nghệ đã giành được một hợp đồng đầu tư siêu lợi nhuận từ quỹ toàn cầu.',
+          shadowing: 'Investing in green renewable energy has become a highly lucrative opportunity.',
+          shadowing_trans: 'Đầu tư vào năng lượng tái tạo xanh đã trở thành một cơ hội mang lại nguồn lợi nhuận rất cao.'
+        },
+        {
+          word: 'synergy', pos: 'noun', topic: 'Business', level: 'B', ipa_uk: '/ˈsɪn.ə.dʒi/', ipa_us: '/ˈsɪn.ɚ.dʒi/',
+          meaning: 'Sự cộng hưởng sức mạnh tập thể',
+          example: 'The partnership created valuable synergy across marketing and sales departments.',
+          example_trans: 'Sự hợp tác đã tạo ra sức mạnh cộng hưởng quý giá giữa các phòng ban tiếp thị và bán hàng.',
+          shadowing: 'Cross-departmental collaboration creates tremendous synergy and drives innovative solutions.',
+          shadowing_trans: 'Hợp tác liên phòng ban tạo ra sức mạnh cộng hưởng to lớn và thúc đẩy các giải pháp sáng tạo.'
+        },
+        {
+          word: 'mitigate', pos: 'verb', topic: 'Business', level: 'B', ipa_uk: '/ˈmɪt.ɪ.ɡeɪt/', ipa_us: '/ˈmɪt̬.ə.ɡeɪt/',
+          meaning: 'Giảm thiểu rủi ro, xoa dịu tác hại',
+          example: 'Proactive risk analysis helps businesses mitigate potential financial loss.',
+          example_trans: 'Phân tích rủi ro chủ động giúp doanh nghiệp giảm thiểu tổn thất tài chính tiềm ẩn.',
+          shadowing: 'Taking prompt preventive measures will mitigate the impact of unforeseen crises.',
+          shadowing_trans: 'Thực hiện các biện pháp phòng ngừa kịp thời sẽ làm giảm bớt tác động của các cuộc khủng hoảng bất ngờ.'
+        },
+        {
+          word: 'wholesome', pos: 'adjective', topic: 'Daily Life', level: 'B', ipa_uk: '/ˈhəʊl.səm/', ipa_us: '/ˈhoʊl.səm/',
+          meaning: 'Lành mạnh, bổ ích cho thể chất và tâm hồn',
+          example: 'The restaurant offers wholesome organic meals prepared with fresh ingredients.',
+          example_trans: 'Nhà hàng phục vụ các bữa ăn hữu cơ lành mạnh được chế biến từ nguyên liệu tươi ngon.',
+          shadowing: 'Spending quality time outdoors provides a deeply wholesome and refreshing experience.',
+          shadowing_trans: 'Dành thời gian chất lượng ngoài trời mang lại trải nghiệm vô cùng lành mạnh và sảng khoái.'
+        },
+        {
+          word: 'empathy', pos: 'noun', topic: 'Daily Life', level: 'B', ipa_uk: '/ˈem.pə.θi/', ipa_us: '/ˈem.pə.θi/',
+          meaning: 'Sự thấu cảm, khả năng đồng cảm sâu sắc',
+          example: 'Practicing empathy helps us build meaningful and trusted relationships.',
+          example_trans: 'Thực hành sự thấu cảm giúp chúng ta xây dựng những mối quan hệ ý nghĩa và đáng tin cậy.',
+          shadowing: 'Great leaders listen attentively and demonstrate genuine empathy toward their team members.',
+          shadowing_trans: 'Những nhà lãnh đạo tuyệt vời luôn lắng nghe chăm chú và thể hiện sự đồng cảm chân thành với các thành viên.'
+        },
+        {
+          word: 'spontaneous', pos: 'adjective', topic: 'Daily Life', level: 'B', ipa_uk: '/spɒnˈteɪ.ni.əs/', ipa_us: '/spɑːnˈteɪ.ni.əs/',
+          meaning: 'Tự phát, ngẫu hứng tự nhiên',
+          example: 'They made a spontaneous decision to take a weekend road trip to the coast.',
+          example_trans: 'Họ đã đưa ra một quyết định ngẫu hứng là lái xe đi du lịch biển vào cuối tuần.',
+          shadowing: 'Sometimes the most delightful and memorable life adventures begin with a spontaneous idea.',
+          shadowing_trans: 'Đôi khi những chuyến phiêu lưu thú vị và đáng nhớ nhất trong cuộc đời lại bắt đầu từ một ý tưởng ngẫu hứng.'
+        },
+        {
+          word: 'nostalgia', pos: 'noun', topic: 'Daily Life', level: 'B', ipa_uk: '/nɒsˈtæl.dʒə/', ipa_us: '/nɑːˈstæl.dʒə/',
+          meaning: 'Nỗi hoài niệm về kỷ niệm xưa',
+          example: 'Looking through old family albums filled her with sweet nostalgia.',
+          example_trans: 'Ngắm nhìn lại những cuốn album ảnh gia đình cũ khiến cô ngập tràn nỗi hoài niệm ngọt ngào.',
+          shadowing: 'Hearing a familiar childhood melody often triggers a profound wave of warm nostalgia.',
+          shadowing_trans: 'Nghe lại một giai điệu quen thuộc thời thơ ấu thường khơi dậy một làn sóng hoài niệm ấm áp sâu sắc.'
+        },
+        {
+          word: 'meticulous', pos: 'adjective', topic: 'Personality', level: 'B', ipa_uk: '/məˈtɪk.jə.ləs/', ipa_us: '/məˈtɪk.jə.ləs/',
+          meaning: 'Tỉ mỉ, cẩn trọng từng chi tiết',
+          example: 'Her meticulous attention to detail ensured that the final design was flawless.',
+          example_trans: 'Sự chú ý tỉ mỉ đến từng chi tiết của cô ấy đã đảm bảo rằng thiết kế cuối cùng là hoàn hảo.',
+          shadowing: 'A meticulous approach to quality assurance guarantees customer satisfaction and trust.',
+          shadowing_trans: 'Cách tiếp cận tỉ mỉ trong đảm bảo chất lượng sẽ bảo chứng cho sự hài lòng và niềm tin của khách hàng.'
+        },
+        {
+          word: 'resilience', pos: 'noun', topic: 'Personality', level: 'B', ipa_uk: '/rɪˈzɪl.i.əns/', ipa_us: '/rɪˈzɪl.jəns/',
+          meaning: 'Sức bật kiên cường, khả năng phục hồi sau khó khăn',
+          example: 'Her psychological resilience helped her overcome difficult setbacks with grace.',
+          example_trans: 'Sức bật tâm lý kiên cường đã giúp cô vượt qua những trở ngại khó khăn một cách bình thản.',
+          shadowing: 'Inner resilience allows us to bounce back stronger whenever we encounter adversity.',
+          shadowing_trans: 'Nghị lực kiên cường nội tại giúp chúng ta phục hồi mạnh mẽ hơn mỗi khi đối mặt với nghịch cảnh.'
+        },
+        {
+          word: 'mindfulness', pos: 'noun', topic: 'Health', level: 'B', ipa_uk: '/ˈmaɪnd.fəl.nəs/', ipa_us: '/ˈmaɪnd.fəl.nəs/',
+          meaning: 'Chánh niệm, sự tập trung nhận thức hiện tại',
+          example: 'Practicing daily mindfulness helps clear mental clutter and enhances focus.',
+          example_trans: 'Thực hành chánh niệm hàng ngày giúp dọn dẹp tâm trí bộn bề và nâng cao khả năng tập trung.',
+          shadowing: 'Cultivating mindfulness throughout the workday keeps our minds calm and centered.',
+          shadowing_trans: 'Nuôi dưỡng chánh niệm trong suốt ngày làm việc giúp tâm trí chúng ta luôn điềm tĩnh và vững vàng.'
+        },
+        {
+          word: 'gratitude', pos: 'noun', topic: 'Daily Life', level: 'B', ipa_uk: '/ˈɡræt.ɪ.tʃuːd/', ipa_us: '/ˈɡræt̬.ə.tuːd/',
+          meaning: 'Lòng biết ơn, sự tri ân',
+          example: 'Expressing sincere gratitude to teammates creates a positive workplace culture.',
+          example_trans: 'Bày tỏ lòng biết ơn chân thành tới đồng đội tạo nên một văn hóa làm việc tích cực.',
+          shadowing: 'Starting every morning with a feeling of gratitude transforms our mindset for the day.',
+          shadowing_trans: 'Bắt đầu mỗi buổi sáng với cảm giác biết ơn sẽ chuyển hóa tư duy của chúng ta cho cả ngày.'
+        },
+        {
+          word: 'tranquil', pos: 'adjective', topic: 'Daily Life', level: 'B', ipa_uk: '/ˈtræŋ.kwɪl/', ipa_us: '/ˈtræŋ.kwəl/',
+          meaning: 'Thanh bình, tĩnh lặng an nhiên',
+          example: 'The lakeside retreat was quiet, serene, and remarkably tranquil.',
+          example_trans: 'Nơi nghỉ dưỡng ven hồ rất yên tĩnh, thanh tịnh và cực kỳ thanh bình.',
+          shadowing: 'Walking quietly through the tranquil forest at dawn brings deep peace to the soul.',
+          shadowing_trans: 'Đi dạo nhẹ nhàng qua khu rừng thanh bình lúc bình minh mang lại sự an yên sâu sắc cho tâm hồn.'
+        },
+        {
+          word: 'scalability', pos: 'noun', topic: 'Technology', level: 'B', ipa_uk: '/ˌskeɪ.ləˈbɪl.ə.ti/', ipa_us: '/ˌskeɪ.ləˈbɪl.ə.t̬i/',
+          meaning: 'Khả năng mở rộng quy mô hệ thống',
+          example: 'The cloud database architecture is designed for high scalability and security.',
+          example_trans: 'Kiến trúc cơ sở dữ liệu đám mây được thiết kế để có khả năng mở rộng quy mô và bảo mật cao.',
+          shadowing: 'Designing for scalability ensures the platform handles rapid user growth seamlessly.',
+          shadowing_trans: 'Thiết kế hướng tới khả năng mở rộng đảm bảo nền tảng xử lý sự gia tăng người dùng nhanh chóng một cách mượt mà.'
+        },
+        {
+          word: 'automation', pos: 'noun', topic: 'Technology', level: 'B', ipa_uk: '/ˌɔː.təˈmeɪ.ʃən/', ipa_us: '/ˌɑː.t̬əˈmeɪ.ʃən/',
+          meaning: 'Tự động hóa tác vụ thông minh',
+          example: 'Workflow automation frees our team from tedious and repetitive manual tasks.',
+          example_trans: 'Tự động hóa quy trình làm việc giải phóng đội ngũ của chúng ta khỏi các tác vụ thủ công nhàm chán lặp đi lặp lại.',
+          shadowing: 'Smart process automation boosts operational speed and eliminates human errors.',
+          shadowing_trans: 'Tự động hóa quy trình thông minh nâng cao tốc độ vận hành và loại bỏ các sai sót của con người.'
+        },
+        {
+          word: 'encryption', pos: 'noun', topic: 'Technology', level: 'B', ipa_uk: '/ɪnˈkrɪp.ʃən/', ipa_us: '/ɪnˈkrɪp.ʃən/',
+          meaning: 'Mã hóa bảo mật thông tin',
+          example: 'End-to-end encryption safeguards sensitive financial data from unauthorized access.',
+          example_trans: 'Mã hóa đầu cuối bảo vệ dữ liệu tài chính nhạy cảm khỏi sự truy cập trái phép.',
+          shadowing: 'Modern cryptographic encryption is vital for protecting user privacy across the internet.',
+          shadowing_trans: 'Mã hóa mật mã hiện đại là điều tối quan trọng để bảo vệ quyền riêng tư của người dùng trên internet.'
+        },
+        {
+          word: 'cybersecurity', pos: 'noun', topic: 'Technology', level: 'B', ipa_uk: '/ˈsaɪ.bə.sɪˌkjʊə.rə.ti/', ipa_us: '/ˈsaɪ.bɚ.səˌkjʊr.ə.t̬i/',
+          meaning: 'An ninh mạng và an toàn dữ liệu',
+          example: 'Financial institutions invest heavily in cutting-edge cybersecurity infrastructure.',
+          example_trans: 'Các tổ chức tài chính đầu tư mạnh mẽ vào cơ sở hạ tầng an ninh mạng tiên tiến.',
+          shadowing: 'Maintaining strong cybersecurity vigilance protects critical digital assets from cyber threats.',
+          shadowing_trans: 'Duy trì sự cảnh giác an ninh mạng cao độ giúp bảo vệ các tài sản số trọng yếu khỏi các mối đe dọa mạng.'
+        },
+        {
+          word: 'persuasive', pos: 'adjective', topic: 'Communication', level: 'B', ipa_uk: '/pəˈsweɪ.sɪv/', ipa_us: '/pɚˈsweɪ.sɪv/',
+          meaning: 'Có sức thuyết phục mạnh mẽ',
+          example: 'She delivered a highly persuasive argument that won over the entire committee.',
+          example_trans: 'Cô ấy đã đưa ra một lập luận đầy thuyết phục và chinh phục được toàn bộ hội đồng.',
+          shadowing: 'Mastering the art of persuasive storytelling makes your presentations unforgettable.',
+          shadowing_trans: 'Làm chủ nghệ thuật kể chuyện thuyết phục sẽ khiến các bài thuyết trình của bạn trở nên khó quên.'
+        },
+        {
+          word: 'eloquent', pos: 'adjective', topic: 'Communication', level: 'B', ipa_uk: '/ˈel.ə.kwənt/', ipa_us: '/ˈel.ə.kwənt/',
+          meaning: 'Hùng biện, diễn đạt truyền cảm trau chuốt',
+          example: 'He gave an eloquent speech honoring the lifelong contributions of his mentor.',
+          example_trans: 'Ông đã có một bài phát biểu hùng biện tôn vinh những đóng góp trọn đời của người thầy mình.',
+          shadowing: 'Her eloquent keynote address inspired hundreds of delegates at the international summit.',
+          shadowing_trans: 'Bài phát biểu chính truyền cảm của cô ấy đã truyền cảm hứng cho hàng trăm đại biểu tại hội nghị quốc tế.'
+        },
+        {
+          word: 'assertive', pos: 'adjective', topic: 'Communication', level: 'B', ipa_uk: '/əˈsɜː.tɪv/', ipa_us: '/əˈsɝː.t̬ɪv/',
+          meaning: 'Quyết đoán, tự tin bày tỏ quan điểm',
+          example: 'Being assertive allows you to express your viewpoints firmly and respectfully.',
+          example_trans: 'Sự quyết đoán cho phép bạn bày tỏ quan điểm của mình một cách kiên định và tôn trọng người khác.',
+          shadowing: 'An assertive communication style fosters mutual respect and clear boundaries at work.',
+          shadowing_trans: 'Phong cách giao tiếp quyết đoán thúc đẩy sự tôn trọng lẫn nhau và ranh giới rõ ràng trong công việc.'
+        },
+        {
+          word: 'concise', pos: 'adjective', topic: 'Communication', level: 'B', ipa_uk: '/kənˈsaɪs/', ipa_us: '/kənˈsaɪs/',
+          meaning: 'Ngắn gọn, súc tích, cô đọng',
+          example: 'Please keep your executive summary concise, structured, and easy to read.',
+          example_trans: 'Vui lòng giữ cho bản tóm tắt điều hành ngắn gọn, có cấu trúc và dễ đọc.',
+          shadowing: 'Writing clear and concise emails saves time and avoids miscommunication.',
+          shadowing_trans: 'Viết email rõ ràng và súc tích giúp tiết kiệm thời gian và tránh những hiểu lầm trong giao tiếp.'
+        },
+        {
+          word: 'nuance', pos: 'noun', topic: 'Communication', level: 'B', ipa_uk: '/ˈnjuː.ɑːns/', ipa_us: '/ˈnuː.ɑːns/',
+          meaning: 'Sắc thái tinh tế trong ý nghĩa',
+          example: 'Understanding cultural nuances is essential when conducting international business.',
+          example_trans: 'Hiểu được các sắc thái văn hóa tinh tế là điều thiết yếu khi tiến hành kinh doanh quốc tế.',
+          shadowing: 'Listening carefully helps you catch subtle nuances in vocal tone and emotion.',
+          shadowing_trans: 'Lắng nghe cẩn thận giúp bạn nắm bắt được những sắc thái tinh tế trong giọng điệu và cảm xúc.'
+        },
+        {
+          word: 'coherent', pos: 'adjective', topic: 'Communication', level: 'B', ipa_uk: '/kəʊˈhɪə.rənt/', ipa_us: '/koʊˈhɪr.ənt/',
+          meaning: 'Mạch lạc, liên kết chặt chẽ dễ hiểu',
+          example: 'The speaker presented a coherent strategy for tackling urban environmental issues.',
+          example_trans: 'Diễn giả đã trình bày một chiến lược mạch lạc để giải quyết các vấn đề môi trường đô thị.',
+          shadowing: 'Organizing your ideas logically creates a coherent and compelling narrative.',
+          shadowing_trans: 'Sắp xếp ý tưởng của bạn một cách logic sẽ tạo nên một câu chuyện mạch lạc và hấp dẫn.'
+        },
+        {
+          word: 'diplomatic', pos: 'adjective', topic: 'Communication', level: 'B', ipa_uk: '/ˌdɪp.ləˈmæt.ɪk/', ipa_us: '/ˌdɪp.ləˈmæt̬.ɪk/',
+          meaning: 'Khéo léo, mang tính ngoại giao',
+          example: 'He used diplomatic language to resolve the misunderstanding between both parties.',
+          example_trans: 'Anh ấy đã sử dụng ngôn ngữ khéo léo mang tính ngoại giao để giải quyết hiểu lầm giữa đôi bên.',
+          shadowing: 'A diplomatic approach turns tense conflicts into constructive collaborative discussions.',
+          shadowing_trans: 'Cách tiếp cận mang tính ngoại giao sẽ biến các xung đột căng thẳng thành những cuộc thảo luận hợp tác mang tính xây dựng.'
+        },
+        {
+          word: 'nutritious', pos: 'adjective', topic: 'Health', level: 'B', ipa_uk: '/njuːˈtrɪʃ.əs/', ipa_us: '/nuːˈtrɪʃ.əs/',
+          meaning: 'Bổ dưỡng, giàu dinh dưỡng',
+          example: 'A nutritious breakfast provides sustained energy for a demanding workday.',
+          example_trans: 'Một bữa sáng giàu dinh dưỡng cung cấp năng lượng bền bỉ cho một ngày làm việc đòi hỏi cao.',
+          shadowing: 'Choosing nutritious whole foods over processed snacks improves long-term vitality.',
+          shadowing_trans: 'Chọn thực phẩm nguyên phần giàu dinh dưỡng thay vì đồ ăn vặt chế biến sẵn giúp nâng cao sinh lực lâu dài.'
+        },
+        {
+          word: 'rejuvenate', pos: 'verb', topic: 'Health', level: 'B', ipa_uk: '/rɪˈdʒuː.vən.eɪt/', ipa_us: '/rɪˈdʒuː.vən.eɪt/',
+          meaning: 'Phục hồi sinh lực, làm trẻ hóa',
+          example: 'A weekend spent in nature will rejuvenate both your mind and body.',
+          example_trans: 'Một ngày cuối tuần hòa mình vào thiên nhiên sẽ làm trẻ hóa cả tâm trí và cơ thể bạn.',
+          shadowing: 'Getting sufficient restful sleep each night is essential to rejuvenate your immune system.',
+          shadowing_trans: 'Ngủ đủ giấc và ngủ sâu mỗi đêm là điều cần thiết để phục hồi hệ thống miễn dịch của bạn.'
+        },
+        {
+          word: 'immunity', pos: 'noun', topic: 'Health', level: 'B', ipa_uk: '/ɪˈmjuː.nə.ti/', ipa_us: '/ɪˈmjuː.nə.t̬i/',
+          meaning: 'Khả năng miễn dịch cơ thể',
+          example: 'Regular aerobic exercise and a balanced diet boost your natural immunity.',
+          example_trans: 'Tập thể dục nhịp điệu đều đặn và chế độ ăn cân bằng giúp tăng cường khả năng miễn dịch tự nhiên của bạn.',
+          shadowing: 'Strengthening your immune system helps your body resist seasonal illnesses effectively.',
+          shadowing_trans: 'Củng cố hệ thống miễn dịch giúp cơ thể bạn chống lại các bệnh theo mùa một cách hiệu quả.'
+        },
+        {
+          word: 'wellbeing', pos: 'noun', topic: 'Health', level: 'B', ipa_uk: '/ˈwelˌbiː.ɪŋ/', ipa_us: '/ˈwelˌbiː.ɪŋ/',
+          meaning: 'Sự khỏe mạnh toàn diện về thể chất và tinh thần',
+          example: 'Modern companies place high priority on employee mental and physical wellbeing.',
+          example_trans: 'Các công ty hiện đại đặt ưu tiên cao vào sự khỏe mạnh toàn diện về tinh thần và thể chất của nhân viên.',
+          shadowing: 'Investing in personal wellbeing creates a sustainable foundation for lasting career success.',
+          shadowing_trans: 'Đầu tư vào sức khỏe toàn diện của bản thân tạo ra nền tảng bền vững cho thành công sự nghiệp lâu dài.'
+        }
       ],
+
+      // CẤP ĐỘ C: Nâng cao, Học thuật & Chuyên sâu (C1 - C2 / IELTS 7.5+)
       'Level_C': [
-        { word: 'empirical', pos: 'adjective', topic: 'Academic', level: 'C', ipa_uk: '/ɪmˈpɪr.ɪ.kəl/', ipa_us: '/ɪmˈpɪr.ɪ.kəl/', meaning: 'Dựa trên thực nghiệm, quan sát thực tế', example: 'The researchers provided solid empirical evidence to support their hypothesis.', example_trans: 'Các nhà nghiên cứu đã cung cấp bằng chứng thực nghiệm vững chắc để củng cố giả thuyết.', shadowing: 'Empirical data provides an objective foundation for critical scientific breakthroughs.', shadowing_trans: 'Dữ liệu thực nghiệm cung cấp nền tảng khách quan cho các đột phá khoa học quan trọng.' },
-        { word: 'corroborate', pos: 'verb', topic: 'Academic', level: 'C', ipa_uk: '/kəˈrɒb.ə.reɪt/', ipa_us: '/kəˈrɑː.bə.reɪt/', meaning: 'Chứng thực, xác minh độ tin cậy', example: 'Subsequent experimental trials served to corroborate the preliminary findings.', example_trans: 'Các thử nghiệm thực nghiệm sau đó đã giúp chứng thực những phát hiện sơ bộ ban đầu.', shadowing: 'Scientists seek multiple independent studies to corroborate unexpected discoveries.', shadowing_trans: 'Các nhà khoa học tìm kiếm nhiều nghiên cứu độc lập để chứng thực những phát hiện bất ngờ.' },
-        { word: 'synthesize', pos: 'verb', topic: 'Academic', level: 'C', ipa_uk: '/ˈsɪn.θə.saɪz/', ipa_us: '/ˈsɪn.θə.saɪz/', meaning: 'Tổng hợp, kết hợp thành hệ thống', example: 'The review essay aims to synthesize diverse perspectives into a cohesive framework.', example_trans: 'Bài tiểu luận tổng quan nhằm tổng hợp các góc nhìn đa dạng thành một khung lý thuyết thống nhất.', shadowing: 'Synthesizing complex information into actionable insights is the hallmark of strategic thinking.', shadowing_trans: 'Tổng hợp thông tin phức tạp thành những hiểu biết sâu sắc có thể hành động là dấu ấn của tư duy chiến lược.' }
+        {
+          word: 'empirical', pos: 'adjective', topic: 'Academic', level: 'C', ipa_uk: '/ɪmˈpɪr.ɪ.kəl/', ipa_us: '/ɪmˈpɪr.ɪ.kəl/',
+          meaning: 'Dựa trên thực nghiệm, kiểm chứng thực tế',
+          example: 'The research paper provided strong empirical evidence supporting the new hypothesis.',
+          example_trans: 'Bài báo nghiên cứu đã cung cấp bằng chứng thực nghiệm vững chắc ủng hộ giả thuyết mới.',
+          shadowing: 'Rigorous scientific investigation relies strictly on empirical data rather than speculation.',
+          shadowing_trans: 'Nghiên cứu khoa học chặt chẽ hoàn toàn dựa vào dữ liệu thực nghiệm thay vì sự suy đoán.'
+        },
+        {
+          word: 'corroborate', pos: 'verb', topic: 'Academic', level: 'C', ipa_uk: '/kəˈrɒb.ə.reɪt/', ipa_us: '/kəˈrɑː.bə.reɪt/',
+          meaning: 'Chứng thực, xác minh bằng chứng cứ độc lập',
+          example: 'Independent laboratory tests were conducted to corroborate the initial findings.',
+          example_trans: 'Các thử nghiệm độc lập trong phòng thí nghiệm đã được tiến hành để chứng thực các phát hiện ban đầu.',
+          shadowing: 'Historical scholars examined multiple primary archives to corroborate the timeline of events.',
+          shadowing_trans: 'Các học giả lịch sử đã kiểm tra nhiều tài liệu lưu trữ sơ cấp để xác minh mốc thời gian của các sự kiện.'
+        },
+        {
+          word: 'synthesize', pos: 'verb', topic: 'Academic', level: 'C', ipa_uk: '/ˈsɪn.θə.saɪz/', ipa_us: '/ˈsɪn.θə.saɪz/',
+          meaning: 'Tổng hợp các luồng ý kiến, dữ liệu phức tạp',
+          example: 'The doctoral candidate had to synthesize theories from multiple academic disciplines.',
+          example_trans: 'Nghiên cứu sinh tiến sĩ đã phải tổng hợp các lý thuyết từ nhiều chuyên ngành học thuật khác nhau.',
+          shadowing: 'The ability to synthesize vast amounts of complex information is a hallmark of great analysts.',
+          shadowing_trans: 'Khả năng tổng hợp khối lượng lớn thông tin phức tạp là dấu ấn của những nhà phân tích xuất sắc.'
+        },
+        {
+          word: 'juxtaposition', pos: 'noun', topic: 'Academic', level: 'C', ipa_uk: '/ˌdʒʌk.stə.pəˈzɪʃ.ən/', ipa_us: '/ˌdʒʌk.stə.pəˈzɪʃ.ən/',
+          meaning: 'Sự đặt cạnh nhau để làm nổi bật tương phản',
+          example: 'The exhibition featured a striking juxtaposition of classical sculpture and modern art.',
+          example_trans: 'Triển lãm nổi bật với sự đặt cạnh nhau đầy ấn tượng giữa điêu khắc cổ điển và nghệ thuật hiện đại.',
+          shadowing: 'The clever juxtaposition of contrasting viewpoints illuminated the core paradox of the issue.',
+          shadowing_trans: 'Sự đặt cạnh nhau khéo léo của các quan điểm trái ngược đã làm sáng tỏ nghịch lý cốt lõi của vấn đề.'
+        },
+        {
+          word: 'elucidate', pos: 'verb', topic: 'Academic', level: 'C', ipa_uk: '/iˈluː.sɪ.deɪt/', ipa_us: '/iˈluː.sə.deɪt/',
+          meaning: 'Làm sáng tỏ vấn đề học thuật trừu tượng',
+          example: 'The professor used clear visual diagrams to elucidate the complex quantum theory.',
+          example_trans: 'Giáo sư đã sử dụng các sơ đồ trực quan rõ ràng để làm sáng tỏ lý thuyết lượng tử phức tạp.',
+          shadowing: 'A great educator possesses the rare gift of elucidating difficult concepts with ease.',
+          shadowing_trans: 'Một nhà giáo dục tuyệt vời sở hữu tài năng hiếm có là làm sáng tỏ các khái niệm khó một cách dễ dàng.'
+        },
+        {
+          word: 'proliferation', pos: 'noun', topic: 'Academic', level: 'C', ipa_uk: '/prəˌlɪf.əˈreɪ.ʃən/', ipa_us: '/prəˌlɪf.əˈreɪ.ʃən/',
+          meaning: 'Sự gia tăng nhanh chóng, sự sinh sôi nảy nở',
+          example: 'The rapid proliferation of digital communication tools has reshaped modern society.',
+          example_trans: 'Sự gia tăng nhanh chóng của các công cụ truyền thông kỹ thuật số đã định hình lại xã hội hiện đại.',
+          shadowing: 'We are witnessing an unprecedented proliferation of artificial intelligence across all industries.',
+          shadowing_trans: 'Chúng ta đang chứng kiến sự bùng nổ chưa từng có của trí tuệ nhân tạo trên mọi ngành công nghiệp.'
+        },
+        {
+          word: 'intrinsic', pos: 'adjective', topic: 'Academic', level: 'C', ipa_uk: '/ɪnˈtrɪn.zɪk/', ipa_us: '/ɪnˈtrɪn.zɪk/',
+          meaning: 'Bản chất bên trong, nội tại cốt lõi',
+          example: 'Curiosity is an intrinsic characteristic of passionate lifelong learners.',
+          example_trans: 'Tính tò mò là một đặc tính nội tại của những người đam mê học tập suốt đời.',
+          shadowing: 'Understanding the intrinsic value of teamwork is essential for building sustainable organizations.',
+          shadowing_trans: 'Hiểu được giá trị nội tại của tinh thần đồng đội là điều thiết yếu để xây dựng các tổ chức bền vững.'
+        },
+        {
+          word: 'methodology', pos: 'noun', topic: 'Academic', level: 'C', ipa_uk: '/ˌmeθ.əˈdɒl.ə.dʒi/', ipa_us: '/ˌmeθ.əˈdɑː.lə.dʒi/',
+          meaning: 'Phương pháp luận nghiên cứu khoa học',
+          example: 'The university approved the experimental methodology proposed by the research team.',
+          example_trans: 'Trường đại học đã phê duyệt phương pháp luận thử nghiệm do nhóm nghiên cứu đề xuất.',
+          shadowing: 'A transparent and sound methodology guarantees the reliability and validity of scientific conclusions.',
+          shadowing_trans: 'Một phương pháp luận minh bạch và vững chắc đảm bảo độ tin cậy và giá trị của các kết luận khoa học.'
+        },
+        {
+          word: 'dichotomy', pos: 'noun', topic: 'Academic', level: 'C', ipa_uk: '/daɪˈkɒt.ə.mi/', ipa_us: '/daɪˈkɑː.t̬ə.mi/',
+          meaning: 'Sự phân đôi, hai mặt đối lập hoàn toàn',
+          example: 'The author explored the sharp dichotomy between traditional heritage and modernity.',
+          example_trans: 'Tác giả đã khám phá sự đối lập gay gắt giữa di sản truyền thống và tính hiện đại.',
+          shadowing: 'Rather than viewing the problem as a rigid dichotomy, we should recognize the nuanced spectrum between both sides.',
+          shadowing_trans: 'Thay vì nhìn nhận vấn đề như sự đối lập cứng nhắc, chúng ta nên nhận ra dải sắc thái đa dạng giữa đôi bên.'
+        },
+        {
+          word: 'prerequisite', pos: 'noun', topic: 'Academic', level: 'C', ipa_uk: '/ˌpriːˈrek.wɪ.zɪt/', ipa_us: '/ˌpriːˈrek.wə.zɪt/',
+          meaning: 'Điều kiện tiên quyết bắt buộc',
+          example: 'A solid grasp of advanced calculus is a prerequisite for studying theoretical physics.',
+          example_trans: 'Nắm vững môn giải tích nâng cao là điều kiện tiên quyết để học vật lý lý thuyết.',
+          shadowing: 'Mutual trust and open dialogue are indispensable prerequisites for meaningful collaboration.',
+          shadowing_trans: 'Sự tin tưởng lẫn nhau và đối thoại cởi mở là những điều kiện tiên quyết không thể thiếu cho sự hợp tác ý nghĩa.'
+        },
+        {
+          word: 'ubiquity', pos: 'noun', topic: 'Technology', level: 'C', ipa_uk: '/juːˈbɪk.wə.ti/', ipa_us: '/juːˈbɪk.wə.t̬i/',
+          meaning: 'Sự hiện diện ở khắp mọi nơi',
+          example: 'The ubiquity of smartphones has profoundly altered our daily communication habits.',
+          example_trans: 'Sự hiện diện ở khắp mọi nơi của điện thoại thông minh đã làm thay đổi sâu sắc thói quen giao tiếp hàng ngày của chúng ta.',
+          shadowing: 'Given the ubiquity of digital media, developing critical media literacy is more important than ever.',
+          shadowing_trans: 'Với sự phủ sóng khắp nơi của truyền thông kỹ thuật số, việc phát triển tư duy phản biện truyền thông càng quan trọng hơn bao giờ hết.'
+        },
+        {
+          word: 'paradigm', pos: 'noun', topic: 'Academic', level: 'C', ipa_uk: '/ˈpær.ə.daɪm/', ipa_us: '/ˈper.ə.daɪm/',
+          meaning: 'Mô hình chuẩn, hệ hình tư duy khoa học',
+          example: 'The introduction of quantum mechanics sparked a transformative paradigm shift in physics.',
+          example_trans: 'Sự ra đời của cơ học lượng tử đã châm ngòi cho một bước chuyển biến hệ hình mang tính cách mạng trong vật lý.',
+          shadowing: 'Challenging existing orthodoxies often paves the way for a revolutionary scientific paradigm.',
+          shadowing_trans: 'Việc thách thức các định kiến cũ thường mở đường cho một hệ hình tư duy khoa học mang tính cách mạng.'
+        },
+        {
+          word: 'substantiate', pos: 'verb', topic: 'Academic', level: 'C', ipa_uk: '/səbˈstæn.ʃi.eɪt/', ipa_us: '/səbˈstæn.ʃi.eɪt/',
+          meaning: 'Chứng minh bằng bằng chứng cứ xác thực',
+          example: 'Researchers must present verifiable experimental data to substantiate their hypotheses.',
+          example_trans: 'Các nhà nghiên cứu phải trình bày dữ liệu thử nghiệm có thể kiểm chứng để chứng minh cho giả thuyết của mình.',
+          shadowing: 'Without credible documented evidence, it is impossible to substantiate such bold assertions.',
+          shadowing_trans: 'Nếu không có bằng chứng tài liệu đáng tin cậy, không thể nào chứng minh cho những khẳng định táo bạo như vậy.'
+        },
+        {
+          word: 'articulate', pos: 'adjective', topic: 'Communication', level: 'C', ipa_uk: '/ɑːˈtɪk.jə.lət/', ipa_us: '/ɑːrˈtɪk.jə.lət/',
+          meaning: 'Ăn nói lưu loát, diễn đạt khúc chiết rõ ràng',
+          example: 'She is an articulate advocate for clean renewable energy and environmental conservation.',
+          example_trans: 'Cô ấy là một người ủng hộ nhiệt thành và lưu loát cho năng lượng tái tạo sạch và bảo tồn môi trường.',
+          shadowing: 'Being able to articulate complex ideas with precision is crucial for visionary leadership.',
+          shadowing_trans: 'Khả năng diễn đạt những ý tưởng phức tạp với độ chính xác cao là điều tối quan trọng đối với sự lãnh đạo nhìn xa trông rộng.'
+        }
       ]
     };
 
@@ -2291,11 +2910,24 @@
     };
 
     function findCuratedWord(cleanWord) {
+      if (!cleanWord) return null;
+      var clean = cleanWord.toLowerCase().trim();
       if (appState && appState.allWords && appState.allWords.length > 0) {
-        var found = appState.allWords.find(function (w) {
-          return (w.word || '').toLowerCase() === cleanWord;
+        var foundApp = appState.allWords.find(function (w) {
+          return (w.word || '').toLowerCase() === clean;
         });
-        if (found) return found;
+        if (foundApp) return foundApp;
+      }
+      if (typeof SMART_CURATED_WORDS !== 'undefined') {
+        var foundDict = null;
+        ['Level_A', 'Level_B', 'Level_C'].forEach(function (lKey) {
+          if (SMART_CURATED_WORDS[lKey]) {
+            SMART_CURATED_WORDS[lKey].forEach(function (item) {
+              if (item.word.toLowerCase() === clean) foundDict = item;
+            });
+          }
+        });
+        if (foundDict) return foundDict;
       }
       return null;
     }
@@ -2517,14 +3149,22 @@
       var wordObj = appState.currentSession[appState.sessionIndex];
       if (!wordObj) return;
 
-      // Ưu tiên phát file MP3 người bản xứ nếu có
+      var targetAccent = accent || 'us';
+      var textToSpeak = wordObj.word;
+
+      // Ưu tiên 1: Link MP3 người bản xứ nếu có
       if (wordObj.audio_url && wordObj.audio_url.startsWith('http')) {
         var audio = new Audio(wordObj.audio_url);
-        audio.play().catch(function () {
-          VoiceManager.speak(wordObj.word, accent, 0.88);
-        });
+        var playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(function () {
+            // Fallback tức thì 0s qua Web Speech API
+            VoiceManager.speak(textToSpeak, targetAccent, 0.88);
+          });
+        }
       } else {
-        VoiceManager.speak(wordObj.word, accent, 0.88);
+        // Fallback tức thì 0s qua VoiceManager
+        VoiceManager.speak(textToSpeak, targetAccent, 0.88);
       }
     }
 
@@ -2555,9 +3195,12 @@
     function pokeMascot() {
       var svg = document.getElementById('mascot-owl-svg');
       if (svg) {
-        svg.classList.remove('animate-shake');
+        svg.classList.remove('animate-shake', 'animate-somersault-3d');
         void svg.offsetWidth; // Trigger reflow
-        svg.classList.add('animate-shake');
+        svg.classList.add('animate-somersault-3d');
+        setTimeout(function () {
+          if (svg) svg.classList.remove('animate-somersault-3d');
+        }, 900);
       }
 
       triggerMiniConfetti();
@@ -2568,7 +3211,20 @@
         speechEl.textContent = '"' + randomQuote + '"';
       }
 
-      showToast('Cú Giáo Sư: ' + randomQuote, 'info');
+      showToast('🦉 Cú Giáo Sư: ' + randomQuote, 'info');
+    }
+
+    function flapMascotWings() {
+      var leftWing = document.getElementById('owl-left-wing');
+      var rightWing = document.getElementById('owl-right-wing');
+      if (leftWing && rightWing) {
+        leftWing.classList.add('animate-wing-flap-left');
+        rightWing.classList.add('animate-wing-flap-right');
+        setTimeout(function () {
+          leftWing.classList.remove('animate-wing-flap-left');
+          rightWing.classList.remove('animate-wing-flap-right');
+        }, 1200);
+      }
     }
 
     function updateMascotContextSpeech() {
@@ -3163,6 +3819,20 @@
       var modalBar = document.getElementById('modal-tier-progress-bar');
       if (modalBar) modalBar.style.width = prog.progressPercent + '%';
 
+      // Dynamic Highlight for Tier Cards in Modal
+      for (var t = 1; t <= 4; t++) {
+        var cardEl = document.getElementById('tier-card-' + t);
+        if (cardEl) {
+          if (t === prog.tier) {
+            cardEl.className = 'p-3.5 rounded-2xl bg-indigo-50/80 border-2 border-indigo-500 shadow-md ring-2 ring-indigo-400/30 space-y-1.5 transition-all';
+          } else if (t < prog.tier) {
+            cardEl.className = 'p-3.5 rounded-2xl bg-slate-50/70 border border-slate-200/80 shadow-xs space-y-1.5 opacity-90 transition-all';
+          } else {
+            cardEl.className = 'p-3.5 rounded-2xl bg-white border border-slate-200/70 shadow-xs space-y-1.5 transition-all';
+          }
+        }
+      }
+
       initLucideIcons();
     }
 
@@ -3570,6 +4240,14 @@
       document.getElementById('btn-fc-voice-check').className = 'px-4 py-2 rounded-2xl bg-rose-600 text-white text-xs font-extrabold flex items-center space-x-2 shadow-glow-rose animate-pulse transition-all cursor-pointer';
       document.getElementById('lbl-fc-voice').textContent = 'Đang nghe... Hãy đọc to từ';
 
+      var viz = document.getElementById('fc-recording-visualizer');
+      if (viz) {
+        viz.classList.remove('hidden');
+        viz.classList.add('flex');
+      }
+      var liveTxt = document.getElementById('fc-live-transcript-text');
+      if (liveTxt) liveTxt.textContent = 'Đang lắng nghe... Hãy phát âm to rõ';
+
       if (SpeechRecognition) {
         try {
           if (appState.flashcardVoice.recognition) {
@@ -3591,6 +4269,7 @@
             recognizedText = (finalStr || interim).trim();
             if (recognizedText) {
               document.getElementById('lbl-fc-voice').textContent = 'Đang nghe: "' + recognizedText + '"';
+              if (liveTxt) liveTxt.textContent = 'Đang nhận diện: "' + recognizedText + '"';
             }
           };
 
@@ -3624,6 +4303,11 @@
 
     function stopFlashcardVoiceCheck() {
       appState.flashcardVoice.isListening = false;
+      var viz = document.getElementById('fc-recording-visualizer');
+      if (viz) {
+        viz.classList.add('hidden');
+        viz.classList.remove('flex');
+      }
       if (appState.flashcardVoice.recognition) {
         try { appState.flashcardVoice.recognition.stop(); } catch (e) { }
       }
@@ -3672,6 +4356,7 @@
         resultBox.className = 'mt-1 px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-glow-emerald animate-fadeIn flex items-center justify-center space-x-1.5';
         resultBox.innerHTML = '<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i><span>Đạt ' + evalResult.score + '% (≥80%) - Chuẩn bản xứ! (+15 XP, +10 💎) ✨</span>';
 
+        flapMascotWings();
         triggerMiniConfetti();
         addXP(15, 'Phát âm chuẩn ' + evalResult.score + '%');
         addGems(10, 'Phát âm chuẩn');
@@ -3965,6 +4650,12 @@
       document.getElementById('lbl-mic-state').textContent = 'Đang nghe... Hãy đọc to câu';
       document.getElementById('shadowing-result-card').classList.add('hidden');
 
+      var viz = document.getElementById('shadowing-recording-visualizer');
+      if (viz) {
+        viz.classList.remove('hidden');
+        viz.classList.add('flex');
+      }
+
       var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (SpeechRecognition) {
         try {
@@ -4012,6 +4703,12 @@
 
     function stopShadowingRecording(evaluate = true) {
       appState.shadowing.isRecording = false;
+
+      var viz = document.getElementById('shadowing-recording-visualizer');
+      if (viz) {
+        viz.classList.add('hidden');
+        viz.classList.remove('flex');
+      }
 
       if (appState.shadowing.recognition) {
         try { appState.shadowing.recognition.stop(); } catch (e) { }
@@ -4117,6 +4814,7 @@
       if (accuracyScore >= 80) {
         scoreBadge.className = 'px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-200';
         feedbackEl.textContent = 'Xuất sắc! Ngữ điệu và phát âm chuẩn tự nhiên (≥80%) (+30 XP, +15 💎) ✨';
+        flapMascotWings();
         triggerMiniConfetti();
         addXP(30, 'Shadowing xuất sắc (' + accuracyScore + '%)');
         addGems(15, 'Shadowing chuẩn');
@@ -4488,26 +5186,47 @@
       closeAddWordModal();
       showToast('Đang phân loại & nạp ' + words.length + ' từ vựng...', 'info');
 
-      // Tự động phân loại ngữ nghĩa Heuristic cho từng từ ở client
+      // Tự động phân loại ngữ nghĩa & tra cứu từ điển thông minh cho từng từ
       words.forEach(function (w) {
         var existing = appState.allWords.find(item => item.word.toLowerCase() === w);
         if (!existing) {
+          var curWord = findCuratedWord(w);
           var autoClass = classifyWordHeuristic(w);
-          var newWordObj = {
-            id: 'w_local_' + Math.random().toString(36).substring(2, 9),
-            word: w,
-            ipa_uk: '/' + w + '/',
-            ipa_us: '/' + w + '/',
-            pos: 'noun',
-            meaning: w,
-            example: 'Understanding ' + w + ' is crucial for continuous improvement.',
-            example_trans: 'Hiểu rõ ' + w + ' là điều cốt yếu để không ngừng tiến bộ.',
-            topic: autoClass.topic,
-            level: autoClass.level,
-            shadowing_sentence: 'We can practice using ' + w + ' regularly in natural communication.',
-            shadowing_trans: 'Chúng ta có thể luyện tập sử dụng ' + w + ' thường xuyên trong giao tiếp tự nhiên.',
-            srs: { box_level: 1, last_reviewed: '', next_review: appState.today, streak: 0 }
-          };
+          var newWordObj;
+
+          if (curWord) {
+            newWordObj = {
+              id: 'w_local_' + Math.random().toString(36).substring(2, 9),
+              word: curWord.word,
+              ipa_uk: curWord.ipa_uk || '/' + w + '/',
+              ipa_us: curWord.ipa_us || '/' + w + '/',
+              pos: curWord.pos || 'noun',
+              meaning: curWord.meaning || w,
+              example: curWord.example || ('Using ' + w + ' effectively enhances communication.'),
+              example_trans: curWord.example_trans || ('Sử dụng ' + w + ' hiệu quả giúp nâng cao giao tiếp.'),
+              topic: curWord.topic || autoClass.topic,
+              level: curWord.level || autoClass.level,
+              shadowing_sentence: curWord.shadowing_sentence || curWord.example || ('We practice ' + w + ' daily.'),
+              shadowing_trans: curWord.shadowing_trans || curWord.example_trans || ('Chúng ta luyện tập ' + w + ' hàng ngày.'),
+              srs: { box_level: 1, last_reviewed: '', next_review: appState.today, streak: 0 }
+            };
+          } else {
+            newWordObj = {
+              id: 'w_local_' + Math.random().toString(36).substring(2, 9),
+              word: w,
+              ipa_uk: '/' + w + '/',
+              ipa_us: '/' + w + '/',
+              pos: 'noun',
+              meaning: w,
+              example: 'Understanding ' + w + ' is crucial for continuous improvement.',
+              example_trans: 'Hiểu rõ ' + w + ' là điều cốt yếu để không ngừng tiến bộ.',
+              topic: autoClass.topic,
+              level: autoClass.level,
+              shadowing_sentence: 'We can practice using ' + w + ' regularly in natural communication.',
+              shadowing_trans: 'Chúng ta có thể luyện tập sử dụng ' + w + ' thường xuyên trong giao tiếp tự nhiên.',
+              srs: { box_level: 1, last_reviewed: '', next_review: appState.today, streak: 0 }
+            };
+          }
           appState.allWords.push(newWordObj);
         }
       });
