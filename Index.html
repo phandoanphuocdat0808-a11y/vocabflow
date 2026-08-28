@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>VocabFlow - Apple Minimalist & Speech AI</title>
 
-  <!-- Google Fonts: Plus Jakarta Sans & Outfit (Chuẩn tiếng Việt 100% & Ký tự IPA quốc tế) -->
+  <!-- Google Fonts: Be Vietnam Pro (Chuẩn quốc tế tiếng Việt 100% không lỗi dấu) & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap&subset=vietnamese,latin-ext"
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap&subset=vietnamese,latin-ext"
     rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
@@ -28,9 +28,9 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-            display: ['"Outfit"', '"Plus Jakarta Sans"', 'sans-serif'],
-            mono: ['"SF Mono"', 'Consolas', 'Menlo', 'monospace'],
+            sans: ['"Be Vietnam Pro"', '-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', 'sans-serif'],
+            display: ['"Be Vietnam Pro"', '"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', '"SF Mono"', 'Consolas', 'Menlo', 'monospace'],
           },
           colors: {
             apple: {
@@ -61,6 +61,7 @@
             'apple-float': '0 20px 40px -15px rgba(0, 0, 0, 0.08)',
             'glow-emerald': '0 0 20px rgba(16, 185, 129, 0.35)',
             'glow-rose': '0 0 20px rgba(244, 63, 94, 0.35)',
+            'glow-amber': '0 0 24px rgba(245, 158, 11, 0.45)',
           },
           animation: {
             'fadeIn': 'fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
@@ -104,8 +105,10 @@
     /* APPLE MINIMALIST DESIGN SYSTEM STYLING                                     */
     /* ========================================================================= */
     body {
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
       background-color: #F5F5F7;
       color: #1D1D1F;
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
@@ -125,6 +128,25 @@
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.9);
       box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Aura Hào Quang Dành Cho Cấp Bậc Native Speaker Master */
+    @keyframes nativeGlow {
+
+      0%,
+      100% {
+        filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.7)) drop-shadow(0 0 24px rgba(245, 158, 11, 0.35));
+        transform: scale(1);
+      }
+
+      50% {
+        filter: drop-shadow(0 0 22px rgba(251, 191, 36, 0.95)) drop-shadow(0 0 36px rgba(245, 158, 11, 0.55));
+        transform: scale(1.04);
+      }
+    }
+
+    .mascot-native-aura {
+      animation: nativeGlow 2.8s infinite ease-in-out;
     }
 
     /* 3D Flashcard Transitions */
@@ -184,10 +206,10 @@
     <!-- 1. STREAMLINED APPLE HEADER (3 CỤM TỐI GIẢN & SANG TRỌNG)                  -->
     <!-- ========================================================================= -->
     <header
-      class="glass-panel sticky top-3 z-40 rounded-2xl px-4 py-2.5 mb-5 flex items-center justify-between transition-all">
+      class="glass-panel sticky top-3 z-40 rounded-2xl px-3 sm:px-4 py-2.5 mb-5 flex items-center justify-between transition-all">
 
       <!-- Cụm Trái: Logo & Status (Đã loại bỏ nhãn chữ rác Apple Edition) -->
-      <div class="flex items-center space-x-2.5">
+      <div class="flex items-center space-x-2">
         <a href="javascript:void(0)" onclick="navigateTo('dashboard')" class="flex items-center space-x-2 group">
           <div
             class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
@@ -231,20 +253,31 @@
         </button>
       </nav>
 
-      <!-- Cụm Phải: Streak Counter, Mục Tiêu Hôm Nay & Thêm Từ -->
-      <div class="flex items-center space-x-2">
+      <!-- Cụm Phải: Cột Mốc Trình Độ, Streak/Gems, Mục Tiêu & Thêm Từ -->
+      <div class="flex items-center space-x-1.5 sm:space-x-2">
 
-        <!-- Streak Badge -->
-        <div
-          class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200/70 text-amber-800 text-xs font-black flex items-center space-x-1 shadow-sm">
-          <span>🔥</span>
-          <span id="header-streak-count">1</span>
-          <span class="text-[11px] font-bold text-amber-700 hidden sm:inline">ngày</span>
-        </div>
+        <!-- Learner Tier & XP Pill -->
+        <button type="button" onclick="openTierGuideModal()" id="header-tier-btn"
+          class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-xs font-black flex items-center space-x-1.5 shadow-sm active:scale-95 transition-all cursor-pointer"
+          title="Xem Cột mốc & Trình độ người học">
+          <span id="header-tier-icon">🌱</span>
+          <span id="header-tier-label" class="hidden sm:inline">Cấp A</span>
+          <span class="text-[10px] font-mono bg-indigo-200/60 px-1.5 py-0.2 rounded-md" id="header-xp-val">150 XP</span>
+        </button>
+
+        <!-- Streak & Vocab Gems Button (Opens Streak Shop Modal) -->
+        <button type="button" onclick="openStreakShopModal()" id="header-gamification-btn"
+          class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200/70 text-amber-800 text-xs font-black flex items-center space-x-1.5 sm:space-x-2 shadow-sm active:scale-95 transition-all cursor-pointer"
+          title="Cửa hàng Chuỗi Streak & Kim cương 💎">
+          <span>🔥 <span id="header-streak-count">1</span></span>
+          <span class="text-indigo-600">💎 <span id="header-gems-count">100</span></span>
+          <span id="header-freeze-badge" class="hidden text-sky-600 text-[10px]">❄️ <span
+              id="header-freeze-count">1</span></span>
+        </button>
 
         <!-- Nút Mục Tiêu Hôm Nay (CEFR A/B/C/Mix) -->
         <button type="button" onclick="openDailyGoalModal()" title="Mục tiêu & Khám phá từ mới hôm nay"
-          class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold shadow-sm transition-all flex items-center space-x-1 active:scale-95 cursor-pointer">
+          class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold shadow-sm transition-all flex items-center space-x-1 active:scale-95 cursor-pointer">
           <i data-lucide="target" class="w-3.5 h-3.5 text-indigo-600"></i>
           <span class="hidden sm:inline">Mục tiêu</span>
         </button>
@@ -397,9 +430,56 @@
                   <circle cx="78" cy="37" r="2" fill="#F59E0B" />
                 </g>
               </svg>
-              <span class="text-[10px] font-bold text-slate-400 mt-1">Cú Giáo Sư VocabFlow</span>
+              <span id="mascot-title-badge" class="text-[10px] font-bold text-slate-400 mt-1">Cú Giáo Sư
+                VocabFlow</span>
             </div>
 
+          </div>
+        </div>
+
+        <!-- Learner Tier Progress Card -->
+        <div class="glass-panel rounded-3xl p-4 sm:p-5 relative overflow-hidden space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="flex items-center space-x-2.5">
+              <div id="dash-tier-badge-icon"
+                class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-700 text-xl flex items-center justify-center font-black shadow-xs">
+                🌱
+              </div>
+              <div>
+                <div class="flex items-center space-x-2">
+                  <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Trình độ hiện tại</span>
+                  <span id="dash-tier-badge-pill"
+                    class="text-[10px] font-extrabold px-2 py-0.2 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Cấp
+                    A</span>
+                </div>
+                <h3 id="dash-tier-name" class="font-display font-extrabold text-base text-slate-900">Người mới bắt đầu
+                </h3>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button type="button" onclick="openTierGuideModal()"
+                class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 active:scale-95 text-slate-700 text-xs font-bold border border-slate-200 shadow-sm transition-all flex items-center space-x-1 cursor-pointer">
+                <i data-lucide="award" class="w-3.5 h-3.5 text-indigo-600"></i>
+                <span>Lộ trình 4 Cấp bậc</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- XP Progress Bar -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-bold text-slate-600">
+              <span id="dash-tier-xp-text">Tiến độ: 150 / 300 XP</span>
+              <span id="dash-tier-percent" class="text-indigo-600 font-extrabold">50%</span>
+            </div>
+            <div class="w-full bg-slate-200/80 h-2.5 rounded-full overflow-hidden">
+              <div id="dash-tier-progress-bar"
+                class="h-full bg-gradient-to-r from-indigo-500 to-violet-600 rounded-full transition-all duration-500"
+                style="width: 50%;"></div>
+            </div>
+            <div id="dash-tier-checklist" class="text-[11px] text-slate-500 pt-0.5 flex items-center space-x-1">
+              <i data-lucide="sparkles" class="w-3 h-3 text-amber-500"></i>
+              <span>Mục tiêu thăng Cấp B: Thuộc ≥ 20 từ vựng + Phát âm TB ≥ 70%</span>
+            </div>
           </div>
         </div>
 
@@ -423,39 +503,68 @@
           </div>
         </div>
 
-        <!-- Leitner 5-Box Distribution Bar -->
+        <!-- Leitner 5-Box Distribution Bar (CLICK-TO-STUDY TRỰC TIẾP TỪNG HỘP) -->
         <div class="glass-panel rounded-3xl p-4 sm:p-5 space-y-3">
           <div class="flex items-center justify-between">
             <h3 class="text-xs font-display font-extrabold text-slate-800 flex items-center space-x-1.5">
               <i data-lucide="layers" class="w-3.5 h-3.5 text-indigo-600"></i>
               <span>Phân bổ 5 Hộp Trí nhớ Leitner</span>
             </h3>
-            <span class="text-[10px] font-bold text-slate-400">Chu kỳ: 1 → 30 ngày</span>
+            <span class="text-[10px] font-bold text-indigo-600 flex items-center space-x-1">
+              <i data-lucide="mouse-pointer-click" class="w-3 h-3"></i>
+              <span>Chạm vào hộp để ôn ngay</span>
+            </span>
           </div>
 
           <div class="grid grid-cols-5 gap-2 text-center">
-            <div class="p-2.5 rounded-2xl bg-rose-50/70 border border-rose-100">
-              <div class="text-[10px] font-extrabold text-rose-600">Hộp 1</div>
+            <div onclick="startFlashcardSessionByBox(1)"
+              class="p-2.5 rounded-2xl bg-rose-50/70 border border-rose-100 hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-xs hover:shadow-sm group"
+              title="Bấm để ôn ngay các từ Hộp 1">
+              <div class="text-[10px] font-extrabold text-rose-600 flex items-center justify-center space-x-0.5">
+                <span>Hộp 1</span>
+                <i data-lucide="zap" class="w-2.5 h-2.5 text-rose-500 group-hover:scale-125 transition-transform"></i>
+              </div>
               <div id="box-count-1" class="text-base font-display font-black text-rose-800 mt-0.5">0</div>
               <div class="text-[9px] text-rose-500 font-medium">1 ngày</div>
             </div>
-            <div class="p-2.5 rounded-2xl bg-amber-50/70 border border-amber-100">
-              <div class="text-[10px] font-extrabold text-amber-600">Hộp 2</div>
+            <div onclick="startFlashcardSessionByBox(2)"
+              class="p-2.5 rounded-2xl bg-amber-50/70 border border-amber-100 hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-xs hover:shadow-sm group"
+              title="Bấm để ôn ngay các từ Hộp 2">
+              <div class="text-[10px] font-extrabold text-amber-600 flex items-center justify-center space-x-0.5">
+                <span>Hộp 2</span>
+                <i data-lucide="zap" class="w-2.5 h-2.5 text-amber-500 group-hover:scale-125 transition-transform"></i>
+              </div>
               <div id="box-count-2" class="text-base font-display font-black text-amber-800 mt-0.5">0</div>
               <div class="text-[9px] text-amber-500 font-medium">3 ngày</div>
             </div>
-            <div class="p-2.5 rounded-2xl bg-blue-50/70 border border-blue-100">
-              <div class="text-[10px] font-extrabold text-blue-600">Hộp 3</div>
+            <div onclick="startFlashcardSessionByBox(3)"
+              class="p-2.5 rounded-2xl bg-blue-50/70 border border-blue-100 hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-xs hover:shadow-sm group"
+              title="Bấm để ôn ngay các từ Hộp 3">
+              <div class="text-[10px] font-extrabold text-blue-600 flex items-center justify-center space-x-0.5">
+                <span>Hộp 3</span>
+                <i data-lucide="zap" class="w-2.5 h-2.5 text-blue-500 group-hover:scale-125 transition-transform"></i>
+              </div>
               <div id="box-count-3" class="text-base font-display font-black text-blue-800 mt-0.5">0</div>
               <div class="text-[9px] text-blue-500 font-medium">7 ngày</div>
             </div>
-            <div class="p-2.5 rounded-2xl bg-indigo-50/70 border border-indigo-100">
-              <div class="text-[10px] font-extrabold text-indigo-600">Hộp 4</div>
+            <div onclick="startFlashcardSessionByBox(4)"
+              class="p-2.5 rounded-2xl bg-indigo-50/70 border border-indigo-100 hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-xs hover:shadow-sm group"
+              title="Bấm để ôn ngay các từ Hộp 4">
+              <div class="text-[10px] font-extrabold text-indigo-600 flex items-center justify-center space-x-0.5">
+                <span>Hộp 4</span>
+                <i data-lucide="zap" class="w-2.5 h-2.5 text-indigo-500 group-hover:scale-125 transition-transform"></i>
+              </div>
               <div id="box-count-4" class="text-base font-display font-black text-indigo-800 mt-0.5">0</div>
               <div class="text-[9px] text-indigo-500 font-medium">14 ngày</div>
             </div>
-            <div class="p-2.5 rounded-2xl bg-emerald-50/70 border border-emerald-100">
-              <div class="text-[10px] font-extrabold text-emerald-600">Hộp 5</div>
+            <div onclick="startFlashcardSessionByBox(5)"
+              class="p-2.5 rounded-2xl bg-emerald-50/70 border border-emerald-100 hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-xs hover:shadow-sm group"
+              title="Bấm để ôn ngay các từ Hộp 5">
+              <div class="text-[10px] font-extrabold text-emerald-600 flex items-center justify-center space-x-0.5">
+                <span>Hộp 5</span>
+                <i data-lucide="zap"
+                  class="w-2.5 h-2.5 text-emerald-500 group-hover:scale-125 transition-transform"></i>
+              </div>
               <div id="box-count-5" class="text-base font-display font-black text-emerald-800 mt-0.5">0</div>
               <div class="text-[9px] text-emerald-500 font-medium">30 ngày</div>
             </div>
@@ -1206,38 +1315,241 @@
     </div>
   </div>
 
-  <!-- MODAL 4: IMPORT EXCEL / CSV -->
-  <div id="modal-import"
+  <!-- MODAL 6: LEARNER PROFICIENCY & PROGRESSION GUIDE (CỘT MỐC 4 CẤP BẬC TRÌNH ĐỘ NGƯỜI HỌC) -->
+  <div id="modal-tier-guide"
     class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl animate-slideUp">
+    <div
+      class="glass-panel w-full max-w-lg rounded-3xl p-6 space-y-4 shadow-2xl animate-slideUp max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between">
-        <h3 class="font-display font-extrabold text-base text-slate-900 flex items-center space-x-1.5">
-          <i data-lucide="file-up" class="w-4 h-4 text-indigo-600"></i>
-          <span>Nhập Excel / CSV</span>
-        </h3>
-        <button type="button" onclick="closeImportModal()" class="p-1 text-slate-400 hover:text-slate-600">
+        <div class="flex items-center space-x-2">
+          <div
+            class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+            👑
+          </div>
+          <div>
+            <h3 class="font-display font-extrabold text-base text-slate-900">Hệ Thống Cấp Bậc Trình Độ</h3>
+            <p class="text-[10px] text-slate-500">Tích lũy XP qua phát âm chuẩn & Shadowing để thăng hạng</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeTierGuideModal()"
+          class="p-1 text-slate-400 hover:text-slate-600 cursor-pointer">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <div class="space-y-3 text-xs">
+      <!-- Current User Progress Summary -->
+      <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-100 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-extrabold text-indigo-900">Điểm kinh nghiệm: <span id="modal-tier-xp-val"
+              class="font-mono text-indigo-600">0</span> XP</span>
+          <span id="modal-current-tier-pill"
+            class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-indigo-600 text-white shadow-xs">Cấp A</span>
+        </div>
+        <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+          <div id="modal-tier-progress-bar"
+            class="h-full bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full transition-all"
+            style="width: 25%;"></div>
+        </div>
+        <div class="text-[10px] text-indigo-700 flex items-center justify-between font-bold">
+          <span>+15 XP (Phát âm ≥80%)</span>
+          <span>+30 XP (Shadowing)</span>
+          <span>+50 XP (Hoàn thành đợt)</span>
+        </div>
+      </div>
+
+      <!-- 4 Tiers Roadmap Grid -->
+      <div class="space-y-2.5 text-xs">
+
+        <!-- Tier 1 -->
+        <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1.5 transition-all"
+          id="tier-card-1">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="text-base">🌱</span>
+              <span class="font-bold text-slate-900">Tier 1: Người mới bắt đầu (Beginner - Cấp A)</span>
+            </div>
+            <span class="text-[10px] font-mono font-black px-2 py-0.2 rounded-md bg-slate-100 text-slate-600">0 - 299
+              XP</span>
+          </div>
+          <p class="text-[11px] text-slate-500 leading-normal">Mục tiêu: Làm quen 44 âm vị IPA nền tảng, phát âm rõ ràng
+            từng từ đơn lẻ.</p>
+          <div
+            class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-100">
+            🎯 Điều kiện: Thuộc ≥ 20 từ vựng + Điểm phát âm TB ≥ 70%
+          </div>
+        </div>
+
+        <!-- Tier 2 -->
+        <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1.5 transition-all"
+          id="tier-card-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="text-base">🚀</span>
+              <span class="font-bold text-slate-900">Tier 2: Giao tiếp Tự tin (Intermediate - Cấp B)</span>
+            </div>
+            <span class="text-[10px] font-mono font-black px-2 py-0.2 rounded-md bg-slate-100 text-slate-600">300 - 799
+              XP</span>
+          </div>
+          <p class="text-[11px] text-slate-500 leading-normal">Mục tiêu: Làm chủ từ vựng công sở, biết ngắt nhịp câu
+            ngắn và nhấn đúng trọng âm từ.</p>
+          <div
+            class="text-[10px] font-extrabold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-100">
+            🎯 Điều kiện: Thuộc ≥ 50 từ (Hộp 3+) + Hoàn thành 10 bài Shadowing
+          </div>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1.5 transition-all"
+          id="tier-card-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="text-base">💎</span>
+              <span class="font-bold text-slate-900">Tier 3: Thành thạo / Chuyên nghiệp (Advanced - Cấp C)</span>
+            </div>
+            <span class="text-[10px] font-mono font-black px-2 py-0.2 rounded-md bg-slate-100 text-slate-600">800 - 1799
+              XP</span>
+          </div>
+          <p class="text-[11px] text-slate-500 leading-normal">Mục tiêu: Nắm vững từ vựng học thuật, nối âm tự nhiên,
+            phản xạ Shadowing tốt.</p>
+          <div
+            class="text-[10px] font-extrabold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-xl border border-purple-100">
+            🎯 Điều kiện: Thuộc ≥ 100 từ (Hộp 4+) + Điểm Shadowing TB ≥ 85%
+          </div>
+        </div>
+
+        <!-- Tier 4 -->
         <div
-          class="p-4 rounded-2xl border-2 border-dashed border-slate-300 text-center space-y-2 hover:bg-slate-50 transition-colors">
-          <input type="file" id="import-file-input" accept=".csv, .txt, .xlsx" onchange="handleFileSelected(event)"
-            class="hidden">
-          <label for="import-file-input" class="cursor-pointer flex flex-col items-center justify-center space-y-1">
-            <i data-lucide="upload-cloud" class="w-8 h-8 text-indigo-500"></i>
-            <span class="font-bold text-slate-700">Chọn file CSV hoặc TXT</span>
-            <span class="text-[10px] text-slate-400">Định dạng: Word, Meaning, Example</span>
-          </label>
+          class="p-3.5 rounded-2xl bg-gradient-to-tr from-amber-50 to-amber-100/50 border border-amber-200 shadow-xs space-y-1.5 transition-all"
+          id="tier-card-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="text-base">👑</span>
+              <span class="font-bold text-amber-950">Tier 4: Chuẩn Bản Xứ (Native Mastery - C2+)</span>
+            </div>
+            <span class="text-[10px] font-mono font-black px-2 py-0.2 rounded-md bg-amber-200 text-amber-900">≥ 1800
+              XP</span>
+          </div>
+          <p class="text-[11px] text-amber-900/80 leading-normal">Đỉnh cao: Nhả chữ, ngữ điệu (cadence), nối nuốt âm
+            chuẩn xác như người bản xứ sinh sống tại Anh/Mỹ.</p>
+          <div
+            class="text-[10px] font-extrabold text-amber-900 bg-white/80 px-2.5 py-1 rounded-xl border border-amber-300">
+            ✨ Đặc quyền: Mở khóa Hào quang Vàng kim lấp lánh cho Cú Giáo Sư & Danh hiệu VIP Native Master!
+          </div>
         </div>
-        <div id="import-preview-box" class="hidden max-h-32 overflow-y-auto p-2 bg-slate-100 rounded-xl text-[11px]">
+
+      </div>
+
+      <button type="button" onclick="closeTierGuideModal()"
+        class="w-full py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md transition-all cursor-pointer">
+        Đã hiểu, tiếp tục chinh phục! 🚀
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 7: STREAK SHOP & VOCAB GEMS (CỬA HÀNG BẢO VỆ CHUỖI & KIM CƯƠNG) -->
+  <div id="modal-streak-shop"
+    class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl animate-slideUp">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <div
+            class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+            💎
+          </div>
+          <div>
+            <h3 class="font-display font-extrabold text-base text-slate-900">Cửa Hàng Chuỗi Học Tập</h3>
+            <p class="text-[10px] text-slate-500">Dùng Kim Cương để bảo vệ chuỗi Streak không bao giờ mất</p>
+          </div>
         </div>
-        <button type="button" onclick="executeBatchImport()" id="btn-do-import"
-          class="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md transition-all cursor-pointer">
-          Nhập dữ liệu vào Sheets
+        <button type="button" onclick="closeStreakShopModal()"
+          class="p-1 text-slate-400 hover:text-slate-600 cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
+
+      <!-- Current Gems Balance Ribbon -->
+      <div
+        class="p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/10 to-amber-600/20 border border-amber-200/80 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <span class="text-xl">💎</span>
+          <div>
+            <div class="text-[10px] font-bold text-amber-700 uppercase">Kim Cương Tích Lũy</div>
+            <div id="shop-gems-balance" class="text-lg font-display font-black text-amber-900">120 💎</div>
+          </div>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] font-bold text-slate-500">Chuỗi hiện tại:</span>
+          <div class="text-sm font-extrabold text-amber-800">🔥 <span id="shop-streak-days">1</span> ngày</div>
+        </div>
+      </div>
+
+      <!-- Items Grid -->
+      <div class="space-y-2.5 text-xs">
+
+        <!-- Item 1: Streak Freeze -->
+        <div
+          class="p-3 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center justify-between gap-3">
+          <div class="flex items-center space-x-2.5">
+            <div
+              class="w-10 h-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl font-bold border border-sky-100 flex-shrink-0">
+              ❄️
+            </div>
+            <div>
+              <div class="font-extrabold text-slate-900">Khiên Băng Bảo Vệ (Streak Freeze)</div>
+              <p class="text-[10px] text-slate-500 leading-tight mt-0.5">Tự động giữ nguyên chuỗi nếu bạn quên học 1
+                ngày.</p>
+              <div class="text-[10px] text-sky-600 font-bold mt-1">Đang sở hữu: <span
+                  id="shop-freeze-inventory">1</span> khiên</div>
+            </div>
+          </div>
+          <button type="button" onclick="buyStreakFreeze()"
+            class="px-3 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-extrabold text-xs flex-shrink-0 shadow-sm transition-all cursor-pointer">
+            100 💎
+          </button>
+        </div>
+
+        <!-- Item 2: Streak Repair -->
+        <div
+          class="p-3 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center justify-between gap-3">
+          <div class="flex items-center space-x-2.5">
+            <div
+              class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl font-bold border border-rose-100 flex-shrink-0">
+              🔥
+            </div>
+            <div>
+              <div class="font-extrabold text-slate-900">Hồi Sinh Chuỗi Lửa (Streak Repair)</div>
+              <p class="text-[10px] text-slate-500 leading-tight mt-0.5">Khôi phục chuỗi ngày đã mất trong vòng 48 giờ
+                gần nhất.</p>
+              <div class="text-[10px] text-rose-600 font-bold mt-1">Bảo đảm chuỗi không đứt</div>
+            </div>
+          </div>
+          <button type="button" onclick="buyStreakRepair()"
+            class="px-3 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 active:scale-95 text-white font-extrabold text-xs flex-shrink-0 shadow-sm transition-all cursor-pointer">
+            200 💎
+          </button>
+        </div>
+
+        <!-- Item 3: Daily Reward -->
+        <div class="p-3 rounded-2xl bg-emerald-50/60 border border-emerald-100 flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <span class="text-base">🎁</span>
+            <div>
+              <div class="font-bold text-emerald-900">Quà tặng điểm danh hàng ngày</div>
+              <p class="text-[10px] text-emerald-700">Mỗi ngày đăng nhập nhận ngay +20 Kim Cương.</p>
+            </div>
+          </div>
+          <button type="button" onclick="claimDailyGemsGift()" id="btn-claim-gift"
+            class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-all cursor-pointer">
+            Nhận +20 💎
+          </button>
+        </div>
+
+      </div>
+
+      <button type="button" onclick="closeStreakShopModal()"
+        class="w-full py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all cursor-pointer">
+        Đóng cửa hàng
+      </button>
     </div>
   </div>
 
@@ -1817,6 +2129,13 @@
       dictationScore: 0,
       today: new Date().toISOString().split('T')[0],
       streak: 1,
+
+      // Gamification & Learner Progression State (Lưu trữ bền vững)
+      xp: parseInt(localStorage.getItem('vocabflow_xp'), 10) || 150,
+      gems: parseInt(localStorage.getItem('vocabflow_gems'), 10) || 120,
+      streakFreezeCount: parseInt(localStorage.getItem('vocabflow_freeze_count'), 10) || 1,
+      completedShadowingCount: parseInt(localStorage.getItem('vocabflow_shadowing_count'), 10) || 3,
+
       stats: {
         totalWords: 0,
         dueTodayCount: 0,
@@ -1869,6 +2188,73 @@
       articulatoryModal: {
         currentCategory: 'all',
         selectedPhoneme: 'θ'
+      }
+    };
+
+    // 4 CỘT MỐC TRÌNH ĐỘ NGƯỜI HỌC (LEARNER PROFICIENCY TIERS)
+    const LEARNER_TIERS = {
+      1: {
+        id: 'tier-1',
+        tierNumber: 1,
+        name: 'Người mới bắt đầu',
+        label: 'Cấp A',
+        icon: '🌱',
+        color: 'emerald',
+        minXp: 0,
+        maxXp: 300,
+        targetWords: 20,
+        targetMinScore: 70,
+        nextTierName: 'Giao tiếp Tự tin (Cấp B)',
+        description: 'Làm quen 44 âm vị IPA nền tảng, phát âm chuẩn từng từ đơn lẻ.',
+        checklist: 'Mục tiêu thăng Cấp B: Thuộc ≥ 20 từ vựng + Phát âm TB ≥ 70%'
+      },
+      2: {
+        id: 'tier-2',
+        tierNumber: 2,
+        name: 'Giao tiếp Tự tin',
+        label: 'Cấp B',
+        icon: '🚀',
+        color: 'blue',
+        minXp: 300,
+        maxXp: 800,
+        targetWords: 50,
+        targetMinBox: 3,
+        targetShadowingCount: 10,
+        nextTierName: 'Thành thạo (Cấp C)',
+        description: 'Làm chủ từ vựng công sở, biết ngắt nhịp câu ngắn và nhấn đúng trọng âm.',
+        checklist: 'Mục tiêu thăng Cấp C: Thuộc ≥ 50 từ (Hộp 3+) + 10 bài Shadowing'
+      },
+      3: {
+        id: 'tier-3',
+        tierNumber: 3,
+        name: 'Thành thạo / Chuyên nghiệp',
+        label: 'Cấp C',
+        icon: '💎',
+        color: 'purple',
+        minXp: 800,
+        maxXp: 1800,
+        targetWords: 100,
+        targetMinBox: 4,
+        targetShadowingScore: 85,
+        nextTierName: 'Chuẩn Bản Xứ (C2+)',
+        description: 'Nắm vững từ vựng học thuật, nối âm tự nhiên, phản xạ Shadowing tốt.',
+        checklist: 'Mục tiêu C2+: Thuộc ≥ 100 từ (Hộp 4+) + Điểm Shadowing TB ≥ 85%'
+      },
+      4: {
+        id: 'tier-4',
+        tierNumber: 4,
+        name: 'Chuẩn Bản Xứ Master',
+        label: 'Cấp C2+ 👑',
+        icon: '👑',
+        color: 'amber',
+        minXp: 1800,
+        maxXp: 999999,
+        targetWords: 200,
+        targetMinBox: 5,
+        targetShadowingScore: 90,
+        nextTierName: 'Cực hạn Native Master',
+        description: 'Nhả chữ, cadence, nối nuốt âm tự nhiên như người bản xứ sinh sống tại Anh/Mỹ.',
+        checklist: 'Đỉnh cao: Hào quang Vàng kim lấp lánh cho Cú Giáo Sư VocabFlow!'
       }
     };
 
@@ -2615,9 +3001,6 @@
       var dateEl = document.getElementById('dashboard-date-label');
       if (dateEl) dateEl.textContent = 'Hôm nay: ' + appState.today;
 
-      var streakEl = document.getElementById('header-streak-count');
-      if (streakEl) streakEl.textContent = appState.streak || 1;
-
       document.getElementById('stat-total-words').textContent = appState.stats.totalWords;
       document.getElementById('stat-due-today').textContent = appState.stats.dueTodayCount;
       document.getElementById('stat-mastered').textContent = appState.stats.masteredCount;
@@ -2641,6 +3024,319 @@
           dueBadge.classList.add('hidden');
         }
       }
+
+      // Cập nhật Cấp bậc người học & Gamification Streak/Gems
+      updateLearnerLevelUI();
+      updateGamificationUI();
+    }
+
+    /**
+     * =========================================================================================
+     * LEARNER PROFICIENCY & PROGRESSION SYSTEM (4 TIERS & XP ENGINE)
+     * =========================================================================================
+     */
+    function calculateLearnerProgression() {
+      var xp = appState.xp || 0;
+      var box3PlusCount = 0;
+      var box4PlusCount = 0;
+      var box5Count = 0;
+
+      if (appState.allWords && appState.allWords.length > 0) {
+        appState.allWords.forEach(function (w) {
+          var b = (w.srs && w.srs.box_level) ? w.srs.box_level : 1;
+          if (b >= 3) box3PlusCount++;
+          if (b >= 4) box4PlusCount++;
+          if (b === 5) box5Count++;
+        });
+      }
+
+      var currentTier = 1;
+      if (xp >= 1800 && (box5Count >= 5 || appState.stats.totalWords >= 150)) {
+        currentTier = 4;
+      } else if (xp >= 800 && (box4PlusCount >= 10 || appState.stats.totalWords >= 80)) {
+        currentTier = 3;
+      } else if (xp >= 300 && (box3PlusCount >= 10 || appState.stats.totalWords >= 30)) {
+        currentTier = 2;
+      } else {
+        currentTier = 1;
+      }
+
+      var tierInfo = LEARNER_TIERS[currentTier];
+      var progressPercent = 0;
+      if (currentTier === 4) {
+        progressPercent = 100;
+      } else {
+        var range = tierInfo.maxXp - tierInfo.minXp;
+        var currentInRange = Math.max(0, xp - tierInfo.minXp);
+        progressPercent = Math.min(100, Math.round((currentInRange / range) * 100));
+      }
+
+      return {
+        tier: currentTier,
+        tierInfo: tierInfo,
+        xp: xp,
+        progressPercent: progressPercent,
+        box3PlusCount: box3PlusCount,
+        box4PlusCount: box4PlusCount,
+        box5Count: box5Count
+      };
+    }
+
+    function updateLearnerLevelUI() {
+      var prog = calculateLearnerProgression();
+      var info = prog.tierInfo;
+
+      // Header Pill
+      var headerIcon = document.getElementById('header-tier-icon');
+      if (headerIcon) headerIcon.textContent = info.icon;
+      var headerLabel = document.getElementById('header-tier-label');
+      if (headerLabel) headerLabel.textContent = info.label;
+      var headerXp = document.getElementById('header-xp-val');
+      if (headerXp) headerXp.textContent = prog.xp + ' XP';
+
+      // Dashboard Card
+      var dashIcon = document.getElementById('dash-tier-badge-icon');
+      if (dashIcon) dashIcon.textContent = info.icon;
+      var dashPill = document.getElementById('dash-tier-badge-pill');
+      if (dashPill) {
+        dashPill.textContent = info.label;
+        if (prog.tier === 4) {
+          dashPill.className = 'text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 shadow-glow-amber';
+        } else {
+          dashPill.className = 'text-[10px] font-extrabold px-2 py-0.2 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200';
+        }
+      }
+      var dashName = document.getElementById('dash-tier-name');
+      if (dashName) dashName.textContent = info.name;
+
+      var dashXpText = document.getElementById('dash-tier-xp-text');
+      if (dashXpText) {
+        if (prog.tier === 4) {
+          dashXpText.textContent = 'Đạt mốc Cực hạn: ' + prog.xp + ' XP';
+        } else {
+          dashXpText.textContent = 'Tiến độ: ' + prog.xp + ' / ' + info.maxXp + ' XP';
+        }
+      }
+
+      var dashPercent = document.getElementById('dash-tier-percent');
+      if (dashPercent) dashPercent.textContent = prog.progressPercent + '%';
+
+      var dashBar = document.getElementById('dash-tier-progress-bar');
+      if (dashBar) {
+        dashBar.style.width = prog.progressPercent + '%';
+        if (prog.tier === 4) {
+          dashBar.className = 'h-full bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-300 rounded-full transition-all duration-500 shadow-glow-amber';
+        } else {
+          dashBar.className = 'h-full bg-gradient-to-r from-indigo-500 to-violet-600 rounded-full transition-all duration-500';
+        }
+      }
+
+      var checklistEl = document.getElementById('dash-tier-checklist');
+      if (checklistEl) {
+        checklistEl.innerHTML = '<i data-lucide="sparkles" class="w-3 h-3 text-amber-500"></i><span>' + escapeHtml(info.checklist) + '</span>';
+      }
+
+      // Mascot Owl Aura for Tier 4 Native Master
+      var mascotSvg = document.getElementById('mascot-owl-svg');
+      var mascotBadge = document.getElementById('mascot-title-badge');
+      if (mascotSvg) {
+        if (prog.tier === 4) {
+          mascotSvg.classList.add('mascot-native-aura');
+          if (mascotBadge) {
+            mascotBadge.textContent = '👑 Cú Master Chuẩn Bản Xứ';
+            mascotBadge.className = 'text-[10px] font-black text-amber-700 mt-1 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-300 shadow-sm';
+          }
+        } else {
+          mascotSvg.classList.remove('mascot-native-aura');
+          if (mascotBadge) {
+            mascotBadge.textContent = 'Cú Giáo Sư VocabFlow';
+            mascotBadge.className = 'text-[10px] font-bold text-slate-400 mt-1';
+          }
+        }
+      }
+
+      // Modal Guide values
+      var modalXpVal = document.getElementById('modal-tier-xp-val');
+      if (modalXpVal) modalXpVal.textContent = prog.xp;
+      var modalTierPill = document.getElementById('modal-current-tier-pill');
+      if (modalTierPill) modalTierPill.textContent = info.icon + ' ' + info.label;
+      var modalBar = document.getElementById('modal-tier-progress-bar');
+      if (modalBar) modalBar.style.width = prog.progressPercent + '%';
+
+      initLucideIcons();
+    }
+
+    function addXP(amount, reason) {
+      appState.xp = (appState.xp || 0) + amount;
+      localStorage.setItem('vocabflow_xp', appState.xp);
+      updateLearnerLevelUI();
+      showToast('+ ' + amount + ' XP: ' + reason, 'success');
+    }
+
+    function addGems(amount, reason) {
+      appState.gems = (appState.gems || 0) + amount;
+      localStorage.setItem('vocabflow_gems', appState.gems);
+      updateGamificationUI();
+      showToast('+ ' + amount + ' 💎: ' + reason, 'success');
+    }
+
+    /**
+     * =========================================================================================
+     * GAMIFICATION ENGINE (STREAK, GEMS & STREAK SHOP)
+     * =========================================================================================
+     */
+    function updateGamificationUI() {
+      var streakEl = document.getElementById('header-streak-count');
+      if (streakEl) streakEl.textContent = appState.streak || 1;
+
+      var gemsEl = document.getElementById('header-gems-count');
+      if (gemsEl) gemsEl.textContent = appState.gems || 0;
+
+      var freezeBadge = document.getElementById('header-freeze-badge');
+      var freezeCountEl = document.getElementById('header-freeze-count');
+      if (freezeBadge && freezeCountEl) {
+        if (appState.streakFreezeCount > 0) {
+          freezeCountEl.textContent = appState.streakFreezeCount;
+          freezeBadge.classList.remove('hidden');
+        } else {
+          freezeBadge.classList.add('hidden');
+        }
+      }
+
+      // Shop Modal Sync
+      var shopGems = document.getElementById('shop-gems-balance');
+      if (shopGems) shopGems.textContent = (appState.gems || 0) + ' 💎';
+      var shopStreak = document.getElementById('shop-streak-days');
+      if (shopStreak) shopStreak.textContent = appState.streak || 1;
+      var shopFreeze = document.getElementById('shop-freeze-inventory');
+      if (shopFreeze) shopFreeze.textContent = appState.streakFreezeCount || 0;
+    }
+
+    function openTierGuideModal() {
+      var modal = document.getElementById('modal-tier-guide');
+      if (modal) {
+        updateLearnerLevelUI();
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        initLucideIcons();
+      }
+    }
+
+    function closeTierGuideModal() {
+      var modal = document.getElementById('modal-tier-guide');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function openStreakShopModal() {
+      var modal = document.getElementById('modal-streak-shop');
+      if (modal) {
+        updateGamificationUI();
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        initLucideIcons();
+      }
+    }
+
+    function closeStreakShopModal() {
+      var modal = document.getElementById('modal-streak-shop');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function buyStreakFreeze() {
+      if ((appState.gems || 0) < 100) {
+        showToast('Bạn chưa đủ Kim Cương (Cần 100 💎). Hãy luyện phát âm để nhận thêm!', 'error');
+        return;
+      }
+      appState.gems -= 100;
+      appState.streakFreezeCount = (appState.streakFreezeCount || 0) + 1;
+      localStorage.setItem('vocabflow_gems', appState.gems);
+      localStorage.setItem('vocabflow_freeze_count', appState.streakFreezeCount);
+      updateGamificationUI();
+      triggerMiniConfetti();
+      showToast('Mua Khiên Băng ❄️ thành công! Chuỗi ngày của bạn luôn an toàn.', 'success');
+    }
+
+    function buyStreakRepair() {
+      if ((appState.gems || 0) < 200) {
+        showToast('Bạn chưa đủ Kim Cương (Cần 200 💎). Hãy hoàn thành các đợt học để tích lũy!', 'error');
+        return;
+      }
+      appState.gems -= 200;
+      appState.streak = Math.max(2, (appState.streak || 1) + 1);
+      localStorage.setItem('vocabflow_gems', appState.gems);
+      updateGamificationUI();
+      triggerMiniConfetti();
+      showToast('Hồi Sinh Chuỗi Lửa 🔥 thành công! Chuỗi của bạn đã được cứu.', 'success');
+    }
+
+    function claimDailyGemsGift() {
+      var lastClaim = localStorage.getItem('vocabflow_last_gift_date');
+      if (lastClaim === appState.today) {
+        showToast('Bạn đã nhận quà điểm danh hôm nay rồi. Hãy quay lại vào ngày mai nhé! 🎁', 'info');
+        return;
+      }
+      localStorage.setItem('vocabflow_last_gift_date', appState.today);
+      addGems(20, 'Quà điểm danh hàng ngày');
+      triggerMiniConfetti();
+      var btn = document.getElementById('btn-claim-gift');
+      if (btn) {
+        btn.textContent = 'Đã nhận hôm nay ✓';
+        btn.className = 'px-3 py-1.5 rounded-xl bg-slate-200 text-slate-500 font-bold text-xs cursor-default';
+        btn.disabled = true;
+      }
+    }
+
+    /**
+     * =========================================================================================
+     * CLICK-TO-STUDY ON 5 LEITNER BOXES
+     * =========================================================================================
+     */
+    function startFlashcardSessionByBox(boxLevel) {
+      if (!appState.allWords || appState.allWords.length === 0) {
+        showToast('Chưa có từ vựng. Hãy nạp thêm từ!', 'info');
+        openDailyGoalModal();
+        return;
+      }
+
+      var filtered = appState.allWords.filter(function (w) {
+        var b = (w.srs && w.srs.box_level) ? w.srs.box_level : 1;
+        return b === boxLevel;
+      });
+
+      if (filtered.length === 0) {
+        showToast('Hộp ' + boxLevel + ' hiện chưa có từ vựng nào!', 'info');
+        return;
+      }
+
+      filtered = shuffleArray(filtered);
+
+      appState.dailyBatches = [];
+      for (var i = 0; i < filtered.length; i += 15) {
+        appState.dailyBatches.push(filtered.slice(i, i + 15));
+      }
+      appState.currentBatchIndex = 0;
+      appState.currentSession = appState.dailyBatches[0] || [];
+      appState.sessionIndex = 0;
+      appState.sessionResults = [];
+      appState.sessionMode = 'flashcard';
+      appState.weakWords = [];
+      appState.passedWords = [];
+
+      var screens = ['dashboard', 'flashcard', 'shadowing', 'dictation', 'words'];
+      screens.forEach(function (s) {
+        var el = document.getElementById('screen-' + s);
+        if (el) el.classList.add('hidden');
+      });
+      document.getElementById('screen-flashcard').classList.remove('hidden');
+
+      showToast('Khởi chạy phiên ôn tập riêng cho ' + filtered.length + ' từ trong Hộp ' + boxLevel + '! 🚀', 'info');
+      renderCurrentFlashcard();
     }
 
     /**
@@ -2974,9 +3670,11 @@
 
       if (evalResult.passed) {
         resultBox.className = 'mt-1 px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-glow-emerald animate-fadeIn flex items-center justify-center space-x-1.5';
-        resultBox.innerHTML = '<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i><span>Đạt ' + evalResult.score + '% (≥80%) - Chuẩn bản xứ! ✨</span>';
+        resultBox.innerHTML = '<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i><span>Đạt ' + evalResult.score + '% (≥80%) - Chuẩn bản xứ! (+15 XP, +10 💎) ✨</span>';
 
         triggerMiniConfetti();
+        addXP(15, 'Phát âm chuẩn ' + evalResult.score + '%');
+        addGems(10, 'Phát âm chuẩn');
 
         setTimeout(function () {
           if (!appState.isCardFlipped) flipFlashcard();
@@ -3036,6 +3734,10 @@
 
       appState.passedWords = passedList;
       appState.weakWords = weakList;
+
+      // Thưởng XP & Kim Cương khi hoàn thành đợt học
+      addXP(50, 'Hoàn thành đợt học Spaced Repetition');
+      addGems(50, 'Hoàn thành đợt học');
 
       // Sync results to backend
       if (appState.sessionResults.length > 0) {
@@ -3414,12 +4116,17 @@
 
       if (accuracyScore >= 80) {
         scoreBadge.className = 'px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-200';
-        feedbackEl.textContent = 'Xuất sắc! Ngữ điệu và phát âm chuẩn tự nhiên (≥80%) ✨';
+        feedbackEl.textContent = 'Xuất sắc! Ngữ điệu và phát âm chuẩn tự nhiên (≥80%) (+30 XP, +15 💎) ✨';
         triggerMiniConfetti();
+        addXP(30, 'Shadowing xuất sắc (' + accuracyScore + '%)');
+        addGems(15, 'Shadowing chuẩn');
+        appState.completedShadowingCount = (appState.completedShadowingCount || 0) + 1;
+        localStorage.setItem('vocabflow_shadowing_count', appState.completedShadowingCount);
         appState.sessionResults.push({ word_id: currentWord.id, rating: 'easy' });
       } else if (accuracyScore >= 60) {
         scoreBadge.className = 'px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-800 border border-amber-200';
         feedbackEl.textContent = 'Khá tốt! Chạm vào các từ gạch đỏ để tra cứu khẩu hình âm vị nhé 👍';
+        addXP(10, 'Shadowing khá tốt');
         appState.sessionResults.push({ word_id: currentWord.id, rating: 'good' });
       } else {
         scoreBadge.className = 'px-3 py-1 rounded-full text-xs font-black bg-rose-100 text-rose-800 border border-rose-200';
