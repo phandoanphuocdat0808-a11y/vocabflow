@@ -35,7 +35,7 @@
           colors: {
             apple: {
               bg: '#F5F5F7',
-              surface: 'rgba(255, 255, 255, 0.85)',
+              surface: 'rgba(255, 255, 255, 0.82)',
               card: '#FFFFFF',
               border: 'rgba(255, 255, 255, 0.7)',
               dark: '#1D1D1F',
@@ -66,7 +66,8 @@
             'fadeIn': 'fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
             'slideUp': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
             'pulse-soft': 'pulseSoft 2s infinite ease-in-out',
-            'float-subtle': 'floatSubtle 3s infinite ease-in-out',
+            'float-subtle': 'floatSubtle 3.5s infinite ease-in-out',
+            'shake': 'shake 0.5s ease-in-out',
           },
           keyframes: {
             fadeIn: {
@@ -83,7 +84,14 @@
             },
             floatSubtle: {
               '0%, 100%': { transform: 'translateY(0)' },
-              '50%': { transform: 'translateY(-4px)' },
+              '50%': { transform: 'translateY(-6px)' },
+            },
+            shake: {
+              '0%, 100%': { transform: 'translateX(0) rotate(0deg)' },
+              '20%': { transform: 'translateX(-4px) rotate(-4deg)' },
+              '40%': { transform: 'translateX(4px) rotate(4deg)' },
+              '60%': { transform: 'translateX(-3px) rotate(-2deg)' },
+              '80%': { transform: 'translateX(3px) rotate(2deg)' },
             }
           }
         }
@@ -111,38 +119,12 @@
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
     }
 
-    .glass-header {
-      background: rgba(245, 245, 247, 0.8);
+    .glass-speech-bubble {
+      background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    }
-
-    /* Mobile Simulator Frame */
-    .mobile-simulator-frame {
-      max-width: 420px;
-      min-height: 840px;
-      border-radius: 52px;
-      border: 12px solid #1E293B;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.2);
-      background: #F5F5F7;
-      position: relative;
-      margin: 20px auto;
-      overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .iphone-dynamic-island {
-      width: 110px;
-      height: 28px;
-      background: #0F172A;
-      border-radius: 20px;
-      margin: 8px auto 4px auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 10px;
-      z-index: 50;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
     }
 
     /* 3D Flashcard Transitions */
@@ -195,33 +177,29 @@
 
 <body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-  <!-- WRAPPER CHÍNH (HỖ TRỢ DESKTOP STUDIO VS MOBILE SIMULATOR) -->
+  <!-- WRAPPER CHÍNH TỰ ĐỘNG RESPONSIVE 100% -->
   <div id="app-viewport-wrapper" class="w-full max-w-6xl mx-auto px-3 sm:px-6 py-3 transition-all duration-300">
 
     <!-- ========================================================================= -->
-    <!-- 1. STREAMLINED APPLE HEADER (3 CỤM DUY NHẤT)                              -->
+    <!-- 1. STREAMLINED APPLE HEADER (3 CỤM TỐI GIẢN & SANG TRỌNG)                  -->
     <!-- ========================================================================= -->
     <header
       class="glass-panel sticky top-3 z-40 rounded-2xl px-4 py-2.5 mb-5 flex items-center justify-between transition-all">
 
-      <!-- Cụm Trái: Logo & Status -->
+      <!-- Cụm Trái: Logo & Status (Đã loại bỏ nhãn chữ rác Apple Edition) -->
       <div class="flex items-center space-x-2.5">
         <a href="javascript:void(0)" onclick="navigateTo('dashboard')" class="flex items-center space-x-2 group">
           <div
             class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
             <i data-lucide="sparkles" class="w-4 h-4"></i>
           </div>
-          <div class="leading-none">
-            <span
-              class="font-display font-extrabold text-base tracking-tight bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 bg-clip-text text-transparent">VocabFlow</span>
-            <span class="block text-[9px] font-bold text-indigo-600 tracking-wider uppercase pt-0.5">Apple
-              Edition</span>
-          </div>
+          <span
+            class="font-display font-black text-lg tracking-tight bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 bg-clip-text text-transparent">VocabFlow</span>
         </a>
 
-        <!-- Sync Spinner -->
+        <!-- Nút Làm Mới Dữ Liệu Từ Google Sheets -->
         <button type="button" onclick="manualSyncFromBackend()" title="Làm mới dữ liệu từ Google Sheets"
-          class="p-1 text-slate-400 hover:text-indigo-600 transition-colors">
+          class="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50/50 transition-colors">
           <i data-lucide="refresh-cw" id="icon-sync" class="w-3.5 h-3.5"></i>
         </button>
       </div>
@@ -230,96 +208,56 @@
       <nav
         class="hidden md:flex items-center bg-slate-200/60 p-1 rounded-full space-x-0.5 shadow-inner backdrop-blur-md">
         <button type="button" onclick="navigateTo('dashboard')" id="nav-btn-dashboard"
-          class="nav-pill-btn px-3.5 py-1 rounded-full text-xs font-bold text-white bg-indigo-600 shadow-sm transition-all">
+          class="nav-pill-btn px-4 py-1.5 rounded-full text-xs font-bold text-white bg-indigo-600 shadow-sm transition-all">
           Tổng quan
         </button>
         <button type="button" onclick="navigateTo('flashcard')" id="nav-btn-flashcard"
-          class="nav-pill-btn px-3.5 py-1 rounded-full text-xs font-bold text-slate-600 hover:text-slate-900 transition-all flex items-center space-x-1">
+          class="nav-pill-btn px-4 py-1.5 rounded-full text-xs font-bold text-slate-600 hover:text-slate-900 transition-all flex items-center space-x-1">
           <span>Flashcard</span>
           <span id="badge-due-flashcard"
             class="hidden px-1.5 py-0.2 rounded-full text-[10px] bg-rose-500 text-white font-extrabold">0</span>
         </button>
         <button type="button" onclick="navigateTo('shadowing')" id="nav-btn-shadowing"
-          class="nav-pill-btn px-3.5 py-1 rounded-full text-xs font-bold text-slate-600 hover:text-slate-900 transition-all">
+          class="nav-pill-btn px-4 py-1.5 rounded-full text-xs font-bold text-slate-600 hover:text-slate-900 transition-all">
           Shadowing
         </button>
         <button type="button" onclick="navigateTo('dictation')" id="nav-btn-dictation"
-          class="nav-pill-btn px-3.5 py-1 rounded-full text-xs font-bold text-slate-600 hover:text-slate-900 transition-all">
+          class="nav-pill-btn px-4 py-1.5 rounded-full text-xs font-bold text-slate-600 hover:text-slate-900 transition-all">
           Dictation
         </button>
         <button type="button" onclick="navigateTo('words')" id="nav-btn-words"
-          class="nav-pill-btn px-3.5 py-1 rounded-full text-xs font-bold text-slate-600 hover:text-slate-900 transition-all">
+          class="nav-pill-btn px-4 py-1.5 rounded-full text-xs font-bold text-slate-600 hover:text-slate-900 transition-all">
           Từ vựng
         </button>
       </nav>
 
-      <!-- Cụm Phải: Switcher, Streak & Settings Menu -->
+      <!-- Cụm Phải: Streak Counter, Mục Tiêu Hôm Nay & Thêm Từ -->
       <div class="flex items-center space-x-2">
-
-        <!-- Desktop / Mobile Simulator Switcher -->
-        <button type="button" onclick="toggleViewportMode()" id="btn-toggle-viewport"
-          title="Chuyển đổi Desktop Studio / Mobile Simulator"
-          class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center space-x-1 transition-all active:scale-95">
-          <i data-lucide="smartphone" id="icon-viewport-mode" class="w-3.5 h-3.5 text-slate-600"></i>
-          <span id="lbl-viewport-mode" class="hidden sm:inline text-[11px]">Mobile</span>
-        </button>
 
         <!-- Streak Badge -->
         <div
-          class="px-2.5 py-1 rounded-xl bg-amber-50 border border-amber-200/70 text-amber-800 text-xs font-black flex items-center space-x-1 shadow-sm">
+          class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200/70 text-amber-800 text-xs font-black flex items-center space-x-1 shadow-sm">
           <span>🔥</span>
           <span id="header-streak-count">1</span>
+          <span class="text-[11px] font-bold text-amber-700 hidden sm:inline">ngày</span>
         </div>
 
-        <!-- Quick Settings Menu (3 Chấm Tròn) -->
-        <div class="relative">
-          <button type="button" onclick="toggleSettingsPopover()" id="btn-settings-popover"
-            class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all active:scale-95 cursor-pointer">
-            <i data-lucide="more-horizontal" class="w-4 h-4"></i>
-          </button>
+        <!-- Nút Mục Tiêu Hôm Nay (CEFR A/B/C/Mix) -->
+        <button type="button" onclick="openDailyGoalModal()" title="Mục tiêu & Khám phá từ mới hôm nay"
+          class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold shadow-sm transition-all flex items-center space-x-1 active:scale-95 cursor-pointer">
+          <i data-lucide="target" class="w-3.5 h-3.5 text-indigo-600"></i>
+          <span class="hidden sm:inline">Mục tiêu</span>
+        </button>
 
-          <!-- Settings Dropdown Popover -->
-          <div id="popover-settings-menu"
-            class="hidden absolute right-0 mt-2 w-56 rounded-2xl glass-panel shadow-apple-float p-1.5 z-50 text-xs space-y-1 animate-fadeIn">
-            <button type="button" onclick="openArticulatoryModal(); closeSettingsPopover();"
-              class="w-full px-3 py-2 rounded-xl text-left font-bold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center space-x-2 transition-all">
-              <i data-lucide="book-open-check" class="w-4 h-4 text-indigo-500"></i>
-              <span>Khẩu hình học 44 âm IPA</span>
-            </button>
-            <button type="button" onclick="openDailyGoalModal(); closeSettingsPopover();"
-              class="w-full px-3 py-2 rounded-xl text-left font-bold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center space-x-2 transition-all">
-              <i data-lucide="target" class="w-4 h-4 text-amber-500"></i>
-              <span>Mục tiêu hôm nay (A/B/C)</span>
-            </button>
-            <button type="button" onclick="openMicGuideModal(); closeSettingsPopover();"
-              class="w-full px-3 py-2 rounded-xl text-left font-bold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center space-x-2 transition-all">
-              <i data-lucide="mic" class="w-4 h-4 text-emerald-500"></i>
-              <span>Kiểm tra Microphone</span>
-            </button>
-            <button type="button" onclick="openImportModal(); closeSettingsPopover();"
-              class="w-full px-3 py-2 rounded-xl text-left font-bold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center space-x-2 transition-all">
-              <i data-lucide="file-up" class="w-4 h-4 text-blue-500"></i>
-              <span>Nhập Excel / CSV</span>
-            </button>
-            <div class="border-t border-slate-200/60 my-1"></div>
-            <button type="button" onclick="manualSyncFromBackend(); closeSettingsPopover();"
-              class="w-full px-3 py-2 rounded-xl text-left font-bold text-slate-600 hover:bg-slate-100 flex items-center space-x-2 transition-all">
-              <i data-lucide="refresh-cw" class="w-4 h-4 text-slate-500"></i>
-              <span>Làm mới từ Google Sheets</span>
-            </button>
-          </div>
-        </div>
+        <!-- Nút Thêm Từ (+) -->
+        <button type="button" onclick="openAddWordModal()" title="Thêm từ vựng mới"
+          class="w-8 h-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white flex items-center justify-center shadow-sm transition-all cursor-pointer">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+        </button>
 
       </div>
 
     </header>
-
-    <!-- Simulated iPhone Dynamic Island Header (Chỉ hiện khi ở Mobile Mode) -->
-    <div id="simulated-dynamic-island" class="hidden iphone-dynamic-island">
-      <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-      <span class="text-[9px] font-mono text-slate-300 font-bold">VocabFlow</span>
-      <i data-lucide="mic" class="w-2.5 h-2.5 text-indigo-400"></i>
-    </div>
 
     <!-- API Config Alert Banner (Nếu chưa cấu hình) -->
     <div id="api-config-banner"
@@ -342,34 +280,126 @@
     <main class="w-full">
 
       <!-- ========================================================================= -->
-      <!-- SCREEN 1: DASHBOARD (TỔNG QUAN HỌC TẬP)                                   -->
+      <!-- SCREEN 1: DASHBOARD (HERO + LINH VẬT CÚ THÔNG THÁI + MOTIVATION ENGINE)    -->
       <!-- ========================================================================= -->
       <section id="screen-dashboard" class="space-y-4 animate-fadeIn">
 
-        <!-- Hero Card -->
-        <div class="glass-panel rounded-3xl p-5 sm:p-6 relative overflow-hidden">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
-            <div>
+        <!-- Hero Card with Owl Mascot & Interactive Speech Bubble -->
+        <div class="glass-panel rounded-3xl p-5 sm:p-7 relative overflow-hidden">
+          <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+
+            <!-- Left Motivation & Action Info -->
+            <div class="space-y-3 max-w-xl text-center md:text-left">
               <span id="dashboard-date-label" class="text-[11px] font-bold text-indigo-600 tracking-wider uppercase">Hôm
                 nay</span>
-              <h1 class="text-xl sm:text-2xl font-display font-extrabold text-slate-900 tracking-tight mt-0.5">Sẵn sàng
-                nâng tầm phát âm?</h1>
-              <p class="text-xs text-slate-500 mt-1 max-w-md">Lặp lại ngắt quãng Leitner 5 Hộp kết hợp phân tích âm vị
-                IPA chuẩn xác.</p>
+              <h1 class="text-2xl sm:text-3xl font-display font-extrabold text-slate-900 tracking-tight">Sẵn sàng bứt
+                phá phát âm?</h1>
+
+              <!-- Dynamic Speech Bubble -->
+              <div
+                class="glass-speech-bubble p-3.5 rounded-2xl relative inline-block text-left text-xs font-semibold text-slate-700 leading-relaxed shadow-sm">
+                <span id="mascot-speech-text">"Kiên trì 15 phút mỗi ngày sẽ tạo nên sự khác biệt phi thường! 🚀"</span>
+                <div
+                  class="text-[10px] text-indigo-600 font-bold pt-1 flex items-center space-x-1 cursor-pointer hover:underline"
+                  onclick="pokeMascot()">
+                  <span>✨ Chạm vào Cú để nhận cảm hứng học tập</span>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex items-center justify-center md:justify-start space-x-2.5 pt-1">
+                <button type="button" onclick="startFlashcardSession()"
+                  class="px-5 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-extrabold shadow-md shadow-indigo-500/20 transition-all flex items-center space-x-1.5 cursor-pointer">
+                  <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                  <span>Ôn tập ngay (<span id="cta-due-count">0</span>)</span>
+                </button>
+                <button type="button" onclick="openDailyGoalModal()"
+                  class="px-4 py-2.5 rounded-2xl bg-white hover:bg-slate-50 active:scale-95 text-slate-700 text-xs font-bold border border-slate-200 shadow-sm transition-all flex items-center space-x-1 cursor-pointer"
+                  title="Nạp từ mới theo cấp độ">
+                  <i data-lucide="compass" class="w-3.5 h-3.5 text-indigo-600"></i>
+                  <span>Khám phá từ mới</span>
+                </button>
+              </div>
             </div>
 
-            <div class="flex items-center space-x-2 self-start sm:self-auto">
-              <button type="button" onclick="startFlashcardSession()"
-                class="px-5 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-extrabold shadow-md shadow-indigo-500/20 transition-all flex items-center space-x-1.5 cursor-pointer">
-                <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
-                <span>Ôn tập ngay (<span id="cta-due-count">0</span>)</span>
-              </button>
-              <button type="button" onclick="openDailyGoalModal()"
-                class="px-3.5 py-2.5 rounded-2xl bg-white hover:bg-slate-50 active:scale-95 text-slate-700 text-xs font-bold border border-slate-200 shadow-sm transition-all cursor-pointer"
-                title="Nạp từ mới theo cấp độ A, B, C">
-                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-              </button>
+            <!-- Right: Pure Inline Vector SVG Owl Mascot (Interactive Animation) -->
+            <div class="flex flex-col items-center justify-center flex-shrink-0">
+              <svg id="mascot-owl-svg" viewBox="0 0 120 120"
+                class="w-28 h-28 sm:w-32 sm:h-32 cursor-pointer select-none transition-transform duration-300 hover:scale-105 active:scale-95 animate-float-subtle"
+                onclick="pokeMascot()" title="Chạm vào tôi để nhận lời khuyên phát âm!">
+                <defs>
+                  <linearGradient id="owlBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#818CF8" />
+                    <stop offset="50%" stop-color="#6366F1" />
+                    <stop offset="100%" stop-color="#4F46E5" />
+                  </linearGradient>
+                  <linearGradient id="owlBellyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#FFFFFF" />
+                    <stop offset="100%" stop-color="#F1F5F9" />
+                  </linearGradient>
+                  <linearGradient id="beakGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FBBF24" />
+                    <stop offset="100%" stop-color="#F59E0B" />
+                  </linearGradient>
+                  <linearGradient id="capGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#1E293B" />
+                    <stop offset="100%" stop-color="#0F172A" />
+                  </linearGradient>
+                  <filter id="owlShadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#4338CA" flood-opacity="0.22" />
+                  </filter>
+                </defs>
+
+                <!-- Paws / Feet -->
+                <ellipse cx="46" cy="108" rx="8" ry="4" fill="#F59E0B" />
+                <ellipse cx="74" cy="108" rx="8" ry="4" fill="#F59E0B" />
+
+                <!-- Main Body -->
+                <rect x="22" y="32" width="76" height="76" rx="38" fill="url(#owlBodyGrad)" filter="url(#owlShadow)" />
+
+                <!-- Left & Right Layered Wings -->
+                <path id="owl-left-wing" d="M22 62 Q12 75 24 88 Q28 75 28 64 Z" fill="#4338CA" opacity="0.9" />
+                <path id="owl-right-wing" d="M98 62 Q108 75 96 88 Q92 75 92 64 Z" fill="#4338CA" opacity="0.9" />
+
+                <!-- Belly Bib -->
+                <path d="M38 64 Q60 52 82 64 Q86 96 60 98 Q34 96 38 64 Z" fill="url(#owlBellyGrad)" />
+                <path d="M52 74 Q60 78 68 74" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round" fill="none" />
+                <path d="M48 82 Q60 86 72 82" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round" fill="none" />
+
+                <!-- Blushing Cheeks -->
+                <ellipse cx="36" cy="62" rx="5" ry="3.5" fill="#FDA4AF" opacity="0.8" />
+                <ellipse cx="84" cy="62" rx="5" ry="3.5" fill="#FDA4AF" opacity="0.8" />
+
+                <!-- Left Eye -->
+                <circle cx="44" cy="50" r="14" fill="#FFFFFF" />
+                <circle cx="44" cy="50" r="10" fill="#1E1B4B" />
+                <circle cx="44" cy="50" r="6" fill="#3B82F6" opacity="0.8" />
+                <circle cx="41" cy="47" r="3.5" fill="#FFFFFF" />
+                <circle cx="46" cy="52" r="1.5" fill="#FFFFFF" />
+
+                <!-- Right Eye -->
+                <circle cx="76" cy="50" r="14" fill="#FFFFFF" />
+                <circle cx="76" cy="50" r="10" fill="#1E1B4B" />
+                <circle cx="76" cy="50" r="6" fill="#3B82F6" opacity="0.8" />
+                <circle cx="73" cy="47" r="3.5" fill="#FFFFFF" />
+                <circle cx="78" cy="52" r="1.5" fill="#FFFFFF" />
+
+                <!-- Amber Beak -->
+                <polygon points="60,54 53,65 67,65" fill="url(#beakGrad)" rx="2" />
+
+                <!-- Graduation Mortarboard Hat -->
+                <g transform="translate(60, 26) rotate(-8) translate(-60, -26)">
+                  <path d="M42 26 Q60 18 78 26 L74 33 Q60 28 46 33 Z" fill="#0F172A" />
+                  <polygon points="60,10 92,23 60,34 28,23" fill="url(#capGrad)" />
+                  <circle cx="60" cy="22" r="2.5" fill="#FBBF24" />
+                  <path d="M60 22 Q72 26 78 36" stroke="#FBBF24" stroke-width="1.8" fill="none"
+                    stroke-linecap="round" />
+                  <circle cx="78" cy="37" r="2" fill="#F59E0B" />
+                </g>
+              </svg>
+              <span class="text-[10px] font-bold text-slate-400 mt-1">Cú Giáo Sư VocabFlow</span>
             </div>
+
           </div>
         </div>
 
@@ -400,7 +430,7 @@
               <i data-lucide="layers" class="w-3.5 h-3.5 text-indigo-600"></i>
               <span>Phân bổ 5 Hộp Trí nhớ Leitner</span>
             </h3>
-            <span class="text-[10px] font-bold text-slate-400">1 ngày → 30 ngày</span>
+            <span class="text-[10px] font-bold text-slate-400">Chu kỳ: 1 → 30 ngày</span>
           </div>
 
           <div class="grid grid-cols-5 gap-2 text-center">
@@ -520,7 +550,7 @@
                 <h2 id="fc-front-word"
                   class="text-3xl sm:text-4xl font-display font-black text-slate-900 tracking-tight">word</h2>
 
-                <!-- Pronounce Audio Buttons -->
+                <!-- Pronounce Audio Buttons (Phân tách chuẩn UK vs US) -->
                 <div class="flex items-center justify-center space-x-2 pt-1" onclick="event.stopPropagation()">
                   <button type="button" onclick="playPronunciation('uk')"
                     class="px-3 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center space-x-1 cursor-pointer active:scale-95 transition-all">
@@ -535,7 +565,7 @@
                 <!-- PHONEME PILL RIBBON (1 HÀNG DUY NHẤT GỌN GÀNG, KHÔNG CHE KHUẤT NÚT) -->
                 <div id="fc-phonemes-container" class="pt-2 px-1" onclick="event.stopPropagation()">
                   <div id="fc-phonemes-list" class="flex flex-wrap items-center justify-center gap-1.5 py-1.5">
-                    <!-- Dynamic Pill Badges will render here: e.g. [/r/ 95%] [/ɪ/ 88%] [/z/ 45%] -->
+                    <!-- Dynamic Pill Badges: e.g. [/r/ 95%] [/ɪ/ 88%] [/z/ 45%] -->
                   </div>
                   <div id="fc-voice-diagnosis" class="text-[11px] text-slate-500 font-medium pt-0.5"></div>
                 </div>
@@ -627,7 +657,7 @@
       </section>
 
       <!-- ========================================================================= -->
-      <!-- SCREEN 3: SHADOWING STUDIO (LUYỆN NÓI ĐUỔI VỚI NATURAL CADENCE TTS)       -->
+      <!-- SCREEN 3: SHADOWING STUDIO (LUYỆN NÓI ĐUỔI VỚI NÚT NGHE LẠI NỔI BẬT)      -->
       <!-- ========================================================================= -->
       <section id="screen-shadowing" class="hidden space-y-4 animate-fadeIn">
 
@@ -642,15 +672,15 @@
           <!-- Cadence & Accent Switcher -->
           <div class="flex items-center space-x-1.5 bg-slate-200/60 p-1 rounded-full text-xs font-bold">
             <button type="button" onclick="setShadowingSpeed(0.75)" id="speed-0.75"
-              class="px-2 py-0.5 rounded-full text-[10px] text-slate-600 transition-all">0.75x</button>
+              class="px-2.5 py-0.5 rounded-full text-[10px] text-slate-600 transition-all">0.75x</button>
             <button type="button" onclick="setShadowingSpeed(0.9)" id="speed-0.9"
-              class="px-2 py-0.5 rounded-full text-[10px] bg-white text-indigo-600 shadow-sm transition-all">0.9x
+              class="px-2.5 py-0.5 rounded-full text-[10px] bg-white text-indigo-600 shadow-sm transition-all">0.9x
               Chuẩn</button>
             <button type="button" onclick="setShadowingSpeed(1.0)" id="speed-1.0"
-              class="px-2 py-0.5 rounded-full text-[10px] text-slate-600 transition-all">1.0x</button>
+              class="px-2.5 py-0.5 rounded-full text-[10px] text-slate-600 transition-all">1.0x</button>
             <span class="text-slate-300">|</span>
             <button type="button" onclick="toggleShadowingAccent()" id="btn-shadowing-accent"
-              class="px-2 py-0.5 rounded-full text-[10px] text-indigo-600 font-extrabold">🇺🇸 US</button>
+              class="px-2.5 py-0.5 rounded-full text-[10px] text-indigo-600 font-extrabold">🇺🇸 US</button>
           </div>
         </div>
 
@@ -665,14 +695,23 @@
 
             <div id="shadowing-sentence-box"
               class="text-xl sm:text-2xl font-display font-extrabold text-slate-900 tracking-tight leading-relaxed pt-2">
-              <!-- Words will be rendered with clickable phoneme inspection -->
+              <!-- Clickable words to inspect phonemes -->
             </div>
 
             <p id="shadowing-trans-box" class="text-xs text-slate-500 font-medium pt-1"></p>
+
+            <!-- Nút Nghe Lại Câu Mẫu Nổi Bật (Replay Button) -->
+            <div class="pt-2 flex justify-center">
+              <button type="button" onclick="playCurrentShadowingAudio()"
+                class="px-4 py-2 rounded-2xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-extrabold flex items-center space-x-1.5 shadow-sm active:scale-95 transition-all cursor-pointer">
+                <i data-lucide="volume-2" class="w-4 h-4 text-indigo-600"></i>
+                <span>Nghe lại câu mẫu (0.9x Natural)</span>
+              </button>
+            </div>
           </div>
 
           <!-- Prominent Apple Record Button -->
-          <div class="flex flex-col items-center justify-center space-y-3 pt-2">
+          <div class="flex flex-col items-center justify-center space-y-3 pt-1">
             <div class="relative flex items-center justify-center">
               <div id="mic-pulse-ring"
                 class="hidden absolute w-24 h-24 rounded-full bg-rose-500/20 animate-ping pointer-events-none"></div>
@@ -681,7 +720,7 @@
                 <i data-lucide="mic" class="w-8 h-8"></i>
               </button>
             </div>
-            <span id="lbl-mic-state" class="text-xs font-extrabold text-slate-600">Chạm để ghi âm</span>
+            <span id="lbl-mic-state" class="text-xs font-extrabold text-slate-600">Chạm để ghi âm giọng nói</span>
           </div>
 
           <!-- Live Transcript & Waveform -->
@@ -859,7 +898,7 @@
 
     </main>
 
-    <!-- Bottom Navigation Bar (Chỉ hiển thị trên Mobile Simulator hoặc màn hình nhỏ) -->
+    <!-- Bottom Navigation Bar (Dành cho màn hình điện thoại) -->
     <nav
       class="md:hidden glass-panel sticky bottom-3 mt-4 rounded-2xl px-2 py-1.5 flex items-center justify-around text-[10px] font-bold z-40">
       <button type="button" onclick="navigateTo('dashboard')" id="nav-mobile-dashboard"
@@ -949,7 +988,7 @@
     </div>
   </div>
 
-  <!-- MODAL 2: MỤC TIÊU HÔM NAY (A, B, C CEFR DISCOVERY) -->
+  <!-- MODAL 2: MỤC TIÊU HÔM NAY (4 CARD LỰA CHỌN: HỖN HỢP MIX HOẶC CẤP A, B, C) -->
   <div id="modal-daily-goal"
     class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl animate-slideUp">
@@ -964,29 +1003,42 @@
         </button>
       </div>
 
-      <!-- Chọn Cấp Độ CEFR -->
+      <!-- 4 Card Lựa Chọn Cấp Độ CEFR (Có Hỗn Hợp Ngẫu Nhiên) -->
       <div class="space-y-1.5">
-        <label class="text-[11px] font-extrabold text-slate-600 uppercase tracking-wider">Cấp độ CEFR</label>
-        <div class="grid grid-cols-3 gap-2 text-xs font-bold text-center">
+        <label class="text-[11px] font-extrabold text-slate-600 uppercase tracking-wider">Chọn Cấp độ học</label>
+        <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+
+          <button type="button" onclick="selectGoalLevel('mix')" id="btn-level-mix"
+            class="p-3 rounded-2xl bg-indigo-600 text-white shadow-sm transition-all text-left cursor-pointer flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="font-black text-sm">🌟 Hỗn hợp</span>
+              <span class="text-[10px] bg-white/20 px-1.5 py-0.5 rounded-full">Khuyên dùng</span>
+            </div>
+            <div class="text-[10px] opacity-80 pt-1">Trộn ngẫu nhiên A + B + C</div>
+          </button>
+
           <button type="button" onclick="selectGoalLevel('A')" id="btn-level-A"
-            class="p-2.5 rounded-2xl bg-indigo-600 text-white shadow-sm transition-all cursor-pointer">
-            <div class="font-black text-sm">Cấp A</div>
-            <div class="text-[9px] opacity-80">Đời sống</div>
+            class="p-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all text-left cursor-pointer flex flex-col justify-between">
+            <span class="font-black text-sm">Cấp A (Đời sống)</span>
+            <div class="text-[10px] text-slate-500 pt-1">Giao tiếp A1 - A2 nền tảng</div>
           </button>
+
           <button type="button" onclick="selectGoalLevel('B')" id="btn-level-B"
-            class="p-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all cursor-pointer">
-            <div class="font-black text-sm">Cấp B</div>
-            <div class="text-[9px] opacity-80">Công việc</div>
+            class="p-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all text-left cursor-pointer flex flex-col justify-between">
+            <span class="font-black text-sm">Cấp B (Công việc)</span>
+            <div class="text-[10px] text-slate-500 pt-1">Công sở, đàm phán B1 - B2</div>
           </button>
+
           <button type="button" onclick="selectGoalLevel('C')" id="btn-level-C"
-            class="p-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all cursor-pointer">
-            <div class="font-black text-sm">Cấp C</div>
-            <div class="text-[9px] opacity-80">Học thuật</div>
+            class="p-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all text-left cursor-pointer flex flex-col justify-between">
+            <span class="font-black text-sm">Cấp C (Học thuật)</span>
+            <div class="text-[10px] text-slate-500 pt-1">Nâng cao C1 - C2, IELTS 7.5+</div>
           </button>
+
         </div>
       </div>
 
-      <!-- Chọn Số Lượng -->
+      <!-- Chọn Số Lượng Từ Muốn Nạp -->
       <div class="space-y-1.5">
         <label class="text-[11px] font-extrabold text-slate-600 uppercase tracking-wider">Số lượng từ muốn nạp</label>
         <div class="grid grid-cols-4 gap-2 text-xs font-bold text-center">
@@ -1084,37 +1136,11 @@
     </div>
   </div>
 
-  <!-- MODAL 5: MICROPHONE PERMISSION GUIDE -->
-  <div id="modal-mic-guide"
-    class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl animate-slideUp text-xs">
-      <div class="flex items-center justify-between">
-        <h3 class="font-display font-extrabold text-base text-slate-900 flex items-center space-x-1.5">
-          <i data-lucide="mic" class="w-4 h-4 text-indigo-600"></i>
-          <span>Cấp Quyền Microphone</span>
-        </h3>
-        <button type="button" onclick="closeMicGuideModal()" class="p-1 text-slate-400 hover:text-slate-600">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      </div>
-      <div class="space-y-2 text-slate-600 leading-relaxed">
-        <p>• <b>Chrome / Edge (Máy tính):</b> Nhấn vào biểu tượng 🔒 ở thanh địa chỉ $\rightarrow$ Bật <b>Microphone</b>
-          $\rightarrow$ Chọn <b>Cho phép (Allow)</b>.</p>
-        <p>• <b>Safari (iOS / iPhone):</b> Mở <b>Cài đặt (Settings)</b> $\rightarrow$ <b>Safari</b> $\rightarrow$
-          <b>Microphone</b> $\rightarrow$ <b>Cho phép</b>.</p>
-      </div>
-      <button type="button" onclick="requestMicTest()"
-        class="w-full py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shadow-sm cursor-pointer">
-        Thử kích hoạt Micro ngay
-      </button>
-    </div>
-  </div>
-
   <!-- TOAST CONTAINER -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
 
   <!-- ========================================================================= -->
-  <!-- 4. JAVASCRIPT LOGIC CONTROLLER (APPLE ARCHITECTURE & NATURAL CADENCE TTS)  -->
+  <!-- 4. JAVASCRIPT LOGIC CONTROLLER (APPLE MINIMALIST & SPEECH PROCESSING)     -->
   <!-- ========================================================================= -->
   <script>
     /**
@@ -1124,6 +1150,30 @@
      * CẤU HÌNH: Dán URL Deploy Web App Google Apps Script vào biến dưới:
      */
     const API_URL = "https://script.google.com/macros/s/AKfycbziaFkd1a7zrg4BflT5yKiWT2KSZXlwza4i35Ked08s1eRH8dqWjA_QHezG-pP6wdHs4Q/exec";
+
+    // 20+ CÂU NÓI TRUYỀN CẢM HỨNG HỌC TẬP (SMART MOTIVATION POOL)
+    const MOTIVATIONAL_QUOTES = [
+      "Phát âm chuẩn từng âm vị IPA là chìa khóa để người bản xứ hiểu bạn ngay từ giây đầu tiên! 🎙️",
+      "Đừng sợ phát âm sai. Mỗi lần sửa là một lần bạn tiến gần hơn tới sự lưu loát! ✨",
+      "Shadowing không chỉ là nhại giọng, đó là cách bạn học nhịp thở và ngữ điệu của người bản xứ! 🗣️",
+      "Một từ vựng mới là một cánh cửa mới mở ra thế giới! 🌍",
+      "Chuỗi học tập của bạn đang rực cháy, đừng để ngọn lửa này tắt nhé! 🔥",
+      "Não bộ ghi nhớ tốt nhất khi bạn lặp lại ngắt quãng theo 5 Hộp Leitner! 🧠",
+      "15 phút luyện tập nghiêm túc mỗi ngày hơn hẳn 3 tiếng học dồn dập cuối tuần! ⏱️",
+      "Khi bạn phát âm đúng, kỹ năng nghe của bạn sẽ tự động tăng vọt gấp đôi! 🎧",
+      "Hãy chú ý các âm đuôi /s/, /z/, /t/, /d/ – chúng tạo nên sự khác biệt của người nói tiếng Anh đẳng cấp! 💎",
+      "Âm /θ/ và /ð/ rất dễ: chỉ cần đặt nhẹ đầu lưỡi ở giữa 2 hàm răng và đẩy luồng hơi ra! 👅",
+      "Tự tin nói to là bí quyết nhanh nhất để cơ miệng quen với các âm vị quốc tế! 🚀",
+      "Mỗi từ vựng được đưa vào Hộp 5 là một chiến thắng vĩnh viễn trong trí nhớ dài hạn! 🏆",
+      "Nghe chép chính tả Dictation giúp bạn triệt tiêu hoàn toàn thói quen đoán mò từ vựng! ✍️",
+      "Cố lên bạn nhé! Trí thông minh là kết quả của sự kiên trì luyện tập mỗi ngày! 🌟",
+      "Thử luyện nói đuổi theo đúng tốc độ 0.9x để cảm nhận nhịp ngắt tự nhiên nhé! 🎵",
+      "Bạn đã tiến bộ rất nhiều so với ngày đầu tiên, hãy tiếp tục phát huy nào! 👏",
+      "Không có lối tắt để thành thạo một ngôn ngữ, nhưng VocabFlow sẽ là người bạn đồng hành thông minh nhất! 🦉",
+      "Khi đọc câu Shadowing, hãy thả lỏng vai và thở đều bằng cơ hoành! 🧘",
+      "Đích đến của việc học phát âm không phải là hoàn hảo, mà là sự tự tin và truyền cảm hứng! 💬",
+      "Hôm nay bạn đã sẵn sàng chinh phục thêm những từ vựng đỉnh cao chưa nào? 🎯"
+    ];
 
     // KHO TỪ VỰNG DỰ PHÒNG CHUẨN KHI OFFLINE
     const FALLBACK_CURATED_WORDS = {
@@ -1662,7 +1712,6 @@
       dictationScore: 0,
       today: new Date().toISOString().split('T')[0],
       streak: 1,
-      viewMode: 'desktop', // 'desktop' | 'mobile'
       stats: {
         totalWords: 0,
         dueTodayCount: 0,
@@ -1680,10 +1729,10 @@
         passed: false
       },
 
-      // Daily Discovery State
+      // Daily Discovery State (Default: Mix all levels)
       dailyDiscovery: {
         topic: 'all',
-        level: 'all',
+        level: 'mix',
         count: 10,
         pos: 'all'
       },
@@ -1710,104 +1759,143 @@
 
     /**
      * =========================================================================================
-     * NATURAL CADENCE SPEECH SYNTHESIS ENGINE (NEURAL / NATURAL TTS VOICES)
+     * VOICE MANAGER: SEPARATION OF US (EN-US) VS UK (EN-GB) & NATURAL CADENCE TTS
      * =========================================================================================
      */
-    function getBestNaturalVoice(lang = 'en-US') {
-      if (!window.speechSynthesis) return null;
-      var voices = window.speechSynthesis.getVoices();
-      if (!voices || voices.length === 0) return null;
+    const VoiceManager = {
+      voices: [],
+      isLoaded: false,
 
-      var targetPrefix = lang.substring(0, 2).toLowerCase();
-      var langVoices = voices.filter(function (v) {
-        return (v.lang || '').toLowerCase().startsWith(targetPrefix);
-      });
+      init: function () {
+        if (!window.speechSynthesis) return;
+        this.loadVoices();
+        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+          window.speechSynthesis.onvoiceschanged = () => this.loadVoices();
+        }
+      },
 
-      if (langVoices.length === 0) return voices[0];
+      loadVoices: function () {
+        if (!window.speechSynthesis) return;
+        this.voices = window.speechSynthesis.getVoices() || [];
+        if (this.voices.length > 0) this.isLoaded = true;
+      },
 
-      // Ưu tiên các giọng Neural / Natural chất lượng cao của Microsoft / Apple / Google
-      var naturalVoices = langVoices.filter(function (v) {
-        var name = (v.name || '').toLowerCase();
-        return name.includes('natural') || name.includes('neural') || name.includes('online') ||
-          name.includes('google') || name.includes('samantha') || name.includes('jenny') ||
-          name.includes('guy') || name.includes('aria') || name.includes('siri') ||
-          name.includes('premium') || name.includes('enhanced');
-      });
+      getBestVoice: function (accent = 'us') {
+        if (this.voices.length === 0) this.loadVoices();
+        var targetLang = accent === 'uk' ? 'en-GB' : 'en-US';
+        var langPrefix = accent === 'uk' ? 'en-gb' : 'en-us';
 
-      return naturalVoices.length > 0 ? naturalVoices[0] : langVoices[0];
-    }
+        // Lọc voice theo đúng locale
+        var exactVoices = this.voices.filter(function (v) {
+          return (v.lang || '').toLowerCase().replace('_', '-').startsWith(langPrefix);
+        });
 
-    function speakTextNatural(text, lang = 'en-US', speed = 0.9) {
-      if (!window.speechSynthesis || !text) return;
-      window.speechSynthesis.cancel();
+        if (accent === 'uk') {
+          // Ưu tiên các giọng UK tự nhiên
+          var ukPref = exactVoices.find(v => {
+            var n = (v.name || '').toLowerCase();
+            return n.includes('sonia') || n.includes('ryan') || n.includes('uk english') || n.includes('daniel') || n.includes('oliver') || n.includes('george') || n.includes('hazel');
+          });
+          if (ukPref) return ukPref;
+        } else {
+          // Ưu tiên các giọng US tự nhiên
+          var usPref = exactVoices.find(v => {
+            var n = (v.name || '').toLowerCase();
+            return n.includes('jenny') || n.includes('guy') || n.includes('aria') || n.includes('samantha') || n.includes('us english') || n.includes('alex') || n.includes('natural');
+          });
+          if (usPref) return usPref;
+        }
 
-      var utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = lang;
-      utterance.rate = speed;
-      utterance.pitch = 1.0;
+        return exactVoices[0] || this.voices.find(v => (v.lang || '').toLowerCase().startsWith('en')) || null;
+      },
 
-      var bestVoice = getBestNaturalVoice(lang);
-      if (bestVoice) utterance.voice = bestVoice;
+      speak: function (text, accent = 'us', speed = 0.9) {
+        if (!window.speechSynthesis || !text) return;
+        window.speechSynthesis.cancel();
 
-      window.speechSynthesis.speak(utterance);
-    }
+        var utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = accent === 'uk' ? 'en-GB' : 'en-US';
+        utterance.rate = speed;
+        utterance.pitch = 1.0;
+
+        var voice = this.getBestVoice(accent);
+        if (voice) utterance.voice = voice;
+
+        window.speechSynthesis.speak(utterance);
+      }
+    };
+
+    VoiceManager.init();
 
     function playPronunciation(accent = 'us') {
       var wordObj = appState.currentSession[appState.sessionIndex];
       if (!wordObj) return;
-      var lang = accent === 'uk' ? 'en-GB' : 'en-US';
-      speakTextNatural(wordObj.word, lang, 0.88);
+
+      // Ưu tiên phát file MP3 người bản xứ nếu có
+      if (wordObj.audio_url && wordObj.audio_url.startsWith('http')) {
+        var audio = new Audio(wordObj.audio_url);
+        audio.play().catch(function () {
+          VoiceManager.speak(wordObj.word, accent, 0.88);
+        });
+      } else {
+        VoiceManager.speak(wordObj.word, accent, 0.88);
+      }
     }
 
     function playCurrentExampleAudio() {
       var wordObj = appState.currentSession[appState.sessionIndex];
       if (!wordObj || !wordObj.example) return;
-      speakTextNatural(wordObj.example, 'en-US', 0.9);
+      VoiceManager.speak(wordObj.example, 'us', 0.9);
     }
 
     function playCurrentShadowingAudio() {
       var wordObj = appState.currentSession[appState.sessionIndex];
       if (!wordObj) return;
       var sentence = wordObj.shadowing_sentence || wordObj.example || wordObj.word;
-      var lang = appState.shadowing.accent === 'uk' ? 'en-GB' : 'en-US';
-      speakTextNatural(sentence, lang, appState.shadowing.speed);
+      VoiceManager.speak(sentence, appState.shadowing.accent, appState.shadowing.speed);
     }
 
     function playDictationAudio(accent = 'us') {
       var wordObj = appState.currentSession[appState.sessionIndex];
       if (!wordObj) return;
-      var lang = accent === 'uk' ? 'en-GB' : 'en-US';
-      speakTextNatural(wordObj.word, lang, 0.85);
+      VoiceManager.speak(wordObj.word, accent, 0.85);
     }
 
     /**
      * =========================================================================================
-     * VIEWPORT MODE CONTROLLER (DESKTOP STUDIO VS MOBILE SIMULATOR)
+     * MASCOT OWL & CONTEXTUAL MOTIVATION ENGINE (POKE & SPEECH BUBBLES)
      * =========================================================================================
      */
-    function toggleViewportMode() {
-      var wrapper = document.getElementById('app-viewport-wrapper');
-      var island = document.getElementById('simulated-dynamic-island');
-      var lbl = document.getElementById('lbl-viewport-mode');
-      var icon = document.getElementById('icon-viewport-mode');
-
-      if (appState.viewMode === 'desktop') {
-        appState.viewMode = 'mobile';
-        wrapper.className = 'mobile-simulator-frame';
-        island.classList.remove('hidden');
-        lbl.textContent = 'Desktop';
-        icon.setAttribute('data-lucide', 'monitor');
-        showToast('Đã chuyển sang chế độ Mobile Simulator', 'info');
-      } else {
-        appState.viewMode = 'desktop';
-        wrapper.className = 'w-full max-w-6xl mx-auto px-3 sm:px-6 py-3 transition-all duration-300';
-        island.classList.add('hidden');
-        lbl.textContent = 'Mobile';
-        icon.setAttribute('data-lucide', 'smartphone');
-        showToast('Đã chuyển sang chế độ Desktop Studio', 'info');
+    function pokeMascot() {
+      var svg = document.getElementById('mascot-owl-svg');
+      if (svg) {
+        svg.classList.remove('animate-shake');
+        void svg.offsetWidth; // Trigger reflow
+        svg.classList.add('animate-shake');
       }
 
-      initLucideIcons();
+      triggerMiniConfetti();
+
+      var randomQuote = MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)];
+      var speechEl = document.getElementById('mascot-speech-text');
+      if (speechEl) {
+        speechEl.textContent = '"' + randomQuote + '"';
+      }
+
+      showToast('Cú Giáo Sư: ' + randomQuote, 'info');
+    }
+
+    function updateMascotContextSpeech() {
+      var speechEl = document.getElementById('mascot-speech-text');
+      if (!speechEl) return;
+
+      if (appState.dueWords.length > 0) {
+        speechEl.textContent = '"Đang có ' + appState.dueWords.length + ' từ cần ôn hôm nay để củng cố trí nhớ dài hạn. Cùng học nào! 🧠"';
+      } else if (appState.stats.totalWords === 0) {
+        speechEl.textContent = '"Chào mừng bạn! Hãy bấm vào mục tiêu hôm nay để nạp bộ từ vựng đầu tiên nhé! 🌟"';
+      } else {
+        speechEl.textContent = '"Bạn đã hoàn thành các từ cần ôn hôm nay! Thử nạp thêm từ mới hoặc luyện Shadowing nhé! 🏆"';
+      }
     }
 
     /**
@@ -2132,14 +2220,6 @@
       if (!isApiConfigured()) {
         document.getElementById('api-config-banner').classList.remove('hidden');
       }
-
-      // Pre-warm Speech Synthesis voices
-      if (window.speechSynthesis) {
-        window.speechSynthesis.getVoices();
-        window.speechSynthesis.onvoiceschanged = function () {
-          window.speechSynthesis.getVoices();
-        };
-      }
     }
 
     if (document.readyState === 'loading') {
@@ -2160,7 +2240,7 @@
       setSyncingIndicator(false);
 
       if (!response || !response.success) {
-        showToast('Không thể đồng bộ Google Sheets. Chạy ở chế độ offline', 'info');
+        showToast('Đang chạy ở chế độ offline cục bộ.', 'info');
         return;
       }
 
@@ -2171,6 +2251,7 @@
       appState.topics = response.topics || appState.topics;
 
       updateDashboardUI();
+      updateMascotContextSpeech();
       populateTopicFilter();
       filterWordsList();
     }
@@ -2196,7 +2277,7 @@
 
         var dBtn = document.getElementById('nav-btn-' + s);
         if (dBtn) {
-          dBtn.className = 'nav-pill-btn px-3.5 py-1 rounded-full text-xs font-bold text-slate-600 hover:text-slate-900 transition-all';
+          dBtn.className = 'nav-pill-btn px-4 py-1.5 rounded-full text-xs font-bold text-slate-600 hover:text-slate-900 transition-all';
         }
         var mBtn = document.getElementById('nav-mobile-' + s);
         if (mBtn) {
@@ -2209,7 +2290,7 @@
 
       var activeDesktop = document.getElementById('nav-btn-' + screenId);
       if (activeDesktop) {
-        activeDesktop.className = 'nav-pill-btn px-3.5 py-1 rounded-full text-xs font-bold text-white bg-indigo-600 shadow-sm transition-all';
+        activeDesktop.className = 'nav-pill-btn px-4 py-1.5 rounded-full text-xs font-bold text-white bg-indigo-600 shadow-sm transition-all';
       }
 
       var activeMobile = document.getElementById('nav-mobile-' + screenId);
@@ -2416,7 +2497,7 @@
           })
           .catch(function (err) {
             console.warn('Flashcard mic permission notice:', err);
-            openMicGuideModal();
+            showToast('Vui lòng cấp quyền Microphone trên trình duyệt để ghi âm', 'error');
           });
       } else {
         launchFlashcardSpeechRecognition(wordObj.word);
@@ -2430,7 +2511,7 @@
 
       appState.flashcardVoice.isListening = true;
       document.getElementById('btn-fc-voice-check').className = 'px-4 py-2 rounded-2xl bg-rose-600 text-white text-xs font-extrabold flex items-center space-x-2 shadow-glow-rose animate-pulse transition-all cursor-pointer';
-      document.getElementById('lbl-fc-voice').textContent = 'Đang nghe... Hãy đọc to từ vựng';
+      document.getElementById('lbl-fc-voice').textContent = 'Đang nghe... Hãy đọc to từ';
 
       if (SpeechRecognition) {
         try {
@@ -2578,7 +2659,7 @@
 
     /**
      * =========================================================================================
-     * SHADOWING ENGINE (NATURAL CADENCE & LIVE WORD INSPECTION)
+     * SHADOWING ENGINE (NATURAL CADENCE & REPLAY BUTTON)
      * =========================================================================================
      */
     function startShadowingSession() {
@@ -2641,8 +2722,8 @@
       [0.75, 0.9, 1.0].forEach(function (s) {
         var btn = document.getElementById('speed-' + s);
         if (btn) {
-          if (s === spd) btn.className = 'px-2 py-0.5 rounded-full text-[10px] bg-white text-indigo-600 shadow-sm transition-all';
-          else btn.className = 'px-2 py-0.5 rounded-full text-[10px] text-slate-600 transition-all';
+          if (s === spd) btn.className = 'px-2.5 py-0.5 rounded-full text-[10px] bg-white text-indigo-600 shadow-sm transition-all font-bold';
+          else btn.className = 'px-2.5 py-0.5 rounded-full text-[10px] text-slate-600 transition-all font-bold';
         }
       });
       playCurrentShadowingAudio();
@@ -3068,11 +3149,11 @@
     }
 
     function speakIsolatedPhoneme(isolatedText) {
-      speakTextNatural(isolatedText, 'en-US', 0.8);
+      VoiceManager.speak(isolatedText, 'us', 0.8);
     }
 
     function speakContextWord(sampleWord) {
-      speakTextNatural(sampleWord, 'en-US', 0.88);
+      VoiceManager.speak(sampleWord, 'us', 0.88);
     }
 
     function inspectIpaText(textOrIpa) {
@@ -3085,19 +3166,9 @@
 
     /**
      * =========================================================================================
-     * POPUP SETTINGS, DAILY GOALS, MODALS & IMPORT
+     * DAILY GOAL (CEFR DISCOVERY), ADD/EDIT WORDS & EXCEL IMPORT
      * =========================================================================================
      */
-    function toggleSettingsPopover() {
-      var pop = document.getElementById('popover-settings-menu');
-      if (pop) pop.classList.toggle('hidden');
-    }
-
-    function closeSettingsPopover() {
-      var pop = document.getElementById('popover-settings-menu');
-      if (pop) pop.classList.add('hidden');
-    }
-
     function openDailyGoalModal() {
       document.getElementById('modal-daily-goal').classList.remove('hidden');
       document.getElementById('modal-daily-goal').classList.add('flex');
@@ -3110,11 +3181,15 @@
 
     function selectGoalLevel(lvl) {
       appState.dailyDiscovery.level = lvl;
-      ['A', 'B', 'C'].forEach(function (l) {
+      var levels = ['mix', 'A', 'B', 'C'];
+      levels.forEach(function (l) {
         var btn = document.getElementById('btn-level-' + l);
         if (btn) {
-          if (l === lvl) btn.className = 'p-2.5 rounded-2xl bg-indigo-600 text-white shadow-sm transition-all cursor-pointer';
-          else btn.className = 'p-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all cursor-pointer';
+          if (l === lvl) {
+            btn.className = 'p-3 rounded-2xl bg-indigo-600 text-white shadow-sm transition-all text-left cursor-pointer flex flex-col justify-between';
+          } else {
+            btn.className = 'p-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all text-left cursor-pointer flex flex-col justify-between';
+          }
         }
       });
     }
@@ -3131,10 +3206,10 @@
     }
 
     async function applyDailyDiscoveryAndImport() {
-      var lvl = appState.dailyDiscovery.level === 'all' ? 'A' : appState.dailyDiscovery.level;
+      var lvl = appState.dailyDiscovery.level || 'mix';
       var count = appState.dailyDiscovery.count || 10;
       closeDailyGoalModal();
-      showToast('Đang nạp ' + count + ' từ vựng cấp ' + lvl + '...', 'info');
+      showToast('Đang nạp ' + count + ' từ vựng (' + (lvl === 'mix' ? 'Hỗn hợp' : ('Cấp ' + lvl)) + ')...', 'info');
 
       setSyncingIndicator(true);
       var res = await apiCall('discover_daily', { level: lvl, count: count, topic: 'all' });
@@ -3148,29 +3223,6 @@
 
       await loadInitialData();
       startFlashcardSession();
-    }
-
-    function openMicGuideModal() {
-      document.getElementById('modal-mic-guide').classList.remove('hidden');
-      document.getElementById('modal-mic-guide').classList.add('flex');
-    }
-
-    function closeMicGuideModal() {
-      document.getElementById('modal-mic-guide').classList.add('hidden');
-      document.getElementById('modal-mic-guide').classList.remove('flex');
-    }
-
-    function requestMicTest() {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ audio: true })
-          .then(function () {
-            showToast('Microphone đã hoạt động xuất sắc! ✨', 'success');
-            closeMicGuideModal();
-          })
-          .catch(function () {
-            showToast('Chưa cấp được quyền Micro. Hãy kiểm tra cài đặt trình duyệt.', 'error');
-          });
-      }
     }
 
     function openAddWordModal() {
@@ -3417,15 +3469,6 @@
           e.preventDefault();
           flipFlashcard();
         }
-      }
-    });
-
-    // Tự động đóng Settings Popover khi click ra ngoài
-    document.addEventListener('click', function (e) {
-      var pop = document.getElementById('popover-settings-menu');
-      var btn = document.getElementById('btn-settings-popover');
-      if (pop && !pop.classList.contains('hidden') && !pop.contains(e.target) && !btn.contains(e.target)) {
-        pop.classList.add('hidden');
       }
     });
   </script>
